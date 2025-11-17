@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "386144966832",
+    "project_id": "youth-firebase",
+    "storage_bucket": "youth-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386144966832:android:4ec77b8dbe23b639664375",
+        "android_client_info": {
+          "package_name": "com.example.youth_fellowship"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2KQKt0jVCKQprmldxJlS4GhjL6ER4u40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
