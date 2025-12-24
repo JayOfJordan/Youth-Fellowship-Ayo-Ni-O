@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Hymn691 extends StatefulWidget {  const Hymn691({super.key});
+class Hymn692 extends StatefulWidget {
+  const Hymn692({super.key});
 
-@override
-State<Hymn691> createState() => _Hymn691State();
+  @override
+  State<Hymn692> createState() => _Hymn692State();
 }
 
-class _Hymn691State extends State<Hymn691> {
+class _Hymn692State extends State<Hymn692> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +30,7 @@ class _Hymn691State extends State<Hymn691> {
           Padding(
             padding: EdgeInsets.only(right: 8.0),
             child: Text(
-              "K&S 691", // Hymn Number
+              "K&S 692", // Hymn Number
               style: TextStyle(
                 color: Colors.red,
                 fontSize: 35,
@@ -49,7 +50,7 @@ class _Hymn691State extends State<Hymn691> {
                 child: Column(
                   children: [
                     Text(
-                      '691 C.M.S 576 H.C 378 6s 4s (FE 716)', // Title
+                      '692 (FE 717)', // Title
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
@@ -59,7 +60,7 @@ class _Hymn691State extends State<Hymn691> {
                     ),
                     SizedBox(height: 8),
                     Text( // Subtitle
-                      '“Ibukun ni fun awon ti ngbe inu ile Re.” - Ps. 84 : 4',
+                      '“Iwọ ti n gbọ adura.” - Ps. 65:2',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
@@ -72,46 +73,55 @@ class _Hymn691State extends State<Hymn691> {
               ),
             ),
 
-            // --- VERSES ---
-            _buildVerse(
-              '''1.     KRISTI n'ipile wa
-Lori Re lao kole
-Awon Mimo nikan
-L'o ngb' agbala orun
-Ireti wa,
-T'ore aiye
-T'ayo ti mbo,
-Wa n'nu fe Re.''',
+            // --- VERSE 1 & CHORUS ---
+            _buildVerseAndChorus(
+              '''1.cr	    ẸGBẸ Séráfù tẹsiwaju,
+		Tẹjumọ Jesu Apata,
+		Larin ewu at'ẹgan,
+		Ma boju w'ẹhin rara o,
+		Egbe:	    A dupẹ o, a tun s'ọpẹ,
+		Fun ọjọ oni o a, a,
+		A dupẹ o, lọwọ Rẹ o,
+		Jehovah o,
+		B'ajẹ, oso duro,
+		T'ologun 'ka duro,
+		Labara Jehovah a o sẹgun wọn (2)''',
             ),
-            _buildVerse(
-              '''2.     Agbala Mimo yi
-Y'o ho f'orin iyin
-A o korin iyin si
-Metalokan Mimo,
-Be lao f'orin,
-Ayo kede
-Oruko Re,
-Titi aiye.''',
+
+            // --- VERSE 2 & CHORUS ---
+            _buildVerseAndChorus(
+              '''2.cr	    A gbe'le ka'lẹ Baba Mimọ,
+		Ba wa kọle yi titi dopin,
+		K'oju ma ti wa Jesu,
+		Titi 'le na y'o pari o.
+		Egbe:	    A dupẹ o, a tun s'ọpẹ''',
             ),
-            _buildVerse(
-              '''3.     Olorun Olore
-Fiyesini, nihin
-Lati gba ebe wa
-At'ebe wa gbogbo
-K'o si f'opo,
-Bukun dahun,
-Adura wa,
-Nigbagbogbo.''',
+
+            // --- VERSE 3 & CHORUS ---
+            _buildVerseAndChorus(
+              '''3.cr	    K'ayé wa suwọn titi d'alẹ,
+		K'ọwọ ma d'ilẹ, k'a ri 'sẹ se,
+		Agan a f'ọwọ s'osun,
+		Ẹni ti ko bi a bimọ,
+		Egbe:	    A dupẹ o, a tun s'ọpẹ''',
             ),
-            _buildVerse(
-              '''4.     Nihin, je k'ore Re
-T'a ntoro l' at'orun
-Bo sori wa lekan
-K'o ma si tun lo mo
-Tit'ojo na,
-T'ao s'akojo
-Awon Mimo
-Sib'isimi.''',
+
+            // --- VERSE 4 & CHORUS ---
+            _buildVerseAndChorus(
+              '''4.mf	    Ẹgbẹ Kaduna ẹ se giri,
+		Ẹgbẹ Oke Ọya ẹ fi m' s'ọkan,
+		Larin ewu at'ẹgan,
+		Ma boju w'ẹhin rara o.
+		Egbe:	    A dupẹ o, a tun s'ọpẹ''',
+            ),
+
+            // --- VERSE 5 & CHORUS ---
+            _buildVerseAndChorus(
+              '''5.mf	    Ẹ jẹ k'a foriti titi d'alẹ,
+		K'a le gba ade ogo nigbẹhin
+		K'oju ma ti wa Jesu,
+		Baba yoo fi 'fẹ ranti wa.
+		Egbe:	    A dupẹ o, a tun s'ọpẹ''',
             ),
 
             // --- AMIN ---
@@ -133,8 +143,8 @@ Sib'isimi.''',
     );
   }
 
-  // Helper widget to build verses and avoid code duplication
-  Widget _buildVerse(String text) {
+  // Helper widget to build a verse and its chorus
+  Widget _buildVerseAndChorus(String verse) {
     return Column(
       children: [
         const SizedBox(height: 19),
@@ -142,7 +152,7 @@ Sib'isimi.''',
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
           child: Text(
-            text,
+            verse,
             style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.normal,

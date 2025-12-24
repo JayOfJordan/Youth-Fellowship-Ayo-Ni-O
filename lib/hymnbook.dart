@@ -624,8 +624,8 @@ import 'hymns page/hymn 687.dart';
 import 'hymns page/hymn 688.dart';
 import 'hymns page/hymn 689.dart';
 import 'hymns page/hymn 690.dart';
-import 'hymns page/hymn 600.dart';
-import 'hymns page/hymn 600.dart';
+import 'hymns page/hymn 691.dart';
+import 'hymns page/hymn 692.dart';
 import 'hymns page/hymn 600.dart';
 import 'hymns page/hymn 600.dart';
 import 'hymns page/hymn 600.dart';
@@ -21847,6 +21847,68 @@ class _HymnsHomeState extends State<HymnsHome> {
                                   child: ListTile(
                                     leading: const Icon(Icons.menu_book_rounded, color: Colors.black),
                                     title: Text('K&S 690',
+                                      style: TextStyle(color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 19),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // HYMN 691 - 720
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(28.0),
+                            child: Container(
+                              height: 50,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Center(
+                                child: InkWell(
+                                  splashColor: Colors.black54,
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (
+                                        context) => const Hymn691()));
+                                  },
+                                  child: ListTile(
+                                    leading: const Icon(Icons.menu_book_rounded, color: Colors.black),
+                                    title: Text('K&S 691',
+                                      style: TextStyle(color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 19),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(28.0),
+                            child: Container(
+                              height: 50,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Center(
+                                child: InkWell(
+                                  splashColor: Colors.black54,
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (
+                                        context) => const Hymn692()));
+                                  },
+                                  child: ListTile(
+                                    leading: const Icon(Icons.menu_book_rounded, color: Colors.black),
+                                    title: Text('K&S 692',
                                       style: TextStyle(color: Colors.black,
                                           fontWeight: FontWeight.normal,
                                           fontSize: 19),
