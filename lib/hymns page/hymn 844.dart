@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+
+class Hymn844 extends StatefulWidget {
+  const Hymn844({super.key});
+
+  @override
+  State<Hymn844> createState() => _Hymn844State();
+}
+
+class _Hymn844State extends State<Hymn844> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Seraph Hymns\nOrin mimo kerubu ati serafu",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 8.0),
+            child: Text(
+              "K&S 844", // Hymn Number
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // --- HYMN TITLE AND SUBTITLE ---
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      '844 C.M.S. 478, H.C. 494 C. M. (FE 881)', // Title
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text( // Subtitle
+                      '“Nitori ibi hiha ni ẹnu ọna na.” - Matt. 7: 14',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // --- VERSES ---
+            _buildVerse(
+              '''1.mf	    ỌNA kan l'o n tọka s'ọrun,
+		Isina ni 'yoku,
+		Hiha si l'oju ọna na,
+		Awọn Kristian l'o fẹ.''',
+            ),
+            _buildVerse(
+              '''2.	    Lat' ayé, o lo tarata,
+		O si la ewu lọ;
+  cr	    Awọn ti n f'igboya rin in,
+		Y'o d'ọrun nikẹhin.''',
+            ),
+            _buildVerse(
+              '''3.mf	    Awọn ewe y'o ha ti se,
+		Le la ewu yi ja?
+		'Tori idẹkun pọ l'ọna,
+		F'awọn ọdọmọde!''',
+            ),
+            _buildVerse(
+              '''4.p	    Gbigboro l'ọna t'ọpọ n rin,
+		O si tẹju pẹlu!
+		Mo si mo pe lati dẹsẹ,
+		Ni wọn se n rin nibẹ.''',
+            ),
+            _buildVerse(
+              '''5.mf	    Sugbọn k'ẹsẹ mi ma ba ye,
+		Ki n ma si sako lọ,
+		Oluwa, jọ s'Olutọ mi,
+		Emi ki o sina.''',
+            ),
+            _buildVerse(
+              '''6.	    Njẹ mo le lọ l'ai s'ifoya,
+		Ki n gbẹkẹl' ọrọ Rẹ;
+  p	    Apa Rẹ y'o s'aguntan Rẹ,
+		Y'o si ko wọn de'le.''',
+            ),
+            _buildVerse(
+              '''7.cr	    Bẹni n ó la ewu yi ja,
+		Nipa itọju Rẹ?
+  f	    N ó tẹjumọ 'bode ọrun,
+		Titi n ó fi wọle.''',
+            ),
+
+            // --- AMIN ---
+            const SizedBox(height: 19),
+            const Center(
+              child: Text(
+                "AMIN",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+              ),
+            ),
+            const SizedBox(height: 50),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper widget to build verses and avoid code duplication
+  Widget _buildVerse(String text) {
+    return Column(
+      children: [
+        const SizedBox(height: 19),
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+          child: Text(
+            text,
+            style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+                fontSize: 22),
+          ),
+        ),
+      ],
+    );
+  }
+}

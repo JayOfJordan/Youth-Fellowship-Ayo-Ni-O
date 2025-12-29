@@ -51,13 +51,13 @@ class NavBar  extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.directions_run),
-            title: const Text('MAnnouncements'),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>const MAnnouncement()));
-            },
-          ),
+          //ListTile(
+           //git leading: const Icon(Icons.directions_run),
+           // title: const Text('MAnnouncements'),
+            //onTap: (){
+            //  Navigator.push(context, MaterialPageRoute(builder: (context)=>const MAnnouncement()));
+           // },
+          //),
           ListTile(
             leading: const Icon(Icons.message),
             title: const Text('Announcement'),

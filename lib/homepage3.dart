@@ -25,9 +25,9 @@ class _HomePage3State extends State<HomePage3> {
 
   final List<Widget> _pages = [
     const Page(title: '',),
-    const RegistrationForm(userId: null,),
+    const RegistrationForm(userId: '',),
     const Announcement(),
-    const HymnsHome(),
+    const HymnsHome(title: '',),
   ];
 
   @override

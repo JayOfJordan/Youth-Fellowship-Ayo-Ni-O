@@ -63,7 +63,14 @@ class _PageState extends State<Page> {
       drawer: const NavBar(),
       backgroundColor: Colors.blue,
       appBar: AppBar(
-        title: const Text('Youth Fellowship'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Youth", style: TextStyle(color: Colors.blue.shade900, fontSize: 20, fontWeight: FontWeight.bold)),
+            SizedBox(width: getProportionateScreenWidth(10)),
+            const Text("Fellowship", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+          ],
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0, // Remove shadow for a flatter look
@@ -80,54 +87,10 @@ class _PageState extends State<Page> {
       body: SafeArea(
           child: Column(
             children: [
-              Padding(
-                // 3. USE RESPONSIVE PADDING
-                padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(20)),
-                child: Column(
-                  children: [
-                    // IMAGE SLIDER SECTION
-                    SizedBox(
-                      width: double.infinity, // Use full available width
-                      height: getProportionateScreenHeight(200),
-                      child: Card(
-                        color: Colors.blue.shade600,
-                        elevation: 1,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                getProportionateSize(15))),
-                        child: Padding(
-                          padding: EdgeInsets.all(getProportionateSize(8)),
-                          child: CarouselSlider(
-                            items: imageList
-                                .map(
-                                  (item) => ClipRRect(
-                                borderRadius: BorderRadius.circular(getProportionateSize(10)),
-                                child: Image.asset(
-                                  item['image_path'],
-                                  fit: BoxFit.cover, // Use cover for better scaling
-                                  width: double.infinity,
-                                ),
-                              ),
-                            )
-                                .toList(),
-                            options: CarouselOptions(
-                              scrollPhysics: const BouncingScrollPhysics(),
-                              autoPlay: true,
-                              autoPlayCurve: Curves.fastOutSlowIn, // Smoother animation
-                              aspectRatio: 16 / 9,
-                              viewportFraction: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenHeight(30),
-                    ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 30),
+              // --- CAROUSEL SLIDER SECTION ---
+              _buildImageSlider(),
+              SizedBox(height: getProportionateScreenHeight(40)),
 
               //APP WHITE SPACE (SECTION 2)
               Expanded(
@@ -140,7 +103,8 @@ class _PageState extends State<Page> {
                     ),
                     color: Colors.white,
                   ),
-                  child: SingleChildScrollView(
+                  child: SingleChildScrollView
+                    (
                     child: Column(
                       //LIST VIEW OF PAGES
                       children: [
@@ -188,10 +152,37 @@ class _PageState extends State<Page> {
                 ),
               ),
             ],
-          )),
+          ),
+      ),
     );
   }
-
+//Widget Helper For Slider
+  Widget _buildImageSlider() {
+    return CarouselSlider(
+      items: imageList.map((item) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image.asset(
+              item['image_path'],
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
+          ),
+        );
+      }).toList(),
+      options: CarouselOptions(
+        height: 200,
+        autoPlay: true,
+        enlargeCenterPage: true,
+        aspectRatio: 16 / 9,
+        viewportFraction: 0.85,
+        autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+      ),
+    );
+  }
   // 5. HELPER WIDGET TO BUILD LIST ITEMS AND APPLY RESPONSIVE SIZING
   Widget _buildListItem(
       {required String iconPath,

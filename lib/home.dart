@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
       confirmBtnText: "New Member",
       onConfirmBtnTap: () =>
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) =>  const RegistrationForm(userId: null,))),
+              MaterialPageRoute(builder: (context) =>  const RegistrationForm(userId: '',))),
       cancelBtnText: "Existing Member",
       onCancelBtnTap: () =>
           Navigator.push(context,
