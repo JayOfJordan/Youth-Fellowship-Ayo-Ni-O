@@ -1,15 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
-  Future addMAnnouncementDetails(Map<String, dynamic> mannaoucementInfoMap, String id) async{
+  Future addMAnnouncementDetails(Map<String, dynamic> announcementInfoMap, String id) async {
     return await FirebaseFirestore.instance
-        .collection("Announcement")
+        .collection("Announcements")
         .doc(id)
-        .set(mannaoucementInfoMap);
+        .set(announcementInfoMap);
   }
-  Future<Stream<QuerySnapshot>> getAnnouncementDetails() async{
+
+  // GET ALL ANNOUNCEMENTS
+  Future<Stream<QuerySnapshot>> getMAnnouncementDetails() async {
+    return FirebaseFirestore.instance.collection("Announcements").snapshots();
+  }
+
+  //UPDATE AN ANNOUNCEMENT
+  Future updateMAnnouncementDetail(String id, Map<String, dynamic> updateInfo) async {
     return await FirebaseFirestore.instance
-        .collection("Announcement")
-        .snapshots();
+        .collection("Announcements")
+        .doc(id)
+        .update(updateInfo);
+  }
+
+  //DELETE AN ANNOUNCEMENT
+  Future deleteMAnnouncementDetail(String id) async {
+    return await FirebaseFirestore.instance
+        .collection("Announcements")
+        .doc(id)
+        .delete();
   }
 }

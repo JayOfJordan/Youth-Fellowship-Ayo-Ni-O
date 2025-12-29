@@ -74,7 +74,7 @@ class _Hymn691State extends State<Hymn691> {
 
             // --- VERSES ---
             _buildVerse(
-              '''1. KRISTI n'ipile wa
+              '''1.     KRISTI n'ipile wa
 Lori Re lao kole
 Awon Mimo nikan
 L'o ngb' agbala orun
@@ -84,7 +84,7 @@ T'ayo ti mbo,
 Wa n'nu fe Re.''',
             ),
             _buildVerse(
-              '''2. Agbala Mimo yi
+              '''2.     Agbala Mimo yi
 Y'o ho f'orin iyin
 A o korin iyin si
 Metalokan Mimo,
@@ -94,7 +94,7 @@ Oruko Re,
 Titi aiye.''',
             ),
             _buildVerse(
-              '''3. Olorun Olore
+              '''3.     Olorun Olore
 Fiyesini, nihin
 Lati gba ebe wa
 At'ebe wa gbogbo
@@ -104,7 +104,7 @@ Adura wa,
 Nigbagbogbo.''',
             ),
             _buildVerse(
-              '''4. Nihin, je k'ore Re
+              '''4.     Nihin, je k'ore Re
 T'a ntoro l' at'orun
 Bo sori wa lekan
 K'o ma si tun lo mo
