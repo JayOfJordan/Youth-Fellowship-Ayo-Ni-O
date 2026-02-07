@@ -5,6 +5,12 @@ class Assets {
   static const String assets1 = 'assets/1.png';
   static const String assets2 = 'assets/2.png';
   static const String assets3 = 'assets/3.png';
+ static const String assetsAds1 = 'assets/ads 1.png';
+  static const String assetsAds2 = 'assets/ads 2.jpg';
+  static const String assetsAds3 = 'assets/ads 3.png';
+  static const String assetsAds4 = 'assets/ads 4.jpg';
+  static const String assetsAds5 = 'assets/ads 5.webp';
+  static const String assetsAnnouncement = 'assets/announcement.png';
   static const String assetsCalendar1 = 'assets/calendar1.gif';
   static const String assetsChoir1 = 'assets/choir 1.jpg';
   static const String assetsChoir2 = 'assets/choir 2.jpg';
@@ -15,6 +21,7 @@ class Assets {
   static const String assetsClock1 = 'assets/clock1.gif';
   static const String assetsComingSoon = 'assets/coming-soon.gif';
   static const String assetsDocument1 = 'assets/document1.gif';
+  static const String assetsGoogleRemovebgPreview = 'assets/google.png';
   static const String assetsGradient = 'assets/gradient.jpg';
   static const String assetsGradient1 = 'assets/gradient1.jpg';
   static const String assetsJordan = 'assets/Jordan.jpg';
@@ -23,11 +30,8 @@ class Assets {
   static const String assetsSoon1 = 'assets/soon-1.gif';
   static const String assetsVideo1 = 'assets/video1.gif';
   static const String assetsYouth = 'assets/youth.png';
+  static const String assetsYouth1 = 'assets/youth1.png';
   static const String assetsYouth2 = 'assets/youth2.jpg';
-  static const String assetsAnnouncement = 'assets/announcement.png';
-  static const String assets3259690114073558134 = 'assets/3259690114073558134.jpg.png';
-  static const String assets3259690114073578810 = 'assets/3259690114073578810.jpg.png';
-  static const String assets3259690114073665191 = 'assets/3259690114073665191.jpg.png';
-  static const String assets3259690114098660280 = 'assets/3259690114098660280.jpg.png';
+  static const String hymnspageHymn109 = 'lib/hymns page/hymn 109.dart';
 
 }

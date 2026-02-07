@@ -23,7 +23,7 @@ class _HomePage4State extends State<HomePage4> {
 
   final List<Widget> _pages = [
     const Page(title: '',),
-    const RegistrationForm(userId: '',),
+    const Forms(userId: '',),
     const Announcement(),
     const HymnsHome(title: '',),
   ];
@@ -45,7 +45,7 @@ class _HomePage4State extends State<HomePage4> {
           currentIndex: _selectedIndex,
           onTap: _navigateBottomBar,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.black54 ,
+          selectedItemColor: Colors.white,
           //          unselectedItemColor: Colors.black,
           selectedFontSize: 15,
           unselectedFontSize: 5,
@@ -53,22 +53,22 @@ class _HomePage4State extends State<HomePage4> {
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Home'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person_add,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Members'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.speaker_notes_outlined,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Announcement'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.menu_book,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Hymn Book'),
           ],
         ),
