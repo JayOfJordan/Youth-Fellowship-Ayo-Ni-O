@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     const Page(title: '',),
-    const RegistrationForm(userId: '',),
+    const Forms(userId: '',),
     const Announcement(),
      const HymnsHome(title: '',),
   ];
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _selectedIndex,
           onTap: _navigateBottomBar,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.black54 ,
+          selectedItemColor: Colors.white,
         //          unselectedItemColor: Colors.black,
           selectedFontSize: 15,
           unselectedFontSize: 5,
@@ -55,22 +55,22 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Home'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person_add,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Members'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.speaker_notes_outlined,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Announcement'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.menu_book,
-                  color: Colors.black54,),
+                  color: Colors.white,),
                 label: 'Hymn Book'),
           ],
         ),
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
         mini: true,
         child: const Icon(
             Icons.more_horiz_rounded,
-            color: Colors.black54,
+            color: Colors.white,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

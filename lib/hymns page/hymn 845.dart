@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 
 class Hymn845 extends StatefulWidget {
   const Hymn845({super.key});
@@ -10,31 +11,38 @@ class Hymn845 extends StatefulWidget {
 class _Hymn845State extends State<Hymn845> {
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                // 3. AppBar Title font size set to 19, made responsive
+                fontSize: getProportionateFontSize(19),
                 fontWeight: FontWeight.normal,
               ),
             ),
           ],
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: Text(
-              "K&S 845", // Hymn Number
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 845", // Hymn Number
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. AppBar Action font size set to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -44,8 +52,8 @@ class _Hymn845State extends State<Hymn845> {
         child: Column(
           children: [
             // --- HYMN TITLE AND SUBTITLE ---
-            const Padding(
-              padding: EdgeInsets.all(15.0),
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
@@ -55,27 +63,29 @@ class _Hymn845State extends State<Hymn845> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                        fontSize: getProportionateFontSize(22),
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text( // Subtitle
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
+                      // Subtitle
                       '“Ni bibi emi o mu iru ọmọ rẹ bi si.” - Gen. 16:10',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text( // Section Title
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
+                      // Section Title
                       'Ohun Orin: A Roko A Furugbin.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getProportionateFontSize(16),
                       ),
                     ),
                   ],
@@ -86,121 +96,128 @@ class _Hymn845State extends State<Hymn845> {
             // --- VERSE 1 & CHORUS ---
             _buildVerseAndChorus(
               '''1.f	    ỌLỌRUN to fẹ Abraham,
-		T'o ti se ore re;
-		Pe ni 'ru ọmọ rẹ layé,
-		Yoo dabi irawọ;
-		O fi Isaaki seleri,
-		Lati gba ilẹ na;
-		O mu ileri na sẹ fun,
-		Jakọbu ọmọ rẹ.
-		Egbe:	    K'a damure lati jagun (2)
-		K'a damure e (2)
-		K'a damure lati jagun.''',
+T'o ti se ore re;
+Pe ni 'ru ọmọ rẹ layé,
+Yoo dabi irawọ;
+O fi Isaaki seleri,
+Lati gba ilẹ na;
+O mu ileri na sẹ fun,
+Jakọbu ọmọ rẹ.
+Egbe:	    K'a damure lati jagun (2)
+K'a damure e (2)
+K'a damure lati jagun.''',
             ),
 
             // --- VERSE 2 & CHORUS ---
             _buildVerseAndChorus(
               '''2.	    Iwọ to gbọ ti Mose,
-		Lori oke Sinai;
-		Iwọ to pe Samueli,
-		Nigba t'o wa lewe;
-		Iwọ to pẹlu Dafidi,
-		T'o sẹgun Golayat,
-		Ẹ wa di Ijọ Séráfù,
-		Lamure ododo.
-		Egbe:	    K'a damure lati jagun''',
+Lori oke Sinai;
+Iwọ to pe Samueli,
+Nigba t'o wa lewe;
+Iwọ to pẹlu Dafidi,
+T'o sẹgun Golayat,
+Ẹ wa di Ijọ SérÁfù,
+Lamure ododo.
+Egbe:	    K'a damure lati jagun''',
             ),
 
             // --- VERSE 3 & CHORUS ---
             _buildVerseAndChorus(
               '''3.	    Gbọ bi Jesu Oluwa wa,
-		Ti se ileri fun;
-		Awọn Aposteli 'gbani,
-		Lati j'alagbara;
-		Nigba wọn gba Ẹmi Mimọ ,
-		Wọn fi ayọ sisẹ;
-		Irapada d'orin fun wọn.
-		Titi d'oke ọrun.
-		Egbe:	    K'a damure lati jagun''',
+Ti se ileri fun;
+Awọn Aposteli 'gbani,
+Lati j'alagbara;
+Nigba wọn gba Ẹmi Mimọ ,
+Wọn fi ayọ sisẹ;
+Irapada d'orin fun wọn.
+Titi d'oke ọrun.
+Egbe:	    K'a damure lati jagun''',
             ),
 
             // --- VERSE 4 & CHORUS ---
             _buildVerseAndChorus(
-              '''4.	    Kérúbù ati Séráfù,
-		Ẹ damure giri;
-		Ki Ẹgbẹ Aladura,
-		Mura lati sisẹ,
-		Ileri ti Oluwa se,
-		Nipa ti otitọ,
-		K'a ranti a o segun,
-		Ni ọjọ ikẹhin.
-		Egbe:	    K'a damure lati jagun''',
+              '''4.	    Kérúbù ati SérÁfù,
+Ẹ damure giri;
+Ki Ẹgbẹ Aladura,
+Mura lati sisẹ,
+Ileri ti Oluwa se,
+Nipa ti otitọ,
+K'a ranti a o segun,
+Ni ọjọ ikẹhin.
+Egbe:	    K'a damure lati jagun''',
             ),
 
             // --- VERSE 5 & CHORUS ---
             _buildVerseAndChorus(
               '''5.	    Ẹyin ẹni irapada,
-		Ẹ kọrin Igbala;
-		Si ẹni ti o fẹ wa,
-		To f'ẹjẹ Rẹ ra wa,
-		Lati oko ẹru wa,
-		Lọ si ilẹ Kenaani,
-		Ilu Jerusalemu,
-		Lọdọ Jesu Ọba.
-		Egbe:	    K'a damure lati jagun''',
+Ẹ kọrin Igbala;
+Si ẹni ti o fẹ wa,
+To f'ẹjẹ Rẹ ra wa,
+Lati oko ẹru wa,
+Lọ si ilẹ Kenaani,
+Ilu Jerusalemu,
+Lọdọ Jesu Ọba.
+Egbe:	    K'a damure lati jagun''',
             ),
 
             // --- VERSE 6 & CHORUS ---
             _buildVerseAndChorus(
               '''6.	    Ẹni to ran Mose lọwọ,
-		Baba Aladura,
-		Lati se isẹ Alakoso,
-		Séráfù, Kérúbù,
-		Fi 'sẹgun fun de isẹgun,
-		Lati ja ajaye,
-		La ti gba ade Ogo na,
-		B'awọn Woli saju.
-		Egbe:	    K'a damure lati jagun (2)
-		K'a damure e (2)
-		K'a damure lati jagun.''',
+Baba Aladura,
+Lati se isẹ Alakoso,
+SérÁfù, Kérúbù,
+Fi 'sẹgun fun de isẹgun,
+Lati ja ajaye,
+La ti gba ade Ogo na,
+B'awọn Woli saju.
+Egbe:	    K'a damure lati jagun (2)
+K'a damure e (2)
+K'a damure lati jagun.''',
             ),
 
             // --- AMIN ---
-            const SizedBox(height: 19),
-            const Center(
-              child: Text(
-                "AMIN",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(20.0),
+              ),
+              child: Center(
+                child: Text(
+                  "AMIN",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: getProportionateFontSize(22),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            SizedBox(height: getProportionateScreenHeight(50)),
           ],
         ),
       ),
     );
   }
 
-  // Helper widget to build a verse and its chorus
+  // 5. Helper widget to handle verse text with left alignment and responsive font size 20
   Widget _buildVerseAndChorus(String verse) {
-    return Column(
-      children: [
-        const SizedBox(height: 19),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-          child: Text(
-            verse,
-            style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 22),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        // Ensures the text block is aligned left as requested
+        alignment: Alignment.centerLeft,
+        child: Text(
+          verse,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            // Lyrics font size set to 20, made responsive
+            fontSize: getProportionateFontSize(20),
           ),
         ),
-      ],
+      ),
     );
   }
 }

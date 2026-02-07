@@ -1,3 +1,4 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
 
 class Hymn639 extends StatefulWidget {
@@ -10,157 +11,165 @@ class Hymn639 extends StatefulWidget {
 class _Hymn639State extends State<Hymn639> {
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Seraph Hymns\nOrin mimo kerubu ati serafu",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 8.0),
-              child: Text(
-                "K&S 639", // Hymn Number
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold),
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Seraph Hymns\nOrin mimo kerubu ati serafu",
+              style: TextStyle(
+                color: Colors.white,
+                // 3. AppBar Title font size set to 19, made responsive
+                fontSize: getProportionateFontSize(19),
+                fontWeight: FontWeight.normal,
               ),
             ),
-          ]),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 639",
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. AppBar Action font size set to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HYMN TITLE AND SUBTITLE ---
-            const Padding(
-              padding: EdgeInsets.all(15.0),
+            // --- HYMN TITLE AND SUBTITLE SECTION ---
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
                     Text(
-                      '639		   (FE 665)', // Title
+                      '639		   (FE 665)',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getProportionateFontSize(22),
+                      ),
                     ),
-                    SizedBox(height: 8),
-                    Text( // Subtitle
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
                       '“Ẹni ti o pọ ni Anu ni Oluwa.” - Num. 14:18',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18),
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                        fontSize: getProportionateFontSize(18),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
 
-            // --- VERSE 1 & CHORUS ---
-            _buildVerseAndChorus(
-              '''1.mf	    ỌLỌRUN gbogbo arayé,
-		Iwọ t'o pe ki 'mọlẹ k'o wa,
-		Iwọ t'o pe k'eweko hu,
-		O si ri bẹ nipa asẹ Rẹ.
-		Egbe:	    Gbọ t'emi, gbọ t'emi,
-		Gbọ t'emi,
-		Ọba awimayẹhun,
-		Gbọ t'emi (3ce)
-		Ọba a-wi-ma-yẹhun.''',
+            // --- VERSES (Using helper widget for left alignment and font size 20) ---
+            _buildVerse(
+              "1.mf	    ỌLỌRUN gbogbo arayé,\n"
+                  "Iwọ t'o pe ki 'mọlẹ k'o wa,\n"
+                  "Iwọ t'o pe k'eweko hu,\n"
+                  "O si ri bẹ nipa asẹ Rẹ.\n\n"
+                  "Egbe:	    Gbọ t'emi, gbọ t'emi,\n"
+                  "Gbọ t'emi,\n"
+                  "Ọba awimayẹhun,\n"
+                  "Gbọ t'emi (3ce)\n"
+                  "Ọba a-wi-ma-yẹhun.",
+            ),
+            _buildVerse(
+              "2.mf	    Ọlọrun t'o gbọ ti Mose,\n"
+                  "T'apa awọn Ọba ko fi ka,\n"
+                  "Ọlọrun t'o gbọ t'Elijah,\n"
+                  "T'o si doju t'awọn ọta rẹ.\n\n"
+                  "Egbe:	    Gbọ t'emi, gbọ t'emi",
+            ),
+            _buildVerse(
+              "3.mf	    Ọlọrun t'o pe k'okun wa,\n"
+                  "T'ọmọ arayé ko ri 'di rẹ,\n"
+                  "Ọlọrun t'o pe k'ọsa wa,\n"
+                  "T'ọmọ arayé ko ridi rẹ.\n\n"
+                  "Egbe:	    Gbọ t'emi, gbọ t'emi",
+            ),
+            _buildVerse(
+              "4.mf	    Ọlọrun t'o la 'gan ninu,\n"
+                  "Baba awọn alaini baba,\n"
+                  "Ọlọrun t'o gbọ ti Estha,\n"
+                  "T'o si gbe leke awọn ọta rẹ.\n\n"
+                  "Egbe:	    Gbọ t'emi, gbọ t'emi",
+            ),
+            _buildVerse(
+              "5.mf	    Kérúbù pẹlu SérÁfù,\n"
+                  "Ẹ f'ogo fun Baba loke,\n"
+                  "Fun isẹgun t'o n se fun wa,\n"
+                  "Nigba t'awọn ayé fẹ kẹgan.\n\n"
+                  "Egbe:	    Gbọ t'emi, gbọ t'emi",
+            ),
+            _buildVerse(
+              "6.cr	    Ẹ f'ogo fun Baba loke,\n"
+                  "A wa si f'ogo f'Ọmọ Rẹ,\n"
+                  "A f'ogo fun Ẹmi Mimọ ,\n"
+                  "Mẹtalọkan ni ọpẹ yẹ fun.\n\n"
+                  "Egbe:	    Gbọ t'emi, gbọ t'emi",
             ),
 
-            // --- VERSE 2 & CHORUS ---
-            _buildVerseAndChorus(
-              '''2.mf	    Ọlọrun t'o gbọ ti Mose,
-		T'apa awọn Ọba ko fi ka,
-		Ọlọrun t'o gbọ t'Elijah,
-		T'o si doju t'awọn ọta rẹ.
-		Egbe:	    Gbọ t'emi, gbọ t'emi''',
-            ),
-
-            // --- VERSE 3 & CHORUS ---
-            _buildVerseAndChorus(
-              '''3.mf	    Ọlọrun t'o pe k'okun wa,
-		T'ọmọ arayé ko ri 'di rẹ,
-		Ọlọrun t'o pe k'ọsa wa,
-		T'ọmọ arayé ko ridi rẹ.
-		Egbe:	    Gbọ t'emi, gbọ t'emi''',
-            ),
-
-            // --- VERSE 4 & CHORUS ---
-            _buildVerseAndChorus(
-              '''4.mf	    Ọlọrun t'o la 'gan ninu,
-		Baba awọn alaini baba,
-		Ọlọrun t'o gbọ ti Estha,
-		T'o si gbe leke awọn ọta rẹ.
-		Egbe:	    Gbọ t'emi, gbọ t'emi''',
-            ),
-
-            // --- VERSE 5 & CHORUS ---
-            _buildVerseAndChorus(
-              '''5.mf	    Kérúbù pẹlu Séráfù,
-		Ẹ f'ogo fun Baba loke,
-		Fun isẹgun t'o n se fun wa,
-		Nigba t'awọn ayé fẹ kẹgan.
-		Egbe:	    Gbọ t'emi, gbọ t'emi''',
-            ),
-
-            // --- VERSE 6 & CHORUS ---
-            _buildVerseAndChorus(
-              '''6.cr	    Ẹ f'ogo fun Baba loke,
-		A wa si f'ogo f'Ọmọ Rẹ,
-		A f'ogo fun Ẹmi Mimọ ,
-		Mẹtalọkan ni ọpẹ yẹ fun.
-		Egbe:	    Gbọ t'emi, gbọ t'emi''',
-            ),
-
-            // --- AMIN ---
-            const SizedBox(height: 19),
-            const Center(
+            // --- AMIN SECTION ---
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(20.0),
+              ),
               child: Text(
                 "AMIN",
                 style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22),
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateFontSize(22),
+                ),
               ),
             ),
-            const SizedBox(height: 50),
+            SizedBox(height: getProportionateScreenHeight(50)),
           ],
         ),
       ),
     );
   }
 
-  // Helper widget to build a verse and its chorus
-  Widget _buildVerseAndChorus(String verse, ) {
-    return Column(
-      children: [
-        const SizedBox(height: 19),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-          child: Text(
-            verse,
-            style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 22),
+  // 5. Helper widget to handle verse text with left alignment and responsive font size 20
+  Widget _buildVerse(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        // Ensures the text block is aligned left as requested
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            // Lyrics font size set to 20, made responsive
+            fontSize: getProportionateFontSize(20),
           ),
         ),
-      ],
+      ),
     );
   }
 }

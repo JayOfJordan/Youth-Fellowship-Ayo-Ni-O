@@ -1,9 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:youth_fellowship/navbar.dart';
-import 'package:youth_fellowship/size_config.dart';
+import 'package:youth_fellowship/services/size_config.dart';
 import 'package:youth_fellowship/homepage.dart';
 import 'package:youth_fellowship/hymns%20page/HYMN%20764.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%201.dart';
@@ -30,7 +29,7 @@ import 'package:youth_fellowship/hymns%20page/hymn%2027.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2028.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2029.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2030.dart';
-import 'hymns page/341.dart';
+import 'hymns page/hymn 341.dart';
 import 'hymns page/Hymn 451.dart';
 import 'hymns page/hymn 100.dart';
 import 'hymns page/hymn 101.dart';
@@ -1798,18 +1797,37 @@ class _HymnsHomeState extends State<HymnsHome> {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize SizeConfig here. It's safe to call multiple times.
     SizeConfig().init(context);
 
     return Scaffold(
-      drawer: const NavBar(),
+      drawer: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.white,
+        ),
+        child: const NavBar(),
+      ),
       backgroundColor: Colors.blue,
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white), // Makes the drawer toggle button white
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Hymn", style: TextStyle(color: Colors.blue.shade900, fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(width: getProportionateScreenWidth(10)),
-            const Text("Book", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              "Hymn",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: getProportionateFontSize(20), // Responsive
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: getProportionateScreenWidth(10)), // Responsive
+            Text(
+              "Book",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: getProportionateFontSize(20), // Responsive
+                  fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         centerTitle: true,
@@ -1817,7 +1835,7 @@ class _HymnsHomeState extends State<HymnsHome> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black),
+            icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () => FirebaseAuth.instance.signOut(),
           ),
         ],
@@ -1825,17 +1843,17 @@ class _HymnsHomeState extends State<HymnsHome> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: getProportionateScreenHeight(20)), // Responsive
             // --- CAROUSEL SLIDER SECTION ---
             _buildImageSlider(),
-            SizedBox(height: getProportionateScreenHeight(20)),
-            // --- OPTIMIZED HYMN LIST SECTION ---
+            SizedBox(height: getProportionateScreenHeight(20)), // Responsive
+            // --- HYMN LIST SECTION ---
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(getProportionateSize(40)),
-                    topRight: Radius.circular(getProportionateSize(40)),
+                    topLeft: Radius.circular(getProportionateSize(40)), // Responsive
+                    topRight: Radius.circular(getProportionateSize(40)), // Responsive
                   ),
                   color: Colors.white,
                 ),
@@ -1843,39 +1861,47 @@ class _HymnsHomeState extends State<HymnsHome> {
                   children: [
                     // --- SEARCH BAR ---
                     Padding(
-                      padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(24), getProportionateScreenHeight(20), getProportionateScreenWidth(24), getProportionateScreenHeight(10)),
+                      padding: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(24),
+                        getProportionateScreenHeight(20),
+                        getProportionateScreenWidth(24),
+                        getProportionateScreenHeight(10),
+                      ),
                       child: TextField(
                         controller: _searchController,
                         onChanged: _runFilter,
                         decoration: InputDecoration(
-                          labelText: 'Search Hymn by Title or Number',
+                          labelText: 'Search Hymn by Number',
                           suffixIcon: const Icon(Icons.search),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(getProportionateSize(20)),
+                            borderRadius:
+                            BorderRadius.circular(getProportionateSize(20)), // Responsive
                           ),
                         ),
                       ),
                     ),
-                    // --- HIGHLY-PERFORMANT LISTVIEW ---
+                    // --- GRIDVIEW ---
                     Expanded(
                       child: GridView.builder(
-                        padding: EdgeInsets.all(getProportionateScreenWidth(16)),
+                        padding: EdgeInsets.all(getProportionateScreenWidth(16)), // Responsive
                         itemCount: _foundHymns.length,
-                        // Defines the grid layout
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // **This sets two columns**
-                          crossAxisSpacing: getProportionateScreenWidth(12), // Horizontal space
-                          mainAxisSpacing: getProportionateScreenHeight(12),  // Vertical space
-                          childAspectRatio: 2.2, // Adjust this ratio to get the card height you like (width / height)
+                          crossAxisCount: 2,
+                          crossAxisSpacing: getProportionateScreenWidth(12), // Responsive
+                          mainAxisSpacing: getProportionateScreenHeight(12), // Responsive
+                          childAspectRatio: 2.2,
                         ),
                         itemBuilder: (context, index) {
                           final hymn = _foundHymns[index];
-                          // The same helper widget is reused here
                           return _buildHymnListItem(
-                            hymnNumber: hymn['number'],
-                            title: hymn['title'],
+                            hymnNumber: hymn['number'] as String,
+                            title: hymn['title'] as String,
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => hymn['page']));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => hymn['page'] as Widget),
+                              );
                             },
                           );
                         },
@@ -1890,16 +1916,17 @@ class _HymnsHomeState extends State<HymnsHome> {
       ),
     );
   }
-  //Widget Helper For Slider
+
+  //Widget Helper For Slider (Now Responsive)
   Widget _buildImageSlider() {
     return CarouselSlider(
       items: imageList.map((item) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          margin: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(8)), // Responsive
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(getProportionateSize(20)), // Responsive
             child: Image.asset(
-              item['image_path'],
+              item['image_path']!,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -1907,7 +1934,7 @@ class _HymnsHomeState extends State<HymnsHome> {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 200,
+        height: getProportionateScreenHeight(200), // Responsive
         autoPlay: true,
         enlargeCenterPage: true,
         aspectRatio: 16 / 9,
@@ -1917,13 +1944,15 @@ class _HymnsHomeState extends State<HymnsHome> {
       ),
     );
   }
-  // Helper widget to build each item in the list
+
+  // Helper widget to build each item in the list (Now Fully Responsive)
   Widget _buildHymnListItem({
     required String hymnNumber,
     required String title,
     required VoidCallback onTap,
   }) {
     return Padding(
+      // All values are now responsive
       padding: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(10),
         vertical: getProportionateScreenHeight(6),
@@ -1932,25 +1961,31 @@ class _HymnsHomeState extends State<HymnsHome> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(getProportionateSize(15)),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(5)),
+          padding:
+          EdgeInsets.symmetric(vertical: getProportionateScreenHeight(5)),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.08),
+            color: Colors.blue.withOpacity(0.7),
             borderRadius: BorderRadius.circular(getProportionateSize(15)),
           ),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Colors.blue.shade700,
+              backgroundColor: Colors.blue,
+              radius: getProportionateSize(22), // Responsive radius
               child: Text(
                 hymnNumber,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateFontSize(14), // Responsive font size
+                ),
               ),
             ),
             title: Text(
               title.toUpperCase(),
               style: TextStyle(
-                color: Colors.black87,
+                color: Colors.white,
                 fontWeight: FontWeight.w600,
-                fontSize: getProportionateFontSize(16),
+                fontSize: getProportionateFontSize(13), // Responsive font size
               ),
               overflow: TextOverflow.ellipsis,
             ),

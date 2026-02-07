@@ -12,7 +12,20 @@
           "package_name": "com.example.youth_fellowship"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "386144966832-9km1qa8dgn4evklj1e6tmiai4j93f6vd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.youth_fellowship",
+            "certificate_hash": "6ded88de5b2e7d0fe50b067d149c6abfb12ad8ed"
+          }
+        },
+        {
+          "client_id": "386144966832-eb4sb7pr13lo52au6mkhhommg82dhrqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD2KQKt0jVCKQprmldxJlS4GhjL6ER4u40"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386144966832-b240bmr32kkion9r8miunnioo7vetgcm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "386144966832-ujb5i3qdrknqnjrp4l1hgubetppiblq1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.youthFellowship"
+              }
+            }
+          ]
         }
       }
     }

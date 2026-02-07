@@ -1,3 +1,4 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
 
 class Hymn855 extends StatefulWidget {
@@ -10,31 +11,38 @@ class Hymn855 extends StatefulWidget {
 class _Hymn855State extends State<Hymn855> {
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                // 3. AppBar Title font size set to 19, made responsive
+                fontSize: getProportionateFontSize(19),
                 fontWeight: FontWeight.normal,
               ),
             ),
           ],
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: Text(
-              "K&S 855", // Hymn Number
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 855", // Hymn Number
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. AppBar Action font size set to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -44,8 +52,8 @@ class _Hymn855State extends State<Hymn855> {
         child: Column(
           children: [
             // --- HYMN TITLE AND SUBTITLE ---
-            const Padding(
-              padding: EdgeInsets.all(15.0),
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
@@ -55,7 +63,7 @@ class _Hymn855State extends State<Hymn855> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                        fontSize: getProportionateFontSize(22),
                       ),
                     ),
                     // No subtitle for this hymn
@@ -64,95 +72,96 @@ class _Hymn855State extends State<Hymn855> {
               ),
             ),
 
-            // --- VERSE 1 & CHORUS ---
-            _buildVerseAndChorus(
+            // --- VERSES (Using helper widget for left alignment and font size 20) ---
+            _buildVerse(
               '''1.     Gbogbo Ogo iyin ọla
-		Ni f'Ọdaguntan,
-		To fara Rẹ rubọ fun rapada wa,
-		Gbogbo Ogo iyin ọla ni f'Olùgbàlà,
-		To gba ọkan wa la.
-		Egbe:	    Awa yin Ọ o Edumare
-		A m'ọrẹ wa Baba rere,		
-		Jesu nikan ni ọpẹ yẹ,
-		Onibu ọrẹ''',
+Ni f'Ọdaguntan,
+To fara Rẹ rubọ fun rapada wa,
+Gbogbo Ogo iyin ọla ni f'Olùgbàlà,
+To gba ọkan wa la.
+Egbe:	    Awa yin Ọ o Edumare
+A m'ọrẹ wa Baba rere,		
+Jesu nikan ni ọpẹ yẹ,
+Onibu ọrẹ''',
             ),
 
-            // --- VERSE 2 & CHORUS ---
-            _buildVerseAndChorus(
+            _buildVerse(
               '''2.     Gbogbo Ogo iyin ọla ni f'Oluwosan,
-		To n wo arun wa san to m’ara wa ya,
-		Gbogbo Ogo iyn ọla ni f'Olufẹ wa,
-		Ọba 'lafia.
-		Egbe:	    Awa yin Ọ o Edumare''',
+To n wo arun wa san to m’ara wa ya,
+Gbogbo Ogo iyn ọla ni f'Olufẹ wa,
+Ọba 'lafia.
+Egbe:	    Awa yin Ọ o Edumare''',
             ),
 
-            // --- VERSE 3 & CHORUS ---
-            _buildVerseAndChorus(
+            _buildVerse(
               '''3.     Gbogbo Ogo iyin ọla ni f'Alagbara,
-		To n fun wa lagbara fun 'sẹ Oluwa,
-		Gbogbo Ogo iyin ọla ni f'Olusẹgun
-		To n sẹgun fun wa.
-		Egbe:	    Awa yin Ọ o Edumare''',
+To n fun wa lagbara fun 'sẹ Oluwa,
+Gbogbo Ogo iyin ọla ni f'Olusẹgun
+To n sẹgun fun wa.
+Egbe:	    Awa yin Ọ o Edumare''',
             ),
 
-            // --- VERSE 4 & CHORUS ---
-            _buildVerseAndChorus(
+            _buildVerse(
               '''4.     Gbogbo ogo iyin ọla ni f'Olupese,
-		To n pese f'aini wa ni ojojumọ,
-		Gbogbo ogo iyin ọla ni f'Olore wa, 
-		Olore ọfẹ.
-		Egbe:	    Awa yin Ọ o Edumare''',
+To n pese f'aini wa ni ojojumọ,
+Gbogbo ogo iyin ọla ni f'Olore wa, 
+Olore ọfẹ.
+Egbe:	    Awa yin Ọ o Edumare''',
             ),
 
-            // --- VERSE 5 & CHORUS ---
-            _buildVerseAndChorus(
+            _buildVerse(
               '''5.     Gbogbo ogo iyin ọla
-		Ni f'Ọba ti mbọ,
-		To mbọ wa mu wa lọ sile wa loke,
-		Gbogbo ogo iyin ọla ni f'Ọba titi,
-		Ọba awọn Ọba.
-		Egbe:	    Awa yin Ọ o Edumare
-		A m'ore wa Baba rere,		
-		Jesu nikan ni ọpẹ yẹ,
-		Onibu ọrẹ''',
+Ni f'Ọba ti mbọ,
+To mbọ wa mu wa lọ sile wa loke,
+Gbogbo ogo iyin ọla ni f'Ọba titi,
+Ọba awọn Ọba.
+Egbe:	    Awa yin Ọ o Edumare
+A m'ore wa Baba rere,		
+Jesu nikan ni ọpẹ yẹ,
+Onibu ọrẹ''',
             ),
 
-            // --- AMIN ---
-            const SizedBox(height: 19),
-            const Center(
+            // --- AMIN SECTION ---
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(20.0),
+              ),
               child: Text(
                 "AMIN",
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: getProportionateFontSize(22),
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            SizedBox(height: getProportionateScreenHeight(50)),
           ],
         ),
       ),
     );
   }
 
-  // Helper widget to build a verse and its chorus
-  Widget _buildVerseAndChorus(String verse) {
-    return Column(
-      children: [
-        const SizedBox(height: 19),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-          child: Text(
-            verse,
-            style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 22),
+  // 5. Helper widget to handle verse text with left alignment and responsive font size 20
+  Widget _buildVerse(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        // Ensures the text block is aligned left as requested
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            // Lyrics font size set to 20, made responsive
+            fontSize: getProportionateFontSize(20),
           ),
         ),
-      ],
+      ),
     );
   }
 }

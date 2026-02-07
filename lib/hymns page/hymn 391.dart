@@ -1,174 +1,148 @@
+import 'package:youth_fellowship/services/size_config.dart';
 import 'package:flutter/material.dart';
 
-class Hymn391 extends StatefulWidget { // Renamed class to Hymn391
-  const Hymn391({super.key}); // Updated constructor
+class Hymn391 extends StatefulWidget {
+  const Hymn391({super.key});
 
   @override
-  State<Hymn391> createState() => _Hymn391State(); // Updated state class name
+  State<Hymn391> createState() => _Hymn391State();
 }
 
-class _Hymn391State extends State<Hymn391> { // Renamed state class
+class _Hymn391State extends State<Hymn391> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(      //backgroundColor: Colors.purple,
+    SizeConfig().init(context);
+
+    return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Seraph Hymns\nOrin mimo kerubu ati serafu",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal
-                ),
-              ),
-            ],
-          ),
-          actions:[
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
             Text(
-              "K&S 391", // Updated Hymn Number
+              "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold
+                color: Colors.white,
+                fontSize: getProportionateFontSize(19),
+                fontWeight: FontWeight.normal,
               ),
             ),
-          ]
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 391",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Colors.transparent,
-              ),
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(30)
-                        ),
-                        child: Center(
-                          child: ListTile(
-                            title: Text('391 C.M.S 286 t.H.C. 383. 6s. 8s. (FE 414)', // Updated Title
-                              style: TextStyle(color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22),
-                            ),
-                            subtitle: Text( // Updated Subtitle
-                              '“Oluwa, Iwọ ni o yẹ lati gba ogo, ati ọla \nati agbara.” - Ifi. 4:11',
-                              style: TextStyle(color: Colors.red,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        ),
+                    Text(
+                      '391 C.M.S 286 t.H.C. 383. 6s. 8s. (FE 414)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getProportionateFontSize(22),
+                      ),
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
+                      '“Oluwa, Iwọ ni o yẹ lati gba ogo, ati ọla \nati agbara.” - Ifi. 4:11',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            //vs 1
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("1.	    BABA, Ẹlẹda wa,          \n" // Updated verse
-                        "Gbọ orin iyin wa,\n"
-                        "L'ayé ati l'ọrun\n"
-                        "Baba Olubukun;\n"
-                        "Iwọ l'ogo ati iyin,\n"
-                        "Ọpẹ, ati ọla yẹ fun.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              "1.	    BABA, Ẹlẹda wa,          \n"
+              "Gbọ orin iyin wa,\n"
+              "L'ayé ati l'ọrun\n"
+              "Baba Olubukun;\n"
+              "Iwọ l'ogo ati iyin,\n"
+              "Ọpẹ, ati ọla yẹ fun.",
             ),
-            //vs2
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("2.f	    'Wọ Ọlọrun Ọmọ,       \n" // Updated verse
-                        "T'O ku lati gba wa;\n"
-                        "Ẹni t'O ji dide,\n"
-                        "Ti O si goke lọ;\n"
-                        "Iwọ l'ogo, ati iyin,\n"
-                        "Ọpẹ, ati ọla yẹ fun.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              "2.f	    'Wọ Ọlọrun Ọmọ,       \n"
+              "T'O ku lati gba wa;\n"
+              "Ẹni t'O ji dide,\n"
+              "Ti O si goke lọ;\n"
+              "Iwọ l'ogo, ati iyin,\n"
+              "Ọpẹ, ati ọla yẹ fun.",
             ),
-            //vs3
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("3.	    Si Ọ Ẹmi Mimọ ,         \n" // Updated verse
-                        "Ni a kọrin iyin;\n"
-                        "Iwọ t'o f'imọlẹ,\n"
-                        "Iye si ọkan wa;\n"
-                        "cr	    Iwọ l'ogo, ati iyin,\n"
-                        "Ọpẹ, ati ọla yẹ fun.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              "3.	    Si Ọ Ẹmi Mimọ ,         \n"
+              "Ni a kọrin iyin;\n"
+              "Iwọ t'o f'imọlẹ,\n"
+              "Iye si ọkan wa;\n"
+              "cr	    Iwọ l'ogo, ati iyin,\n"
+              "Ọpẹ, ati ọla yẹ fun.",
             ),
-            //vs4
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("4.p	    Mimọ, mimọ, mimọ,\n" // Updated verse
-                        "N'iyin Mẹtalọkan;\n"
-                        "L'ayé ati l'ọrun,\n"
-                        "f	    L'a o ma kọrin pe;\n"
-                        "cr	    Iwọ l'ogo, ati iyin,\n"
-                        "Ọpẹ, ati ọla yẹ fun.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              "4.p	    Mimọ, mimọ, mimọ,\n"
+              "N'iyin Mẹtalọkan;\n"
+              "L'ayé ati l'ọrun,\n"
+              "f	    L'a o ma kọrin pe;\n"
+              "cr	    Iwọ l'ogo, ati iyin,\n"
+              "Ọpẹ, ati ọla yẹ fun.",
             ),
-            //Amin
-            Column(
-              children: [
-                Text(
-                  "\nAMIN",
-                  style: TextStyle(color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(20.0),
+              ),
+              child: Text(
+                "AMIN",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateFontSize(22),
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 50,),
+            SizedBox(height: getProportionateScreenHeight(20)),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVerse(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: getProportionateFontSize(20),
+          ),
         ),
       ),
     );
