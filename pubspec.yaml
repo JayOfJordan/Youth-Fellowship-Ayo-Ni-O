@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_sign_in: ^7.2.0
   firebase_app_check: ^0.4.1+4
+  firebase_messaging: ^16.1.1
+  http: ^1.6.0
+  mime: ^2.0.0
+  flutter_svg: ^2.2.3
   quickalert: ^1.1.0
   url_launcher: ^6.3.2
   carousel_slider: ^5.1.1
@@ -91,6 +95,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/icons/
     - lib/hymns page/hymn 109.dart
   generate: true
   #   - images/a_dot_ham.jpeg

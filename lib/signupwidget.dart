@@ -1,4 +1,6 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart' hide Page;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +97,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 _buildModernTextField(
                   controller: emailController,
                   hint: 'Email Address',
-                  icon: Icons.alternate_email_rounded,
+                  svgPath: 'assets/icons/mail.svg',
                   keyboardType: TextInputType.emailAddress,
                   validator: (email) =>
                   email != null && !EmailValidator.validate(email)
@@ -108,7 +110,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 _buildModernTextField(
                   controller: passwordController,
                   hint: 'Password',
-                  icon: Icons.lock_outline_rounded,
+                  svgPath: 'assets/icons/lock.svg',
                   isPassword: true,
                   obscureText: !_isPasswordVisible,
                   onSuffixTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
@@ -120,7 +122,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 _buildModernTextField(
                   controller: confirmPasswordController,
                   hint: 'Confirm Password',
-                  icon: Icons.lock_reset_rounded,
+                  svgPath: 'assets/icons/lock.svg',
                   isPassword: true,
                   obscureText: !_isConfirmVisible,
                   onSuffixTap: () => setState(() => _isConfirmVisible = !_isConfirmVisible),
@@ -136,7 +138,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   children: [
                     _buildGridButton(
                       label: "Register",
-                      icon: Icons.person_add_alt_1_rounded,
+                      svgAsset: 'assets/icons/person2.svg',
                       color: Colors.blue.shade700,
                       onTap: signUp,
                     ),
@@ -176,7 +178,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   Widget _buildModernTextField({
     required TextEditingController controller,
     required String hint,
-    required IconData icon,
+    IconData? icon,      // Changed to optional
+    String? svgPath,     // Added new parameter
     bool isPassword = false,
     bool obscureText = false,
     VoidCallback? onSuffixTap,
@@ -195,7 +198,18 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         validator: validator,
         decoration: InputDecoration(
           hintText: hint,
-          prefixIcon: Icon(icon, color: Colors.blue.shade400, size: 22),
+          // Updated prefixIcon logic to support SVG or Icon
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: svgPath != null
+                ? SvgPicture.asset(
+              svgPath,
+              width: 22,
+              height: 22,
+              colorFilter: ColorFilter.mode(Colors.blue.shade400, BlendMode.srcIn),
+            )
+                : Icon(icon, color: Colors.blue.shade400, size: 22),
+          ),
           suffixIcon: isPassword
               ? GestureDetector(
               onTap: onSuffixTap,
@@ -214,6 +228,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     required VoidCallback onTap,
     IconData? icon,
     String? imageAsset,
+    String? svgAsset, // Add new parameter for SVG paths
     bool isLight = false,
   }) {
     return Column(children: [
@@ -231,7 +246,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             border: isLight ? Border.all(color: Colors.grey.shade200) : null,
           ),
           child: Center(
-            child: imageAsset != null
+            // Add logic to display SVG if provided
+            child: svgAsset != null
+                ? SvgPicture.asset(
+              svgAsset,
+              height: getProportionateSize(28),
+              // Tint the SVG icon white to match the original style
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            )
+                : imageAsset != null
                 ? Image.asset(imageAsset, height: getProportionateSize(28))
                 : Icon(icon, color: Colors.white, size: getProportionateSize(28)),
           ),
@@ -245,6 +268,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               color: Colors.grey.shade700))
     ]);
   }
+
 
   Future signUp() async {
     if (!formKey.currentState!.validate()) return;

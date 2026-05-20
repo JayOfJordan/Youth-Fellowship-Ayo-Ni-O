@@ -1,0 +1,19 @@
+<svg viewBox="0 0 33 33" fill="none" width="32" height="32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <style>
+        :root, .palette0 {color: currentColor;
+            --color0: #292929;
+        }
+    </style>
+    <g stroke-width="2.31353" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#navbar_clip0_1545_14479)">
+        <path d="M28.9192 1.1568l-25.4489 0c-1.2777 0-2.3135 1.0358-2.3135 2.3135v25.4489c0 1.2777 1.0358 2.3135 2.3135 2.3135h25.4489c1.2777 0 2.3136-1.0358 2.3136-2.3135V3.4703c0-1.2777-1.0359-2.3135-2.3136-2.3135z" />
+        <path d="M11.5677 1.1568v30.0759" />
+        <path d="M20.8218 1.1568v30.0759" />
+        <path d="M31.2328 11.5677H1.1568" />
+        <path d="M31.2328 20.8218H1.1568" />
+    </g>
+    <defs>
+        <clipPath id="navbar_clip0_1545_14479">
+            <rect fill="#fff" width="32.3895" height="32.3895" />
+        </clipPath>
+    </defs>
+</svg>

@@ -6,15 +6,15 @@ import 'package:youth_fellowship/homepage4.dart';
 import 'package:youth_fellowship/hymnbook.dart';
 import 'package:youth_fellowship/home2.dart';
 
-class HomePage4 extends StatefulWidget {
-  const HomePage4({super.key});
+class HomePage2 extends StatefulWidget {
+  const HomePage2({super.key});
 
   @override
-  State<HomePage4> createState() => _HomePage4State();
+  State<HomePage2> createState() => _HomePage2State();
 }
 
-class _HomePage4State extends State<HomePage4> {
-  int _selectedIndex = 3;
+class _HomePage2State extends State<HomePage2> {
+  int _selectedIndex = 1;
 
   final List<Widget> _pages = [
     const Page(title: ''),

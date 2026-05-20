@@ -1,6 +1,9 @@
 import 'dart:typed_data';
+import 'package:flutter/material.dart' hide Page;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart'; // 1. Added Firebase Storage
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +11,8 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:youth_fellowship/navbar.dart';
 import 'package:youth_fellowship/services/size_config.dart';
 import 'package:youth_fellowship/services/utils.dart';
-import 'package:youth_fellowship/updateforms.dart'; // 1. Added Import
+import 'package:youth_fellowship/updateforms.dart';
+import 'package:mime/mime.dart';
 
 class Forms extends StatefulWidget {
   final String userId;
@@ -30,9 +34,10 @@ class _FormsState extends State<Forms> {
   final _mobileController = TextEditingController();
   final _emailController = TextEditingController();
 
+  String? profileImageUrl;
+
   bool _isLoading = true;
   bool _alreadyRegistered = false;
-
   String? _sexValue;
   String? _maritalValue;
   String? _bandValue;
@@ -62,6 +67,7 @@ class _FormsState extends State<Forms> {
       if (doc.exists) {
         setState(() {
           _alreadyRegistered = true;
+          profileImageUrl = doc['ProfileImage'];
           _isLoading = false;
         });
       } else {
@@ -91,6 +97,32 @@ class _FormsState extends State<Forms> {
     if (img != null) setState(() => _image = img);
   }
 
+  // 2. Logic to upload image to Firebase Storage
+  Future<String?> _uploadImageToStorage(Uint8List image) async {
+    try {
+      Reference ref = FirebaseStorage.instance
+          .ref()
+          .child('profilePics')
+          .child(_auth.currentUser!.uid);
+
+      // 2. Dynamically look up the MIME type from the bytes
+      // This will recognize jpeg, png, gif, webp, etc.
+      String? mimeType = lookupMimeType('', headerBytes: image);
+
+      // 3. Apply the detected type to metadata (fallback to image/jpeg if unknown)
+      SettableMetadata metadata = SettableMetadata(contentType: mimeType ?? 'image/jpeg');
+
+      UploadTask uploadTask = ref.putData(image, metadata);
+      TaskSnapshot snapshot = await uploadTask;
+
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      debugPrint("Error occurred while uploading image: $e");
+      return null;
+    }
+  }
+
   Future<void> _selectDate() async {
     if (_alreadyRegistered) return;
     DateTime? picked = await showDatePicker(
@@ -109,6 +141,15 @@ class _FormsState extends State<Forms> {
       setState(() => _isLoading = true);
       try {
         User? user = _auth.currentUser;
+        if (user == null) return;
+
+        // 1. Handle Image Upload and get the URL
+        // Note: We assign to the class-level profileImageUrl so the UI can use it
+        if (_image != null) {
+          profileImageUrl = await _uploadImageToStorage(_image!);
+        }
+
+        // 2. Prepare the data map including the new ProfileImage URL
         final jsonData = {
           'Full Name': _fullnameController.text,
           'Date Of Birth': _dobController.text,
@@ -120,26 +161,35 @@ class _FormsState extends State<Forms> {
           'Tithe Card': _tithecardController.text,
           'Email': _emailController.text,
           'Phone': _mobileController.text,
-          'uid': user!.uid,
+          'uid': user.uid,
+          'ProfileImage': profileImageUrl, // Saves the URL to the document
           'SubmittedAt': FieldValue.serverTimestamp(),
         };
 
+        // 3. Save to Firestore
         await FirebaseFirestore.instance
             .collection('members')
             .doc(user.uid)
             .set(jsonData);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Registration Successful!'), backgroundColor: Colors.green)
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text('Registration Successful!'),
+                  backgroundColor: Colors.white70
+              )
+          );
+        }
 
         setState(() => _alreadyRegistered = true);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red)
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red)
+          );
+        }
       } finally {
-        setState(() => _isLoading = false);
+        if (mounted) setState(() => _isLoading = false);
       }
     }
   }
@@ -155,13 +205,12 @@ class _FormsState extends State<Forms> {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
+          begin: Alignment.center,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue, Colors.white],
+          colors: [Colors.blue, Colors.lightBlueAccent],
         ),
       ),
       child: Scaffold(
-        // Ensure Drawer is always provided so the icon shows in AppBar
         drawer: const NavBar(),
         appBar: AppBar(
           title: Text(
@@ -171,6 +220,18 @@ class _FormsState extends State<Forms> {
               fontSize: getProportionateFontSize(19),
               fontWeight: FontWeight.bold,
             ),
+          ),
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icons/navbar.svg',
+                  width: 24,
+                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                ),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              );
+            },
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -183,7 +244,6 @@ class _FormsState extends State<Forms> {
     );
   }
 
-  // REFACTORED: View shown after form is filled
   Widget _buildRegisteredView() {
     return Center(
       child: Padding(
@@ -211,27 +271,50 @@ class _FormsState extends State<Forms> {
               ),
             ),
             const SizedBox(height: 40),
-            SizedBox(
+            Container(
               width: double.infinity,
-              child: ElevatedButton(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(getProportionateSize(15)),
+                gradient: const LinearGradient(
+                  colors: [Colors.white, Color(0xFFE3F2FD)],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(15),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(getProportionateSize(15)),
+                  ),
                 ),
                 onPressed: () {
-                  // 2. Updated Routing to updateforms.dart
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const UpdateForms()),
                   );
                 },
-                child: Text(
-                  "Update Details",
+                icon: Icon(
+                  Icons.edit_note_rounded,
+                  color: Colors.blue.shade900,
+                  size: getProportionateSize(24),
+                ),
+                label: Text(
+                  "UPDATE PROFILE",
                   style: TextStyle(
-                      color: Colors.blue.shade900,
-                      fontWeight: FontWeight.bold,
-                      fontSize: getProportionateFontSize(16)
+                    color: Colors.blue.shade900,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
+                    fontSize: getProportionateFontSize(16),
                   ),
                 ),
               ),
@@ -310,7 +393,7 @@ class _FormsState extends State<Forms> {
               ),
               SizedBox(height: getProportionateScreenHeight(40)),
               _buildSubmitButton(),
-              SizedBox(height: getProportionateScreenHeight(40)),
+              SizedBox(height: getProportionateScreenHeight(100)),
             ],
           ),
         ),
@@ -437,8 +520,8 @@ class _FormsState extends State<Forms> {
         onPressed: _submitForm,
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(16)),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.blue,
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 5,
         ),
@@ -456,7 +539,11 @@ class _FormsState extends State<Forms> {
         children: [
           CircleAvatar(
             radius: getProportionateSize(60),
-            backgroundImage: _image != null ? MemoryImage(_image!) : const AssetImage('assets/youth2.jpg') as ImageProvider,
+            backgroundImage: _image != null
+                ? MemoryImage(_image!) // Local preview after picking
+                : (profileImageUrl != null && profileImageUrl!.isNotEmpty)
+                ? NetworkImage(profileImageUrl!) // Image from Firebase
+                : const AssetImage('assets/youth2.jpg') as ImageProvider, // Default
             backgroundColor: Colors.white.withOpacity(0.3),
           ),
           if (!_alreadyRegistered)

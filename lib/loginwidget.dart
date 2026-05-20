@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Page;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:youth_fellowship/forgotpassword.dart';
 import 'package:youth_fellowship/services/size_config.dart';
@@ -115,7 +117,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               _buildModernTextField(
                 controller: emailController,
                 hint: 'Email Address',
-                icon: Icons.alternate_email_rounded,
+                svgPath: 'assets/icons/mail.svg',
                 keyboardType: TextInputType.emailAddress,
               ),
 
@@ -124,7 +126,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               _buildModernTextField(
                 controller: passwordController,
                 hint: 'Password',
-                icon: Icons.lock_outline_rounded,
+                svgPath: 'assets/icons/open lock.svg',
                 isPassword: true,
                 obscureText: !_isPasswordVisible,
                 onSuffixTap: () {
@@ -160,7 +162,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   children: [
                     _buildGridButton(
                       label: "Sign In",
-                      icon: Icons.login_rounded,
+                      svgAsset: 'assets/icons/Signin.svg',
                       color: Colors.blue.shade700,
                       onTap: signIn,
                     ),
@@ -212,35 +214,42 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget _buildModernTextField({
     required TextEditingController controller,
     required String hint,
-    required IconData icon,
+    IconData? icon,      // Changed to optional
+    String? svgPath,     // Added new parameter
     bool isPassword = false,
     bool obscureText = false,
     VoidCallback? onSuffixTap,
     TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
   }) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(getProportionateSize(15)),
       ),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const TextStyle(fontWeight: FontWeight.w500),
+        validator: validator,
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 15),
-          prefixIcon: Icon(icon, color: Colors.blue.shade400, size: 22),
+          // Updated prefixIcon logic to support SVG or Icon
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: svgPath != null
+                ? SvgPicture.asset(
+              svgPath,
+              width: 22,
+              height: 22,
+              colorFilter: ColorFilter.mode(Colors.blue.shade400, BlendMode.srcIn),
+            )
+                : Icon(icon, color: Colors.blue.shade400, size: 22),
+          ),
           suffixIcon: isPassword
               ? GestureDetector(
-            onTap: onSuffixTap,
-            child: Icon(
-              obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-              color: Colors.grey,
-              size: 20,
-            ),
-          )
+              onTap: onSuffixTap,
+              child: Icon(obscureText ? Icons.visibility_off : Icons.visibility, size: 20))
               : null,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
@@ -255,45 +264,45 @@ class _LoginWidgetState extends State<LoginWidget> {
     required VoidCallback onTap,
     IconData? icon,
     String? imageAsset,
+    String? svgAsset, // Add new parameter for SVG paths
     bool isLight = false,
   }) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            height: getProportionateSize(65),
-            width: getProportionateSize(65),
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: color.withOpacity(0.3),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-              border: isLight ? Border.all(color: Colors.grey.shade200) : null,
-            ),
-            child: Center(
-              child: imageAsset != null
-                  ? Image.asset(imageAsset, height: getProportionateSize(28))
-                  : Icon(icon, color: Colors.white, size: getProportionateSize(28)),
-            ),
+    return Column(children: [
+      GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: getProportionateSize(65),
+          width: getProportionateSize(65),
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(color: color.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5))
+            ],
+            border: isLight ? Border.all(color: Colors.grey.shade200) : null,
+          ),
+          child: Center(
+            // Add logic to display SVG if provided
+            child: svgAsset != null
+                ? SvgPicture.asset(
+              svgAsset,
+              height: getProportionateSize(28),
+              // Tint the SVG icon white to match the original style
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            )
+                : imageAsset != null
+                ? Image.asset(imageAsset, height: getProportionateSize(28))
+                : Icon(icon, color: Colors.white, size: getProportionateSize(28)),
           ),
         ),
-        SizedBox(height: getProportionateScreenHeight(8)),
-        Text(
-          label,
+      ),
+      SizedBox(height: getProportionateScreenHeight(8)),
+      Text(label,
           style: TextStyle(
-            fontSize: getProportionateFontSize(13),
-            fontWeight: FontWeight.w600,
-            color: Colors.grey.shade700,
-          ),
-        )
-      ],
-    );
+              fontSize: getProportionateFontSize(13),
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade700))
+    ]);
   }
 
   Future signIn() async {

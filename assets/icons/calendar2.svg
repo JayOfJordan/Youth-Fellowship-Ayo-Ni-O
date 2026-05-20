@@ -1,0 +1,20 @@
+<svg viewBox="0 0 24 24" fill="none" width="32" height="32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <style>
+        :root, .palette0 {color: currentColor;
+            --color0: #292929;
+        }
+    </style>
+    <g stroke-width="2" stroke="var(--color0, #292929)" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#calendar2_clip0_1_20421)">
+        <path d="M4 4h16v14c0 1.1046-0.8954 2-2 2H6c-1.1046 0-2-0.8954-2-2z" />
+        <path d="M12 12v4" />
+        <path d="M10 14h4" />
+        <path d="M4 8h16" />
+        <path d="M16 3v2" />
+        <path d="M8 3v2" />
+    </g>
+    <defs>
+        <clipPath id="calendar2_clip0_1_20421">
+            <rect fill="#fff" width="24" height="24" />
+        </clipPath>
+    </defs>
+</svg>

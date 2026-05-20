@@ -107,16 +107,8 @@ class _MAnnouncementState extends State<MAnnouncement> {
     return StreamBuilder(
       stream: announcementStream,
       builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Center(
-              child: Text("Error loading announcements.",
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: getProportionateFontSize(14))));
-        }
+        // 1. Check if we have data first (Firestore serves cache immediately)
+        // This ensures the list shows up even if ConnectionState is 'waiting' due to no internet
         if (snapshot.hasData && snapshot.data.docs.length > 0) {
           return ListView.builder(
             shrinkWrap: true,
@@ -127,18 +119,44 @@ class _MAnnouncementState extends State<MAnnouncement> {
               return _buildAnnouncementCard(ds);
             },
           );
-        } else {
-          return Center(
+        }
+
+        // 2. Handle the "waiting" state ONLY if we don't have data yet
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
             child: Padding(
-              padding: EdgeInsets.all(getProportionateSize(20.0)),
-              child: Text(
-                "No announcements found.",
-                style: TextStyle(
-                    fontSize: getProportionateFontSize(16), color: Colors.grey),
+              padding: EdgeInsets.all(20.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        // 3. Handle Errors
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              "Error loading announcements.",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: getProportionateFontSize(14),
               ),
             ),
           );
         }
+
+        // 4. Fallback for empty state (No cache and No server data)
+        return Center(
+          child: Padding(
+            padding: EdgeInsets.all(getProportionateSize(20.0)),
+            child: Text(
+              "No announcements found.",
+              style: TextStyle(
+                fontSize: getProportionateFontSize(16),
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        );
       },
     );
   }

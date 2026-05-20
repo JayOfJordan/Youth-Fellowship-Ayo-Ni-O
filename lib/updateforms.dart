@@ -149,7 +149,7 @@ class _UpdateFormsState extends State<UpdateForms> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue, Colors.white],
+          colors: [Colors.blue, Colors.lightBlueAccent],
         ),
       ),
       child: Scaffold(
