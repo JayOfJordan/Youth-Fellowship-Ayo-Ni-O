@@ -21,7 +21,9 @@ void main() async {
 
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
+
   runApp(const MyApp());
 }
 final navigatorKey = GlobalKey<NavigatorState>();
