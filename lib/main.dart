@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +10,20 @@ import 'package:youth_fellowship/verifyemail.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // Initialize App Check
+  await FirebaseAppCheck.instance.activate(
+    // For Android, PlayIntegrity is the recommended provider
+    androidProvider: AndroidProvider.playIntegrity,
+    // For iOS, DeviceCheck or AppAttest
+    appleProvider: AppleProvider.deviceCheck,
+  );
+
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
+
   runApp(const MyApp());
 }
 final navigatorKey = GlobalKey<NavigatorState>();

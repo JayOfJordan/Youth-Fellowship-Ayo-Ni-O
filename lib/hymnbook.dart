@@ -1,10 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:youth_fellowship/navbar.dart';
-import 'package:youth_fellowship/size_config.dart';
-import 'package:youth_fellowship/homepage.dart';
+import 'package:youth_fellowship/services/size_config.dart';
 import 'package:youth_fellowship/hymns%20page/HYMN%20764.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%201.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2010.dart';
@@ -30,7 +29,7 @@ import 'package:youth_fellowship/hymns%20page/hymn%2027.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2028.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2029.dart';
 import 'package:youth_fellowship/hymns%20page/hymn%2030.dart';
-import 'hymns page/341.dart';
+import 'hymns page/hymn 341.dart';
 import 'hymns page/Hymn 451.dart';
 import 'hymns page/hymn 100.dart';
 import 'hymns page/hymn 101.dart';
@@ -871,7 +870,6 @@ import 'hymns page/hymn 97.dart';
 import 'hymns page/hymn 98.dart';
 import 'hymns page/hymn 99.dart';
 import 'hymns page/hymn33.dart';
-
 class HymnsHome extends StatefulWidget {
   const HymnsHome({super.key, required this.title});
   final String title;
@@ -881,7 +879,6 @@ class HymnsHome extends StatefulWidget {
 }
 
 class _HymnsHomeState extends State<HymnsHome> {
-  // --- CAROUSEL DATA ---
   final List<Map<String, dynamic>> imageList = [
     {"id": 1, "image_path": 'assets/choir 1.jpg'},
     {"id": 2, "image_path": 'assets/choir 2.jpg'},
@@ -892,1014 +889,1772 @@ class _HymnsHomeState extends State<HymnsHome> {
   ];
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
-
-  // --- HYMN DATA AND NAVIGATION LOGIC ---
-  late final List<Map<String, dynamic>> _allHymns;
-  List<Map<String, dynamic>> _foundHymns = [];
   final TextEditingController _searchController = TextEditingController();
+
+  // Use 'static const' for the master data to keep it out of the build cycle
+  late final List<Map<String, String>> _allHymns;
+  List<Map<String, String>> _foundHymns = [];
 
   @override
   void initState() {
     super.initState();
-    // Initialize the list of all hymns with their titles and navigation widgets
-    _allHymns = [
-      {'number': '1', 'title': 'K&S 1', 'page': const Hymn1()},
-      {'number': '2', 'title': 'K&S 2', 'page': const Hymn2()},
-      {'number': '3', 'title': 'K&S 3', 'page': const Hymn3()},
-      {'number': '4', 'title': 'K&S 4', 'page': const Hymn4()},
-      {'number': '5', 'title': 'K&S 5', 'page': const Hymn5()},
-      {'number': '6', 'title': 'K&S 6', 'page': const Hymn6()},
-      {'number': '7', 'title': 'K&S 7', 'page': const Hymn7()},
-      {'number': '8', 'title': 'K&S 8', 'page': const Hymn8()},
-      {'number': '9', 'title': 'K&S 9', 'page': const Hymn9()},
-      {'number': '10', 'title': 'K&S 10', 'page': const Hymn10()},
-      {'number': '11', 'title': 'K&S 11', 'page': const Hymn11()},
-      {'number': '12', 'title': 'K&S 12', 'page': const Hymn12()},
-      {'number': '13', 'title': 'K&S 13', 'page': const Hymn13()},
-      {'number': '14', 'title': 'K&S 14', 'page': const Hymn14()},
-      {'number': '15', 'title': 'K&S 15', 'page': const Hymn15()},
-      {'number': '16', 'title': 'K&S 16', 'page': const Hymn16()},
-      {'number': '17', 'title': 'K&S 17', 'page': const Hymn17()},
-      {'number': '18', 'title': 'K&S 18', 'page': const Hymn18()},
-      {'number': '19', 'title': 'K&S 19', 'page': const Hymn19()},
-      {'number': '20', 'title': 'K&S 20', 'page': const Hymn20()},
-      {'number': '21', 'title': 'K&S 21', 'page': const Hymn21()},
-      {'number': '22', 'title': 'K&S 22', 'page': const Hymn22()},
-      {'number': '23', 'title': 'K&S 23', 'page': const Hymn23()},
-      {'number': '24', 'title': 'K&S 24', 'page': const Hymn24()},
-      {'number': '25', 'title': 'K&S 25', 'page': const Hymn25()},
-      {'number': '26', 'title': 'K&S 26', 'page': const Hymn26()},
-      {'number': '27', 'title': 'K&S 27', 'page': const Hymn27()},
-      {'number': '28', 'title': 'K&S 28', 'page': const Hymn28()},
-      {'number': '29', 'title': 'K&S 29', 'page': const Hymn29()},
-      {'number': '30', 'title': 'K&S 30', 'page': const Hymn30()},
-      {'number': '31', 'title': 'K&S 31', 'page': const Hymn31()},
-      {'number': '32', 'title': 'K&S 32', 'page': const Hymn32()},
-      {'number': '33', 'title': 'K&S 33', 'page': const Hymn33()},
-      {'number': '34', 'title': 'K&S 34', 'page': const Hymn34()},
-      {'number': '35', 'title': 'K&S 35', 'page': const Hymn35()},
-      {'number': '36', 'title': 'K&S 36', 'page': const Hymn36()},
-      {'number': '37', 'title': 'K&S 37', 'page': const Hymn37()},
-      {'number': '38', 'title': 'K&S 38', 'page': const Hymn38()},
-      {'number': '39', 'title': 'K&S 39', 'page': const Hymn39()},
-      {'number': '40', 'title': 'K&S 40', 'page': const Hymn40()},
-      {'number': '41', 'title': 'K&S 41', 'page': const Hymn41()},
-      {'number': '42', 'title': 'K&S 42', 'page': const Hymn42()},
-      {'number': '43', 'title': 'K&S 43', 'page': const Hymn43()},
-      {'number': '44', 'title': 'K&S 44', 'page': const Hymn44()},
-      {'number': '45', 'title': 'K&S 45', 'page': const Hymn45()},
-      {'number': '46', 'title': 'K&S 46', 'page': const Hymn46()},
-      {'number': '47', 'title': 'K&S 47', 'page': const Hymn47()},
-      {'number': '48', 'title': 'K&S 48', 'page': const Hymn48()},
-      {'number': '49', 'title': 'K&S 49', 'page': const Hymn49()},
-      {'number': '50', 'title': 'K&S 50', 'page': const Hymn50()},
-      {'number': '51', 'title': 'K&S 51', 'page': const Hymn51()},
-      {'number': '52', 'title': 'K&S 52', 'page': const Hymn52()},
-      {'number': '53', 'title': 'K&S 53', 'page': const Hymn53()},
-      {'number': '54', 'title': 'K&S 54', 'page': const Hymn54()},
-      {'number': '55', 'title': 'K&S 55', 'page': const Hymn55()},
-      {'number': '56', 'title': 'K&S 56', 'page': const Hymn56()},
-      {'number': '57', 'title': 'K&S 57', 'page': const Hymn57()},
-      {'number': '58', 'title': 'K&S 58', 'page': const Hymn58()},
-      {'number': '59', 'title': 'K&S 59', 'page': const Hymn59()},
-      {'number': '60', 'title': 'K&S 60', 'page': const Hymn60()},
-      {'number': '61', 'title': 'K&S 61', 'page': const Hymn61()},
-      {'number': '62', 'title': 'K&S 62', 'page': const Hymn62()},
-      {'number': '63', 'title': 'K&S 63', 'page': const Hymn63()},
-      {'number': '64', 'title': 'K&S 64', 'page': const Hymn64()},
-      {'number': '65', 'title': 'K&S 65', 'page': const Hymn65()},
-      {'number': '66', 'title': 'K&S 66', 'page': const Hymn66()},
-      {'number': '67', 'title': 'K&S 67', 'page': const Hymn67()},
-      {'number': '68', 'title': 'K&S 68', 'page': const Hymn68()},
-      {'number': '69', 'title': 'K&S 69', 'page': const Hymn69()},
-      {'number': '70', 'title': 'K&S 70', 'page': const Hymn70()},
-      {'number': '71', 'title': 'K&S 71', 'page': const Hymn71()},
-      {'number': '72', 'title': 'K&S 72', 'page': const Hymn72()},
-      {'number': '73', 'title': 'K&S 73', 'page': const Hymn73()},
-      {'number': '74', 'title': 'K&S 74', 'page': const Hymn74()},
-      {'number': '75', 'title': 'K&S 75', 'page': const Hymn75()},
-      {'number': '76', 'title': 'K&S 76', 'page': const Hymn76()},
-      {'number': '77', 'title': 'K&S 77', 'page': const Hymn77()},
-      {'number': '78', 'title': 'K&S 78', 'page': const Hymn78()},
-      {'number': '79', 'title': 'K&S 79', 'page': const Hymn79()},
-      {'number': '80', 'title': 'K&S 80', 'page': const Hymn80()},
-      {'number': '81', 'title': 'K&S 81', 'page': const Hymn81()},
-      {'number': '82', 'title': 'K&S 82', 'page': const Hymn82()},
-      {'number': '83', 'title': 'K&S 83', 'page': const Hymn83()},
-      {'number': '84', 'title': 'K&S 84', 'page': const Hymn84()},
-      {'number': '85', 'title': 'K&S 85', 'page': const Hymn85()},
-      {'number': '86', 'title': 'K&S 86', 'page': const Hymn86()},
-      {'number': '87', 'title': 'K&S 87', 'page': const Hymn87()},
-      {'number': '88', 'title': 'K&S 88', 'page': const Hymn88()},
-      {'number': '89', 'title': 'K&S 89', 'page': const Hymn89()},
-      {'number': '90', 'title': 'K&S 90', 'page': const Hymn90()},
-      {'number': '91', 'title': 'K&S 91', 'page': const Hymn91()},
-      {'number': '92', 'title': 'K&S 92', 'page': const Hymn92()},
-      {'number': '93', 'title': 'K&S 93', 'page': const Hymn93()},
-      {'number': '94', 'title': 'K&S 94', 'page': const Hymn94()},
-      {'number': '95', 'title': 'K&S 95', 'page': const Hymn95()},
-      {'number': '96', 'title': 'K&S 96', 'page': const Hymn96()},
-      {'number': '97', 'title': 'K&S 97', 'page': const Hymn97()},
-      {'number': '98', 'title': 'K&S 98', 'page': const Hymn98()},
-      {'number': '99', 'title': 'K&S 99', 'page': const Hymn99()},
-      {'number': '100', 'title': 'K&S 100', 'page': const Hymn100()},
-      {'number': '101', 'title': 'K&S 101', 'page': const Hymn101()},
-      {'number': '102', 'title': 'K&S 102', 'page': const Hymn102()},
-      {'number': '103', 'title': 'K&S 103', 'page': const Hymn103()},
-      {'number': '104', 'title': 'K&S 104', 'page': const Hymn104()},
-      {'number': '105', 'title': 'K&S 105', 'page': const Hymn105()},
-      {'number': '106', 'title': 'K&S 106', 'page': const Hymn106()},
-      {'number': '107', 'title': 'K&S 107', 'page': const Hymn107()},
-      {'number': '108', 'title': 'K&S 108', 'page': const Hymn108()},
-      {'number': '109', 'title': 'K&S 109', 'page': const Hymn109()},
-      {'number': '110', 'title': 'K&S 110', 'page': const Hymn110()},
-      {'number': '111', 'title': 'K&S 111', 'page': const Hymn111()},
-      {'number': '112', 'title': 'K&S 112', 'page': const Hymn112()},
-      {'number': '113', 'title': 'K&S 113', 'page': const Hymn113()},
-      {'number': '114', 'title': 'K&S 114', 'page': const Hymn114()},
-      {'number': '115', 'title': 'K&S 115', 'page': const Hymn115()},
-      {'number': '116', 'title': 'K&S 116', 'page': const Hymn116()},
-      {'number': '117', 'title': 'K&S 117', 'page': const Hymn117()},
-      {'number': '118', 'title': 'K&S 118', 'page': const Hymn118()},
-      {'number': '119', 'title': 'K&S 119', 'page': const Hymn119()},
-      {'number': '120', 'title': 'K&S 120', 'page': const Hymn120()},
-      {'number': '121', 'title': 'K&S 121', 'page': const Hymn121()},
-      {'number': '122', 'title': 'K&S 122', 'page': const Hymn122()},
-      {'number': '123', 'title': 'K&S 123', 'page': const Hymn123()},
-      {'number': '124', 'title': 'K&S 124', 'page': const Hymn124()},
-      {'number': '125', 'title': 'K&S 125', 'page': const Hymn125()},
-      {'number': '126', 'title': 'K&S 126', 'page': const Hymn126()},
-      {'number': '127', 'title': 'K&S 127', 'page': const Hymn127()},
-      {'number': '128', 'title': 'K&S 128', 'page': const Hymn128()},
-      {'number': '129', 'title': 'K&S 129', 'page': const Hymn129()},
-      {'number': '130', 'title': 'K&S 130', 'page': const Hymn130()},
-      {'number': '131', 'title': 'K&S 131', 'page': const Hymn131()},
-      {'number': '132', 'title': 'K&S 132', 'page': const Hymn132()},
-      {'number': '133', 'title': 'K&S 133', 'page': const Hymn133()},
-      {'number': '134', 'title': 'K&S 134', 'page': const Hymn134()},
-      {'number': '135', 'title': 'K&S 135', 'page': const Hymn135()},
-      {'number': '136', 'title': 'K&S 136', 'page': const Hymn136()},
-      {'number': '137', 'title': 'K&S 137', 'page': const Hymn137()},
-      {'number': '138', 'title': 'K&S 138', 'page': const Hymn138()},
-      {'number': '139', 'title': 'K&S 139', 'page': const Hymn139()},
-      {'number': '140', 'title': 'K&S 140', 'page': const Hymn140()},
-      {'number': '141', 'title': 'K&S 141', 'page': const Hymn141()},
-      {'number': '142', 'title': 'K&S 142', 'page': const Hymn142()},
-      {'number': '143', 'title': 'K&S 143', 'page': const Hymn143()},
-      {'number': '144', 'title': 'K&S 144', 'page': const Hymn144()},
-      {'number': '145', 'title': 'K&S 145', 'page': const Hymn145()},
-      {'number': '146', 'title': 'K&S 146', 'page': const Hymn146()},
-      {'number': '147', 'title': 'K&S 147', 'page': const Hymn147()},
-      {'number': '148', 'title': 'K&S 148', 'page': const Hymn148()},
-      {'number': '149', 'title': 'K&S 149', 'page': const Hymn149()},
-      {'number': '150', 'title': 'K&S 150', 'page': const Hymn150()},
-      {'number': '151', 'title': 'K&S 151', 'page': const Hymn151()},
-      {'number': '152', 'title': 'K&S 152', 'page': const Hymn152()},
-      {'number': '153', 'title': 'K&S 153', 'page': const Hymn153()},
-      {'number': '154', 'title': 'K&S 154', 'page': const Hymn154()},
-      {'number': '155', 'title': 'K&S 155', 'page': const Hymn155()},
-      {'number': '156', 'title': 'K&S 156', 'page': const Hymn156()},
-      {'number': '157', 'title': 'K&S 157', 'page': const Hymn157()},
-      {'number': '158', 'title': 'K&S 158', 'page': const Hymn158()},
-      {'number': '159', 'title': 'K&S 159', 'page': const Hymn159()},
-      {'number': '160', 'title': 'K&S 160', 'page': const Hymn160()},
-      {'number': '161', 'title': 'K&S 161', 'page': const Hymn161()},
-      {'number': '162', 'title': 'K&S 162', 'page': const Hymn162()},
-      {'number': '163', 'title': 'K&S 163', 'page': const Hymn163()},
-      {'number': '164', 'title': 'K&S 164', 'page': const Hymn164()},
-      {'number': '165', 'title': 'K&S 165', 'page': const Hymn165()},
-      {'number': '166', 'title': 'K&S 166', 'page': const Hymn166()},
-      {'number': '167', 'title': 'K&S 167', 'page': const Hymn167()},
-      {'number': '168', 'title': 'K&S 168', 'page': const Hymn168()},
-      {'number': '169', 'title': 'K&S 169', 'page': const Hymn169()},
-      {'number': '170', 'title': 'K&S 170', 'page': const Hymn170()},
-      {'number': '171', 'title': 'K&S 171', 'page': const Hymn171()},
-      {'number': '172', 'title': 'K&S 172', 'page': const Hymn172()},
-      {'number': '173', 'title': 'K&S 173', 'page': const Hymn173()},
-      {'number': '174', 'title': 'K&S 174', 'page': const Hymn174()},
-      {'number': '175', 'title': 'K&S 175', 'page': const Hymn175()},
-      {'number': '176', 'title': 'K&S 176', 'page': const Hymn176()},
-      {'number': '177', 'title': 'K&S 177', 'page': const Hymn177()},
-      {'number': '178', 'title': 'K&S 178', 'page': const Hymn178()},
-      {'number': '179', 'title': 'K&S 179', 'page': const Hymn179()},
-      {'number': '180', 'title': 'K&S 180', 'page': const Hymn180()},
-      {'number': '181', 'title': 'K&S 181', 'page': const Hymn181()},
-      {'number': '182', 'title': 'K&S 182', 'page': const Hymn182()},
-      {'number': '183', 'title': 'K&S 183', 'page': const Hymn183()},
-      {'number': '184', 'title': 'K&S 184', 'page': const Hymn184()},
-      {'number': '185', 'title': 'K&S 185', 'page': const Hymn185()},
-      {'number': '186', 'title': 'K&S 186', 'page': const Hymn186()},
-      {'number': '187', 'title': 'K&S 187', 'page': const Hymn187()},
-      {'number': '188', 'title': 'K&S 188', 'page': const Hymn188()},
-      {'number': '189', 'title': 'K&S 189', 'page': const Hymn189()},
-      {'number': '190', 'title': 'K&S 190', 'page': const Hymn190()},
-      {'number': '191', 'title': 'K&S 191', 'page': const Hymn191()},
-      {'number': '192', 'title': 'K&S 192', 'page': const Hymn192()},
-      {'number': '193', 'title': 'K&S 193', 'page': const Hymn193()},
-      {'number': '194', 'title': 'K&S 194', 'page': const Hymn194()},
-      {'number': '195', 'title': 'K&S 195', 'page': const Hymn195()},
-      {'number': '196', 'title': 'K&S 196', 'page': const Hymn196()},
-      {'number': '197', 'title': 'K&S 197', 'page': const Hymn197()},
-      {'number': '198', 'title': 'K&S 198', 'page': const Hymn198()},
-      {'number': '199', 'title': 'K&S 199', 'page': const Hymn199()},
-      {'number': '200', 'title': 'K&S 200', 'page': const Hymn200()},
-      {'number': '201', 'title': 'K&S 201', 'page': const Hymn201()},
-      {'number': '202', 'title': 'K&S 202', 'page': const Hymn202()},
-      {'number': '203', 'title': 'K&S 203', 'page': const Hymn203()},
-      {'number': '204', 'title': 'K&S 204', 'page': const Hymn204()},
-      {'number': '205', 'title': 'K&S 205', 'page': const Hymn205()},
-      {'number': '206', 'title': 'K&S 206', 'page': const Hymn206()},
-      {'number': '207', 'title': 'K&S 207', 'page': const Hymn207()},
-      {'number': '208', 'title': 'K&S 208', 'page': const Hymn208()},
-      {'number': '209', 'title': 'K&S 209', 'page': const Hymn209()},
-      {'number': '210', 'title': 'K&S 210', 'page': const Hymn210()},
-      {'number': '211', 'title': 'K&S 211', 'page': const Hymn211()},
-      {'number': '212', 'title': 'K&S 212', 'page': const Hymn212()},
-      {'number': '213', 'title': 'K&S 213', 'page': const Hymn213()},
-      {'number': '214', 'title': 'K&S 214', 'page': const Hymn214()},
-      {'number': '215', 'title': 'K&S 215', 'page': const Hymn215()},
-      {'number': '216', 'title': 'K&S 216', 'page': const Hymn216()},
-      {'number': '217', 'title': 'K&S 217', 'page': const Hymn217()},
-      {'number': '218', 'title': 'K&S 218', 'page': const Hymn218()},
-      {'number': '219', 'title': 'K&S 219', 'page': const Hymn219()},
-      {'number': '220', 'title': 'K&S 220', 'page': const Hymn220()},
-      {'number': '221', 'title': 'K&S 221', 'page': const Hymn221()},
-      {'number': '222', 'title': 'K&S 222', 'page': const Hymn222()},
-      {'number': '223', 'title': 'K&S 223', 'page': const Hymn223()},
-      {'number': '224', 'title': 'K&S 224', 'page': const Hymn224()},
-      {'number': '225', 'title': 'K&S 225', 'page': const Hymn225()},
-      {'number': '226', 'title': 'K&S 226', 'page': const Hymn226()},
-      {'number': '227', 'title': 'K&S 227', 'page': const Hymn227()},
-      {'number': '228', 'title': 'K&S 228', 'page': const Hymn228()},
-      {'number': '229', 'title': 'K&S 229', 'page': const Hymn229()},
-      {'number': '230', 'title': 'K&S 230', 'page': const Hymn230()},
-      {'number': '231', 'title': 'K&S 231', 'page': const Hymn231()},
-      {'number': '232', 'title': 'K&S 232', 'page': const Hymn232()},
-      {'number': '233', 'title': 'K&S 233', 'page': const Hymn233()},
-      {'number': '234', 'title': 'K&S 234', 'page': const Hymn234()},
-      {'number': '235', 'title': 'K&S 235', 'page': const Hymn235()},
-      {'number': '236', 'title': 'K&S 236', 'page': const Hymn236()},
-      {'number': '237', 'title': 'K&S 237', 'page': const Hymn237()},
-      {'number': '238', 'title': 'K&S 238', 'page': const Hymn238()},
-      {'number': '239', 'title': 'K&S 239', 'page': const Hymn239()},
-      {'number': '240', 'title': 'K&S 240', 'page': const Hymn240()},
-      {'number': '241', 'title': 'K&S 241', 'page': const Hymn241()},
-      {'number': '242', 'title': 'K&S 242', 'page': const Hymn242()},
-      {'number': '243', 'title': 'K&S 243', 'page': const Hymn243()},
-      {'number': '244', 'title': 'K&S 244', 'page': const Hymn244()},
-      {'number': '245', 'title': 'K&S 245', 'page': const Hymn245()},
-      {'number': '246', 'title': 'K&S 246', 'page': const Hymn246()},
-      {'number': '247', 'title': 'K&S 247', 'page': const Hymn247()},
-      {'number': '248', 'title': 'K&S 248', 'page': const Hymn248()},
-      {'number': '249', 'title': 'K&S 249', 'page': const Hymn249()},
-      {'number': '250', 'title': 'K&S 250', 'page': const Hymn250()},
-      {'number': '251', 'title': 'K&S 251', 'page': const Hymn251()},
-      {'number': '252', 'title': 'K&S 252', 'page': const Hymn252()},
-      {'number': '253', 'title': 'K&S 253', 'page': const Hymn253()},
-      {'number': '254', 'title': 'K&S 254', 'page': const Hymn254()},
-      {'number': '255', 'title': 'K&S 255', 'page': const Hymn255()},
-      {'number': '256', 'title': 'K&S 256', 'page': const Hymn256()},
-      {'number': '257', 'title': 'K&S 257', 'page': const Hymn257()},
-      {'number': '258', 'title': 'K&S 258', 'page': const Hymn258()},
-      {'number': '259', 'title': 'K&S 259', 'page': const Hymn259()},
-      {'number': '260', 'title': 'K&S 260', 'page': const Hymn260()},
-      {'number': '261', 'title': 'K&S 261', 'page': const Hymn261()},
-      {'number': '262', 'title': 'K&S 262', 'page': const Hymn262()},
-      {'number': '263', 'title': 'K&S 263', 'page': const Hymn263()},
-      {'number': '264', 'title': 'K&S 264', 'page': const Hymn264()},
-      {'number': '265', 'title': 'K&S 265', 'page': const Hymn265()},
-      {'number': '266', 'title': 'K&S 266', 'page': const Hymn266()},
-      {'number': '267', 'title': 'K&S 267', 'page': const Hymn267()},
-      {'number': '268', 'title': 'K&S 268', 'page': const Hymn268()},
-      {'number': '269', 'title': 'K&S 269', 'page': const Hymn269()},
-      {'number': '270', 'title': 'K&S 270', 'page': const Hymn270()},
-      {'number': '271', 'title': 'K&S 271', 'page': const Hymn271()},
-      {'number': '272', 'title': 'K&S 272', 'page': const Hymn272()},
-      {'number': '273', 'title': 'K&S 273', 'page': const Hymn273()},
-      {'number': '274', 'title': 'K&S 274', 'page': const Hymn274()},
-      {'number': '275', 'title': 'K&S 275', 'page': const Hymn275()},
-      {'number': '276', 'title': 'K&S 276', 'page': const Hymn276()},
-      {'number': '277', 'title': 'K&S 277', 'page': const Hymn277()},
-      {'number': '278', 'title': 'K&S 278', 'page': const Hymn278()},
-      {'number': '279', 'title': 'K&S 279', 'page': const Hymn279()},
-      {'number': '280', 'title': 'K&S 280', 'page': const Hymn280()},
-      {'number': '281', 'title': 'K&S 281', 'page': const Hymn281()},
-      {'number': '282', 'title': 'K&S 282', 'page': const Hymn282()},
-      {'number': '283', 'title': 'K&S 283', 'page': const Hymn283()},
-      {'number': '284', 'title': 'K&S 284', 'page': const Hymn284()},
-      {'number': '285', 'title': 'K&S 285', 'page': const Hymn285()},
-      {'number': '286', 'title': 'K&S 286', 'page': const Hymn286()},
-      {'number': '287', 'title': 'K&S 287', 'page': const Hymn287()},
-      {'number': '288', 'title': 'K&S 288', 'page': const Hymn288()},
-      {'number': '289', 'title': 'K&S 289', 'page': const Hymn289()},
-      {'number': '290', 'title': 'K&S 290', 'page': const Hymn290()},
-      {'number': '291', 'title': 'K&S 291', 'page': const Hymn291()},
-      {'number': '292', 'title': 'K&S 292', 'page': const Hymn292()},
-      {'number': '293', 'title': 'K&S 293', 'page': const Hymn293()},
-      {'number': '294', 'title': 'K&S 294', 'page': const Hymn294()},
-      {'number': '295', 'title': 'K&S 295', 'page': const Hymn295()},
-      {'number': '296', 'title': 'K&S 296', 'page': const Hymn296()},
-      {'number': '297', 'title': 'K&S 297', 'page': const Hymn297()},
-      {'number': '298', 'title': 'K&S 298', 'page': const Hymn298()},
-      {'number': '299', 'title': 'K&S 299', 'page': const Hymn299()},
-      {'number': '300', 'title': 'K&S 300', 'page': const Hymn300()},
-      {'number': '301', 'title': 'K&S 301', 'page': const Hymn301()},
-      {'number': '302', 'title': 'K&S 302', 'page': const Hymn302()},
-      {'number': '303', 'title': 'K&S 303', 'page': const Hymn303()},
-      {'number': '304', 'title': 'K&S 304', 'page': const Hymn304()},
-      {'number': '305', 'title': 'K&S 305', 'page': const Hymn305()},
-      {'number': '306', 'title': 'K&S 306', 'page': const Hymn306()},
-      {'number': '307', 'title': 'K&S 307', 'page': const Hymn307()},
-      {'number': '308', 'title': 'K&S 308', 'page': const Hymn308()},
-      {'number': '309', 'title': 'K&S 309', 'page': const Hymn309()},
-      {'number': '310', 'title': 'K&S 310', 'page': const Hymn310()},
-      {'number': '311', 'title': 'K&S 311', 'page': const Hymn311()},
-      {'number': '312', 'title': 'K&S 312', 'page': const Hymn312()},
-      {'number': '313', 'title': 'K&S 313', 'page': const Hymn313()},
-      {'number': '314', 'title': 'K&S 314', 'page': const Hymn314()},
-      {'number': '315', 'title': 'K&S 315', 'page': const Hymn315()},
-      {'number': '316', 'title': 'K&S 316', 'page': const Hymn316()},
-      {'number': '317', 'title': 'K&S 317', 'page': const Hymn317()},
-      {'number': '318', 'title': 'K&S 318', 'page': const Hymn318()},
-      {'number': '319', 'title': 'K&S 319', 'page': const Hymn319()},
-      {'number': '320', 'title': 'K&S 320', 'page': const Hymn320()},
-      {'number': '321', 'title': 'K&S 321', 'page': const Hymn321()},
-      {'number': '322', 'title': 'K&S 322', 'page': const Hymn322()},
-      {'number': '323', 'title': 'K&S 323', 'page': const Hymn323()},
-      {'number': '324', 'title': 'K&S 324', 'page': const Hymn324()},
-      {'number': '325', 'title': 'K&S 325', 'page': const Hymn325()},
-      {'number': '326', 'title': 'K&S 326', 'page': const Hymn326()},
-      {'number': '327', 'title': 'K&S 327', 'page': const Hymn327()},
-      {'number': '328', 'title': 'K&S 328', 'page': const Hymn328()},
-      {'number': '329', 'title': 'K&S 329', 'page': const Hymn329()},
-      {'number': '330', 'title': 'K&S 330', 'page': const Hymn330()},
-      {'number': '331', 'title': 'K&S 331', 'page': const Hymn331()},
-      {'number': '332', 'title': 'K&S 332', 'page': const Hymn332()},
-      {'number': '333', 'title': 'K&S 333', 'page': const Hymn333()},
-      {'number': '334', 'title': 'K&S 334', 'page': const Hymn334()},
-      {'number': '335', 'title': 'K&S 335', 'page': const Hymn335()},
-      {'number': '336', 'title': 'K&S 336', 'page': const Hymn336()},
-      {'number': '337', 'title': 'K&S 337', 'page': const Hymn337()},
-      {'number': '338', 'title': 'K&S 338', 'page': const Hymn338()},
-      {'number': '339', 'title': 'K&S 339', 'page': const Hymn339()},
-      {'number': '340', 'title': 'K&S 340', 'page': const Hymn340()},
-      {'number': '341', 'title': 'K&S 341', 'page': const Hymn341()},
-      {'number': '342', 'title': 'K&S 342', 'page': const Hymn342()},
-      {'number': '343', 'title': 'K&S 343', 'page': const Hymn343()},
-      {'number': '344', 'title': 'K&S 344', 'page': const Hymn344()},
-      {'number': '345', 'title': 'K&S 345', 'page': const Hymn345()},
-      {'number': '346', 'title': 'K&S 346', 'page': const Hymn346()},
-      {'number': '347', 'title': 'K&S 347', 'page': const Hymn347()},
-      {'number': '348', 'title': 'K&S 348', 'page': const Hymn348()},
-      {'number': '349', 'title': 'K&S 349', 'page': const Hymn349()},
-      {'number': '350', 'title': 'K&S 350', 'page': const Hymn350()},
-      {'number': '351', 'title': 'K&S 351', 'page': const Hymn351()},
-      {'number': '352', 'title': 'K&S 352', 'page': const Hymn352()},
-      {'number': '353', 'title': 'K&S 353', 'page': const Hymn353()},
-      {'number': '354', 'title': 'K&S 354', 'page': const Hymn354()},
-      {'number': '355', 'title': 'K&S 355', 'page': const Hymn355()},
-      {'number': '356', 'title': 'K&S 356', 'page': const Hymn356()},
-      {'number': '357', 'title': 'K&S 357', 'page': const Hymn357()},
-      {'number': '358', 'title': 'K&S 358', 'page': const Hymn358()},
-      {'number': '359', 'title': 'K&S 359', 'page': const Hymn359()},
-      {'number': '360', 'title': 'K&S 360', 'page': const Hymn360()},
-      {'number': '361', 'title': 'K&S 361', 'page': const Hymn361()},
-      {'number': '362', 'title': 'K&S 362', 'page': const Hymn362()},
-      {'number': '363', 'title': 'K&S 363', 'page': const Hymn363()},
-      {'number': '364', 'title': 'K&S 364', 'page': const Hymn364()},
-      {'number': '365', 'title': 'K&S 365', 'page': const Hymn365()},
-      {'number': '366', 'title': 'K&S 366', 'page': const Hymn366()},
-      {'number': '367', 'title': 'K&S 367', 'page': const Hymn367()},
-      {'number': '368', 'title': 'K&S 368', 'page': const Hymn368()},
-      {'number': '369', 'title': 'K&S 369', 'page': const Hymn369()},
-      {'number': '370', 'title': 'K&S 370', 'page': const Hymn370()},
-      {'number': '371', 'title': 'K&S 371', 'page': const Hymn371()},
-      {'number': '372', 'title': 'K&S 372', 'page': const Hymn372()},
-      {'number': '373', 'title': 'K&S 373', 'page': const Hymn373()},
-      {'number': '374', 'title': 'K&S 374', 'page': const Hymn374()},
-      {'number': '375', 'title': 'K&S 375', 'page': const Hymn375()},
-      {'number': '376', 'title': 'K&S 376', 'page': const Hymn376()},
-      {'number': '377', 'title': 'K&S 377', 'page': const Hymn377()},
-      {'number': '378', 'title': 'K&S 378', 'page': const Hymn378()},
-      {'number': '379', 'title': 'K&S 379', 'page': const Hymn379()},
-      {'number': '380', 'title': 'K&S 380', 'page': const Hymn380()},
-      {'number': '381', 'title': 'K&S 381', 'page': const Hymn381()},
-      {'number': '382', 'title': 'K&S 382', 'page': const Hymn382()},
-      {'number': '383', 'title': 'K&S 383', 'page': const Hymn383()},
-      {'number': '384', 'title': 'K&S 384', 'page': const Hymn384()},
-      {'number': '385', 'title': 'K&S 385', 'page': const Hymn385()},
-      {'number': '386', 'title': 'K&S 386', 'page': const Hymn386()},
-      {'number': '387', 'title': 'K&S 387', 'page': const Hymn387()},
-      {'number': '388', 'title': 'K&S 388', 'page': const Hymn388()},
-      {'number': '389', 'title': 'K&S 389', 'page': const Hymn389()},
-      {'number': '390', 'title': 'K&S 390', 'page': const Hymn390()},
-      {'number': '391', 'title': 'K&S 391', 'page': const Hymn391()},
-      {'number': '392', 'title': 'K&S 392', 'page': const Hymn392()},
-      {'number': '393', 'title': 'K&S 393', 'page': const Hymn393()},
-      {'number': '394', 'title': 'K&S 394', 'page': const Hymn394()},
-      {'number': '395', 'title': 'K&S 395', 'page': const Hymn395()},
-      {'number': '396', 'title': 'K&S 396', 'page': const Hymn396()},
-      {'number': '397', 'title': 'K&S 397', 'page': const Hymn397()},
-      {'number': '398', 'title': 'K&S 398', 'page': const Hymn398()},
-      {'number': '399', 'title': 'K&S 399', 'page': const Hymn399()},
-      {'number': '400', 'title': 'K&S 400', 'page': const Hymn400()},
-      {'number': '401', 'title': 'K&S 401', 'page': const Hymn401()},
-      {'number': '402', 'title': 'K&S 402', 'page': const Hymn402()},
-      {'number': '403', 'title': 'K&S 403', 'page': const Hymn403()},
-      {'number': '404', 'title': 'K&S 404', 'page': const Hymn404()},
-      {'number': '405', 'title': 'K&S 405', 'page': const Hymn405()},
-      {'number': '406', 'title': 'K&S 406', 'page': const Hymn406()},
-      {'number': '407', 'title': 'K&S 407', 'page': const Hymn407()},
-      {'number': '408', 'title': 'K&S 408', 'page': const Hymn408()},
-      {'number': '409', 'title': 'K&S 409', 'page': const Hymn409()},
-      {'number': '410', 'title': 'K&S 410', 'page': const Hymn410()},
-      {'number': '411', 'title': 'K&S 411', 'page': const Hymn411()},
-      {'number': '412', 'title': 'K&S 412', 'page': const Hymn412()},
-      {'number': '413', 'title': 'K&S 413', 'page': const Hymn413()},
-      {'number': '414', 'title': 'K&S 414', 'page': const Hymn414()},
-      {'number': '415', 'title': 'K&S 415', 'page': const Hymn415()},
-      {'number': '416', 'title': 'K&S 416', 'page': const Hymn416()},
-      {'number': '417', 'title': 'K&S 417', 'page': const Hymn417()},
-      {'number': '418', 'title': 'K&S 418', 'page': const Hymn418()},
-      {'number': '419', 'title': 'K&S 419', 'page': const Hymn419()},
-      {'number': '420', 'title': 'K&S 420', 'page': const Hymn420()},
-      {'number': '421', 'title': 'K&S 421', 'page': const Hymn421()},
-      {'number': '422', 'title': 'K&S 422', 'page': const Hymn422()},
-      {'number': '423', 'title': 'K&S 423', 'page': const Hymn423()},
-      {'number': '424', 'title': 'K&S 424', 'page': const Hymn424()},
-      {'number': '425', 'title': 'K&S 425', 'page': const Hymn425()},
-      {'number': '426', 'title': 'K&S 426', 'page': const Hymn426()},
-      {'number': '427', 'title': 'K&S 427', 'page': const Hymn427()},
-      {'number': '428', 'title': 'K&S 428', 'page': const Hymn428()},
-      {'number': '429', 'title': 'K&S 429', 'page': const Hymn429()},
-      {'number': '430', 'title': 'K&S 430', 'page': const Hymn430()},
-      {'number': '431', 'title': 'K&S 431', 'page': const Hymn431()},
-      {'number': '432', 'title': 'K&S 432', 'page': const Hymn432()},
-      {'number': '433', 'title': 'K&S 433', 'page': const Hymn433()},
-      {'number': '434', 'title': 'K&S 434', 'page': const Hymn434()},
-      {'number': '435', 'title': 'K&S 435', 'page': const Hymn435()},
-      {'number': '436', 'title': 'K&S 436', 'page': const Hymn436()},
-      {'number': '437', 'title': 'K&S 437', 'page': const Hymn437()},
-      {'number': '438', 'title': 'K&S 438', 'page': const Hymn438()},
-      {'number': '439', 'title': 'K&S 439', 'page': const Hymn439()},
-      {'number': '440', 'title': 'K&S 440', 'page': const Hymn440()},
-      {'number': '441', 'title': 'K&S 441', 'page': const Hymn441()},
-      {'number': '442', 'title': 'K&S 442', 'page': const Hymn442()},
-      {'number': '443', 'title': 'K&S 443', 'page': const Hymn443()},
-      {'number': '444', 'title': 'K&S 444', 'page': const Hymn444()},
-      {'number': '445', 'title': 'K&S 445', 'page': const Hymn445()},
-      {'number': '446', 'title': 'K&S 446', 'page': const Hymn446()},
-      {'number': '447', 'title': 'K&S 447', 'page': const Hymn447()},
-      {'number': '448', 'title': 'K&S 448', 'page': const Hymn448()},
-      {'number': '449', 'title': 'K&S 449', 'page': const Hymn449()},
-      {'number': '450', 'title': 'K&S 450', 'page': const Hymn450()},
-      {'number': '451', 'title': 'K&S 451', 'page': const Hymn451()},
-      {'number': '452', 'title': 'K&S 452', 'page': const Hymn452()},
-      {'number': '453', 'title': 'K&S 453', 'page': const Hymn453()},
-      {'number': '454', 'title': 'K&S 454', 'page': const Hymn454()},
-      {'number': '455', 'title': 'K&S 455', 'page': const Hymn455()},
-      {'number': '456', 'title': 'K&S 456', 'page': const Hymn456()},
-      {'number': '457', 'title': 'K&S 457', 'page': const Hymn457()},
-      {'number': '458', 'title': 'K&S 458', 'page': const Hymn458()},
-      {'number': '459', 'title': 'K&S 459', 'page': const Hymn459()},
-      {'number': '460', 'title': 'K&S 460', 'page': const Hymn460()},
-      {'number': '461', 'title': 'K&S 461', 'page': const Hymn461()},
-      {'number': '462', 'title': 'K&S 462', 'page': const Hymn462()},
-      {'number': '463', 'title': 'K&S 463', 'page': const Hymn463()},
-      {'number': '464', 'title': 'K&S 464', 'page': const Hymn464()},
-      {'number': '465', 'title': 'K&S 465', 'page': const Hymn465()},
-      {'number': '466', 'title': 'K&S 466', 'page': const Hymn466()},
-      {'number': '467', 'title': 'K&S 467', 'page': const Hymn467()},
-      {'number': '468', 'title': 'K&S 468', 'page': const Hymn468()},
-      {'number': '469', 'title': 'K&S 469', 'page': const Hymn469()},
-      {'number': '470', 'title': 'K&S 470', 'page': const Hymn470()},
-      {'number': '471', 'title': 'K&S 471', 'page': const Hymn471()},
-      {'number': '472', 'title': 'K&S 472', 'page': const Hymn472()},
-      {'number': '473', 'title': 'K&S 473', 'page': const Hymn473()},
-      {'number': '474', 'title': 'K&S 474', 'page': const Hymn474()},
-      {'number': '475', 'title': 'K&S 475', 'page': const Hymn475()},
-      {'number': '476', 'title': 'K&S 476', 'page': const Hymn476()},
-      {'number': '477', 'title': 'K&S 477', 'page': const Hymn477()},
-      {'number': '478', 'title': 'K&S 478', 'page': const Hymn478()},
-      {'number': '479', 'title': 'K&S 479', 'page': const Hymn479()},
-      {'number': '480', 'title': 'K&S 480', 'page': const Hymn480()},
-      {'number': '481', 'title': 'K&S 481', 'page': const Hymn481()},
-      {'number': '482', 'title': 'K&S 482', 'page': const Hymn482()},
-      {'number': '483', 'title': 'K&S 483', 'page': const Hymn483()},
-      {'number': '484', 'title': 'K&S 484', 'page': const Hymn484()},
-      {'number': '485', 'title': 'K&S 485', 'page': const Hymn485()},
-      {'number': '486', 'title': 'K&S 486', 'page': const Hymn486()},
-      {'number': '487', 'title': 'K&S 487', 'page': const Hymn487()},
-      {'number': '488', 'title': 'K&S 488', 'page': const Hymn488()},
-      {'number': '489', 'title': 'K&S 489', 'page': const Hymn489()},
-      {'number': '490', 'title': 'K&S 490', 'page': const Hymn490()},
-      {'number': '491', 'title': 'K&S 491', 'page': const Hymn491()},
-      {'number': '492', 'title': 'K&S 492', 'page': const Hymn492()},
-      {'number': '493', 'title': 'K&S 493', 'page': const Hymn493()},
-      {'number': '494', 'title': 'K&S 494', 'page': const Hymn494()},
-      {'number': '495', 'title': 'K&S 495', 'page': const Hymn495()},
-      {'number': '496', 'title': 'K&S 496', 'page': const Hymn496()},
-      {'number': '497', 'title': 'K&S 497', 'page': const Hymn497()},
-      {'number': '498', 'title': 'K&S 498', 'page': const Hymn498()},
-      {'number': '499', 'title': 'K&S 499', 'page': const Hymn499()},
-      {'number': '500', 'title': 'K&S 500', 'page': const Hymn500()},
-      {'number': '501', 'title': 'K&S 501', 'page': const Hymn501()},
-      {'number': '502', 'title': 'K&S 502', 'page': const Hymn502()},
-      {'number': '503', 'title': 'K&S 503', 'page': const Hymn503()},
-      {'number': '504', 'title': 'K&S 504', 'page': const Hymn504()},
-      {'number': '505', 'title': 'K&S 505', 'page': const Hymn505()},
-      {'number': '506', 'title': 'K&S 506', 'page': const Hymn506()},
-      {'number': '507', 'title': 'K&S 507', 'page': const Hymn507()},
-      {'number': '508', 'title': 'K&S 508', 'page': const Hymn508()},
-      {'number': '509', 'title': 'K&S 509', 'page': const Hymn509()},
-      {'number': '510', 'title': 'K&S 510', 'page': const Hymn510()},
-      {'number': '511', 'title': 'K&S 511', 'page': const Hymn511()},
-      {'number': '512', 'title': 'K&S 512', 'page': const Hymn512()},
-      {'number': '513', 'title': 'K&S 513', 'page': const Hymn513()},
-      {'number': '514', 'title': 'K&S 514', 'page': const Hymn514()},
-      {'number': '515', 'title': 'K&S 515', 'page': const Hymn515()},
-      {'number': '516', 'title': 'K&S 516', 'page': const Hymn516()},
-      {'number': '517', 'title': 'K&S 517', 'page': const Hymn517()},
-      {'number': '518', 'title': 'K&S 518', 'page': const Hymn518()},
-      {'number': '519', 'title': 'K&S 519', 'page': const Hymn519()},
-      {'number': '520', 'title': 'K&S 520', 'page': const Hymn520()},
-      {'number': '521', 'title': 'K&S 521', 'page': const Hymn521()},
-      {'number': '522', 'title': 'K&S 522', 'page': const Hymn522()},
-      {'number': '523', 'title': 'K&S 523', 'page': const Hymn523()},
-      {'number': '524', 'title': 'K&S 524', 'page': const Hymn524()},
-      {'number': '525', 'title': 'K&S 525', 'page': const Hymn525()},
-      {'number': '526', 'title': 'K&S 526', 'page': const Hymn526()},
-      {'number': '527', 'title': 'K&S 527', 'page': const Hymn527()},
-      {'number': '528', 'title': 'K&S 528', 'page': const Hymn528()},
-      {'number': '529', 'title': 'K&S 529', 'page': const Hymn529()},
-      {'number': '530', 'title': 'K&S 530', 'page': const Hymn530()},
-      {'number': '531', 'title': 'K&S 531', 'page': const Hymn531()},
-      {'number': '532', 'title': 'K&S 532', 'page': const Hymn532()},
-      {'number': '533', 'title': 'K&S 533', 'page': const Hymn533()},
-      {'number': '534', 'title': 'K&S 534', 'page': const Hymn534()},
-      {'number': '535', 'title': 'K&S 535', 'page': const Hymn535()},
-      {'number': '536', 'title': 'K&S 536', 'page': const Hymn536()},
-      {'number': '537', 'title': 'K&S 537', 'page': const Hymn537()},
-      {'number': '538', 'title': 'K&S 538', 'page': const Hymn538()},
-      {'number': '539', 'title': 'K&S 539', 'page': const Hymn539()},
-      {'number': '540', 'title': 'K&S 540', 'page': const Hymn540()},
-      {'number': '541', 'title': 'K&S 541', 'page': const Hymn541()},
-      {'number': '542', 'title': 'K&S 542', 'page': const Hymn542()},
-      {'number': '543', 'title': 'K&S 543', 'page': const Hymn543()},
-      {'number': '544', 'title': 'K&S 544', 'page': const Hymn544()},
-      {'number': '545', 'title': 'K&S 545', 'page': const Hymn545()},
-      {'number': '546', 'title': 'K&S 546', 'page': const Hymn546()},
-      {'number': '547', 'title': 'K&S 547', 'page': const Hymn547()},
-      {'number': '548', 'title': 'K&S 548', 'page': const Hymn548()},
-      {'number': '549', 'title': 'K&S 549', 'page': const Hymn549()},
-      {'number': '550', 'title': 'K&S 550', 'page': const Hymn550()},
-      {'number': '551', 'title': 'K&S 551', 'page': const Hymn551()},
-      {'number': '552', 'title': 'K&S 552', 'page': const Hymn552()},
-      {'number': '553', 'title': 'K&S 553', 'page': const Hymn553()},
-      {'number': '554', 'title': 'K&S 554', 'page': const Hymn554()},
-      {'number': '555', 'title': 'K&S 555', 'page': const Hymn555()},
-      {'number': '556', 'title': 'K&S 556', 'page': const Hymn556()},
-      {'number': '557', 'title': 'K&S 557', 'page': const Hymn557()},
-      {'number': '558', 'title': 'K&S 558', 'page': const Hymn558()},
-      {'number': '559', 'title': 'K&S 559', 'page': const Hymn559()},
-      {'number': '560', 'title': 'K&S 560', 'page': const Hymn560()},
-      {'number': '561', 'title': 'K&S 561', 'page': const Hymn561()},
-      {'number': '562', 'title': 'K&S 562', 'page': const Hymn562()},
-      {'number': '563', 'title': 'K&S 563', 'page': const Hymn563()},
-      {'number': '564', 'title': 'K&S 564', 'page': const Hymn564()},
-      {'number': '565', 'title': 'K&S 565', 'page': const Hymn565()},
-      {'number': '566', 'title': 'K&S 566', 'page': const Hymn566()},
-      {'number': '567', 'title': 'K&S 567', 'page': const Hymn567()},
-      {'number': '568', 'title': 'K&S 568', 'page': const Hymn568()},
-      {'number': '569', 'title': 'K&S 569', 'page': const Hymn569()},
-      {'number': '570', 'title': 'K&S 570', 'page': const Hymn570()},
-      {'number': '571', 'title': 'K&S 571', 'page': const Hymn571()},
-      {'number': '572', 'title': 'K&S 572', 'page': const Hymn572()},
-      {'number': '573', 'title': 'K&S 573', 'page': const Hymn573()},
-      {'number': '574', 'title': 'K&S 574', 'page': const Hymn574()},
-      {'number': '575', 'title': 'K&S 575', 'page': const Hymn575()},
-      {'number': '576', 'title': 'K&S 576', 'page': const Hymn576()},
-      {'number': '577', 'title': 'K&S 577', 'page': const Hymn577()},
-      {'number': '578', 'title': 'K&S 578', 'page': const Hymn578()},
-      {'number': '579', 'title': 'K&S 579', 'page': const Hymn579()},
-      {'number': '580', 'title': 'K&S 580', 'page': const Hymn580()},
-      {'number': '581', 'title': 'K&S 581', 'page': const Hymn581()},
-      {'number': '582', 'title': 'K&S 582', 'page': const Hymn582()},
-      {'number': '583', 'title': 'K&S 583', 'page': const Hymn583()},
-      {'number': '584', 'title': 'K&S 584', 'page': const Hymn584()},
-      {'number': '585', 'title': 'K&S 585', 'page': const Hymn585()},
-      {'number': '586', 'title': 'K&S 586', 'page': const Hymn586()},
-      {'number': '587', 'title': 'K&S 587', 'page': const Hymn587()},
-      {'number': '588', 'title': 'K&S 588', 'page': const Hymn588()},
-      {'number': '589', 'title': 'K&S 589', 'page': const Hymn589()},
-      {'number': '590', 'title': 'K&S 590', 'page': const Hymn590()},
-      {'number': '591', 'title': 'K&S 591', 'page': const Hymn591()},
-      {'number': '592', 'title': 'K&S 592', 'page': const Hymn592()},
-      {'number': '593', 'title': 'K&S 593', 'page': const Hymn593()},
-      {'number': '594', 'title': 'K&S 594', 'page': const Hymn594()},
-      {'number': '595', 'title': 'K&S 595', 'page': const Hymn595()},
-      {'number': '596', 'title': 'K&S 596', 'page': const Hymn596()},
-      {'number': '597', 'title': 'K&S 597', 'page': const Hymn597()},
-      {'number': '598', 'title': 'K&S 598', 'page': const Hymn598()},
-      {'number': '599', 'title': 'K&S 599', 'page': const Hymn599()},
-      {'number': '600', 'title': 'K&S 600', 'page': const Hymn600()},
-      {'number': '601', 'title': 'K&S 601', 'page': const Hymn601()},
-      {'number': '602', 'title': 'K&S 602', 'page': const Hymn602()},
-      {'number': '603', 'title': 'K&S 603', 'page': const Hymn603()},
-      {'number': '604', 'title': 'K&S 604', 'page': const Hymn604()},
-      {'number': '605', 'title': 'K&S 605', 'page': const Hymn605()},
-      {'number': '606', 'title': 'K&S 606', 'page': const Hymn606()},
-      {'number': '607', 'title': 'K&S 607', 'page': const Hymn607()},
-      {'number': '608', 'title': 'K&S 608', 'page': const Hymn608()},
-      {'number': '609', 'title': 'K&S 609', 'page': const Hymn609()},
-      {'number': '610', 'title': 'K&S 610', 'page': const Hymn610()},
-      {'number': '611', 'title': 'K&S 611', 'page': const Hymn611()},
-      {'number': '612', 'title': 'K&S 612', 'page': const Hymn612()},
-      {'number': '613', 'title': 'K&S 613', 'page': const Hymn613()},
-      {'number': '614', 'title': 'K&S 614', 'page': const Hymn614()},
-      {'number': '615', 'title': 'K&S 615', 'page': const Hymn615()},
-      {'number': '616', 'title': 'K&S 616', 'page': const Hymn616()},
-      {'number': '617', 'title': 'K&S 617', 'page': const Hymn617()},
-      {'number': '618', 'title': 'K&S 618', 'page': const Hymn618()},
-      {'number': '619', 'title': 'K&S 619', 'page': const Hymn619()},
-      {'number': '620', 'title': 'K&S 620', 'page': const Hymn620()},
-      {'number': '621', 'title': 'K&S 621', 'page': const Hymn621()},
-      {'number': '622', 'title': 'K&S 622', 'page': const Hymn622()},
-      {'number': '623', 'title': 'K&S 623', 'page': const Hymn623()},
-      {'number': '624', 'title': 'K&S 624', 'page': const Hymn624()},
-      {'number': '625', 'title': 'K&S 625', 'page': const Hymn625()},
-      {'number': '626', 'title': 'K&S 626', 'page': const Hymn626()},
-      {'number': '627', 'title': 'K&S 627', 'page': const Hymn627()},
-      {'number': '628', 'title': 'K&S 628', 'page': const Hymn628()},
-      {'number': '629', 'title': 'K&S 629', 'page': const Hymn629()},
-      {'number': '630', 'title': 'K&S 630', 'page': const Hymn630()},
-      {'number': '631', 'title': 'K&S 631', 'page': const Hymn631()},
-      {'number': '632', 'title': 'K&S 632', 'page': const Hymn632()},
-      {'number': '633', 'title': 'K&S 633', 'page': const Hymn633()},
-      {'number': '634', 'title': 'K&S 634', 'page': const Hymn634()},
-      {'number': '635', 'title': 'K&S 635', 'page': const Hymn635()},
-      {'number': '636', 'title': 'K&S 636', 'page': const Hymn636()},
-      {'number': '637', 'title': 'K&S 637', 'page': const Hymn637()},
-      {'number': '638', 'title': 'K&S 638', 'page': const Hymn638()},
-      {'number': '639', 'title': 'K&S 639', 'page': const Hymn639()},
-      {'number': '640', 'title': 'K&S 640', 'page': const Hymn640()},
-      {'number': '641', 'title': 'K&S 641', 'page': const Hymn641()},
-      {'number': '642', 'title': 'K&S 642', 'page': const Hymn642()},
-      {'number': '643', 'title': 'K&S 643', 'page': const Hymn643()},
-      {'number': '644', 'title': 'K&S 644', 'page': const Hymn644()},
-      {'number': '645', 'title': 'K&S 645', 'page': const Hymn645()},
-      {'number': '646', 'title': 'K&S 646', 'page': const Hymn646()},
-      {'number': '647', 'title': 'K&S 647', 'page': const Hymn647()},
-      {'number': '648', 'title': 'K&S 648', 'page': const Hymn648()},
-      {'number': '649', 'title': 'K&S 649', 'page': const Hymn649()},
-      {'number': '650', 'title': 'K&S 650', 'page': const Hymn650()},
-      {'number': '651', 'title': 'K&S 651', 'page': const Hymn651()},
-      {'number': '652', 'title': 'K&S 652', 'page': const Hymn652()},
-      {'number': '653', 'title': 'K&S 653', 'page': const Hymn653()},
-      {'number': '654', 'title': 'K&S 654', 'page': const Hymn654()},
-      {'number': '655', 'title': 'K&S 655', 'page': const Hymn655()},
-      {'number': '656', 'title': 'K&S 656', 'page': const Hymn656()},
-      {'number': '657', 'title': 'K&S 657', 'page': const Hymn657()},
-      {'number': '658', 'title': 'K&S 658', 'page': const Hymn658()},
-      {'number': '659', 'title': 'K&S 659', 'page': const Hymn659()},
-      {'number': '660', 'title': 'K&S 660', 'page': const Hymn660()},
-      {'number': '661', 'title': 'K&S 661', 'page': const Hymn661()},
-      {'number': '662', 'title': 'K&S 662', 'page': const Hymn662()},
-      {'number': '663', 'title': 'K&S 663', 'page': const Hymn663()},
-      {'number': '664', 'title': 'K&S 664', 'page': const Hymn664()},
-      {'number': '665', 'title': 'K&S 665', 'page': const Hymn665()},
-      {'number': '666', 'title': 'K&S 666', 'page': const Hymn666()},
-      {'number': '667', 'title': 'K&S 667', 'page': const Hymn667()},
-      {'number': '668', 'title': 'K&S 668', 'page': const Hymn668()},
-      {'number': '669', 'title': 'K&S 669', 'page': const Hymn669()},
-      {'number': '670', 'title': 'K&S 670', 'page': const Hymn670()},
-      {'number': '671', 'title': 'K&S 671', 'page': const Hymn671()},
-      {'number': '672', 'title': 'K&S 672', 'page': const Hymn672()},
-      {'number': '673', 'title': 'K&S 673', 'page': const Hymn673()},
-      {'number': '674', 'title': 'K&S 674', 'page': const Hymn674()},
-      {'number': '675', 'title': 'K&S 675', 'page': const Hymn675()},
-      {'number': '676', 'title': 'K&S 676', 'page': const Hymn676()},
-      {'number': '677', 'title': 'K&S 677', 'page': const Hymn677()},
-      {'number': '678', 'title': 'K&S 678', 'page': const Hymn678()},
-      {'number': '679', 'title': 'K&S 679', 'page': const Hymn679()},
-      {'number': '680', 'title': 'K&S 680', 'page': const Hymn680()},
-      {'number': '681', 'title': 'K&S 681', 'page': const Hymn681()},
-      {'number': '682', 'title': 'K&S 682', 'page': const Hymn682()},
-      {'number': '683', 'title': 'K&S 683', 'page': const Hymn683()},
-      {'number': '684', 'title': 'K&S 684', 'page': const Hymn684()},
-      {'number': '685', 'title': 'K&S 685', 'page': const Hymn685()},
-      {'number': '686', 'title': 'K&S 686', 'page': const Hymn686()},
-      {'number': '687', 'title': 'K&S 687', 'page': const Hymn687()},
-      {'number': '688', 'title': 'K&S 688', 'page': const Hymn688()},
-      {'number': '689', 'title': 'K&S 689', 'page': const Hymn689()},
-      {'number': '690', 'title': 'K&S 690', 'page': const Hymn690()},
-      {'number': '691', 'title': 'K&S 691', 'page': const Hymn691()},
-      {'number': '692', 'title': 'K&S 692', 'page': const Hymn692()},
-      {'number': '693', 'title': 'K&S 693', 'page': const Hymn693()},
-      {'number': '694', 'title': 'K&S 694', 'page': const Hymn694()},
-      {'number': '695', 'title': 'K&S 695', 'page': const Hymn695()},
-      {'number': '696', 'title': 'K&S 696', 'page': const Hymn696()},
-      {'number': '697', 'title': 'K&S 697', 'page': const Hymn697()},
-      {'number': '698', 'title': 'K&S 698', 'page': const Hymn698()},
-      {'number': '699', 'title': 'K&S 699', 'page': const Hymn699()},
-      {'number': '700', 'title': 'K&S 700', 'page': const Hymn700()},
-      {'number': '701', 'title': 'K&S 701', 'page': const Hymn701()},
-      {'number': '702', 'title': 'K&S 702', 'page': const Hymn702()},
-      {'number': '703', 'title': 'K&S 703', 'page': const Hymn703()},
-      {'number': '704', 'title': 'K&S 704', 'page': const Hymn704()},
-      {'number': '705', 'title': 'K&S 705', 'page': const Hymn705()},
-      {'number': '706', 'title': 'K&S 706', 'page': const Hymn706()},
-      {'number': '707', 'title': 'K&S 707', 'page': const Hymn707()},
-      {'number': '708', 'title': 'K&S 708', 'page': const Hymn708()},
-      {'number': '709', 'title': 'K&S 709', 'page': const Hymn709()},
-      {'number': '710', 'title': 'K&S 710', 'page': const Hymn710()},
-      {'number': '711', 'title': 'K&S 711', 'page': const Hymn711()},
-      {'number': '712', 'title': 'K&S 712', 'page': const Hymn712()},
-      {'number': '713', 'title': 'K&S 713', 'page': const Hymn713()},
-      {'number': '714', 'title': 'K&S 714', 'page': const Hymn714()},
-      {'number': '715', 'title': 'K&S 715', 'page': const Hymn715()},
-      {'number': '716', 'title': 'K&S 716', 'page': const Hymn716()},
-      {'number': '717', 'title': 'K&S 717', 'page': const Hymn717()},
-      {'number': '718', 'title': 'K&S 718', 'page': const Hymn718()},
-      {'number': '719', 'title': 'K&S 719', 'page': const Hymn719()},
-      {'number': '720', 'title': 'K&S 720', 'page': const Hymn720()},
-      {'number': '721', 'title': 'K&S 721', 'page': const Hymn721()},
-      {'number': '722', 'title': 'K&S 722', 'page': const Hymn722()},
-      {'number': '723', 'title': 'K&S 723', 'page': const Hymn723()},
-      {'number': '724', 'title': 'K&S 724', 'page': const Hymn724()},
-      {'number': '725', 'title': 'K&S 725', 'page': const Hymn725()},
-      {'number': '726', 'title': 'K&S 726', 'page': const Hymn726()},
-      {'number': '727', 'title': 'K&S 727', 'page': const Hymn727()},
-      {'number': '728', 'title': 'K&S 728', 'page': const Hymn728()},
-      {'number': '729', 'title': 'K&S 729', 'page': const Hymn729()},
-      {'number': '730', 'title': 'K&S 730', 'page': const Hymn730()},
-      {'number': '731', 'title': 'K&S 731', 'page': const Hymn731()},
-      {'number': '732', 'title': 'K&S 732', 'page': const Hymn732()},
-      {'number': '733', 'title': 'K&S 733', 'page': const Hymn733()},
-      {'number': '734', 'title': 'K&S 734', 'page': const Hymn734()},
-      {'number': '735', 'title': 'K&S 735', 'page': const Hymn735()},
-      {'number': '736', 'title': 'K&S 736', 'page': const Hymn736()},
-      {'number': '737', 'title': 'K&S 737', 'page': const Hymn737()},
-      {'number': '738', 'title': 'K&S 738', 'page': const Hymn738()},
-      {'number': '739', 'title': 'K&S 739', 'page': const Hymn739()},
-      {'number': '740', 'title': 'K&S 740', 'page': const Hymn740()},
-      {'number': '741', 'title': 'K&S 741', 'page': const Hymn741()},
-      {'number': '742', 'title': 'K&S 742', 'page': const Hymn742()},
-      {'number': '743', 'title': 'K&S 743', 'page': const Hymn743()},
-      {'number': '744', 'title': 'K&S 744', 'page': const Hymn744()},
-      {'number': '745', 'title': 'K&S 745', 'page': const Hymn745()},
-      {'number': '746', 'title': 'K&S 746', 'page': const Hymn746()},
-      {'number': '747', 'title': 'K&S 747', 'page': const Hymn747()},
-      {'number': '748', 'title': 'K&S 748', 'page': const Hymn748()},
-      {'number': '749', 'title': 'K&S 749', 'page': const Hymn749()},
-      {'number': '750', 'title': 'K&S 750', 'page': const Hymn750()},
-      {'number': '751', 'title': 'K&S 751', 'page': const Hymn751()},
-      {'number': '752', 'title': 'K&S 752', 'page': const Hymn752()},
-      {'number': '753', 'title': 'K&S 753', 'page': const Hymn753()},
-      {'number': '754', 'title': 'K&S 754', 'page': const Hymn754()},
-      {'number': '755', 'title': 'K&S 755', 'page': const Hymn755()},
-      {'number': '756', 'title': 'K&S 756', 'page': const Hymn756()},
-      {'number': '757', 'title': 'K&S 757', 'page': const Hymn757()},
-      {'number': '758', 'title': 'K&S 758', 'page': const Hymn758()},
-      {'number': '759', 'title': 'K&S 759', 'page': const Hymn759()},
-      {'number': '760', 'title': 'K&S 760', 'page': const Hymn760()},
-      {'number': '761', 'title': 'K&S 761', 'page': const Hymn761()},
-      {'number': '762', 'title': 'K&S 762', 'page': const Hymn762()},
-      {'number': '763', 'title': 'K&S 763', 'page': const Hymn763()},
-      {'number': '764', 'title': 'K&S 764', 'page': const Hymn764()},
-      {'number': '765', 'title': 'K&S 765', 'page': const Hymn765()},
-      {'number': '766', 'title': 'K&S 766', 'page': const Hymn766()},
-      {'number': '767', 'title': 'K&S 767', 'page': const Hymn767()},
-      {'number': '768', 'title': 'K&S 768', 'page': const Hymn768()},
-      {'number': '769', 'title': 'K&S 769', 'page': const Hymn769()},
-      {'number': '770', 'title': 'K&S 770', 'page': const Hymn770()},
-      {'number': '771', 'title': 'K&S 771', 'page': const Hymn771()},
-      {'number': '772', 'title': 'K&S 772', 'page': const Hymn772()},
-      {'number': '773', 'title': 'K&S 773', 'page': const Hymn773()},
-      {'number': '774', 'title': 'K&S 774', 'page': const Hymn774()},
-      {'number': '775', 'title': 'K&S 775', 'page': const Hymn775()},
-      {'number': '776', 'title': 'K&S 776', 'page': const Hymn776()},
-      {'number': '777', 'title': 'K&S 777', 'page': const Hymn777()},
-      {'number': '778', 'title': 'K&S 778', 'page': const Hymn778()},
-      {'number': '779', 'title': 'K&S 779', 'page': const Hymn779()},
-      {'number': '780', 'title': 'K&S 780', 'page': const Hymn780()},
-      {'number': '781', 'title': 'K&S 781', 'page': const Hymn781()},
-      {'number': '782', 'title': 'K&S 782', 'page': const Hymn782()},
-      {'number': '783', 'title': 'K&S 783', 'page': const Hymn783()},
-      {'number': '784', 'title': 'K&S 784', 'page': const Hymn784()},
-      {'number': '785', 'title': 'K&S 785', 'page': const Hymn785()},
-      {'number': '786', 'title': 'K&S 786', 'page': const Hymn786()},
-      {'number': '787', 'title': 'K&S 787', 'page': const Hymn787()},
-      {'number': '788', 'title': 'K&S 788', 'page': const Hymn788()},
-      {'number': '789', 'title': 'K&S 789', 'page': const Hymn789()},
-      {'number': '790', 'title': 'K&S 790', 'page': const Hymn790()},
-      {'number': '791', 'title': 'K&S 791', 'page': const Hymn791()},
-      {'number': '792', 'title': 'K&S 792', 'page': const Hymn792()},
-      {'number': '793', 'title': 'K&S 793', 'page': const Hymn793()},
-      {'number': '794', 'title': 'K&S 794', 'page': const Hymn794()},
-      {'number': '795', 'title': 'K&S 795', 'page': const Hymn795()},
-      {'number': '796', 'title': 'K&S 796', 'page': const Hymn796()},
-      {'number': '797', 'title': 'K&S 797', 'page': const Hymn797()},
-      {'number': '798', 'title': 'K&S 798', 'page': const Hymn798()},
-      {'number': '799', 'title': 'K&S 799', 'page': const Hymn799()},
-      {'number': '800', 'title': 'K&S 800', 'page': const Hymn800()},
-      {'number': '801', 'title': 'K&S 801', 'page': const Hymn801()},
-      {'number': '802', 'title': 'K&S 802', 'page': const Hymn802()},
-      {'number': '803', 'title': 'K&S 803', 'page': const Hymn803()},
-      {'number': '804', 'title': 'K&S 804', 'page': const Hymn804()},
-      {'number': '805', 'title': 'K&S 805', 'page': const Hymn805()},
-      {'number': '806', 'title': 'K&S 806', 'page': const Hymn806()},
-      {'number': '807', 'title': 'K&S 807', 'page': const Hymn807()},
-      {'number': '808', 'title': 'K&S 808', 'page': const Hymn808()},
-      {'number': '809', 'title': 'K&S 809', 'page': const Hymn809()},
-      {'number': '810', 'title': 'K&S 810', 'page': const Hymn810()},
-      {'number': '811', 'title': 'K&S 811', 'page': const Hymn811()},
-      {'number': '812', 'title': 'K&S 812', 'page': const Hymn812()},
-      {'number': '813', 'title': 'K&S 813', 'page': const Hymn813()},
-      {'number': '814', 'title': 'K&S 814', 'page': const Hymn814()},
-      {'number': '815', 'title': 'K&S 815', 'page': const Hymn815()},
-      {'number': '816', 'title': 'K&S 816', 'page': const Hymn816()},
-      {'number': '817', 'title': 'K&S 817', 'page': const Hymn817()},
-      {'number': '818', 'title': 'K&S 818', 'page': const Hymn818()},
-      {'number': '819', 'title': 'K&S 819', 'page': const Hymn819()},
-      {'number': '820', 'title': 'K&S 820', 'page': const Hymn820()},
-      {'number': '821', 'title': 'K&S 821', 'page': const Hymn821()},
-      {'number': '822', 'title': 'K&S 822', 'page': const Hymn822()},
-      {'number': '823', 'title': 'K&S 823', 'page': const Hymn823()},
-      {'number': '824', 'title': 'K&S 824', 'page': const Hymn824()},
-      {'number': '825', 'title': 'K&S 825', 'page': const Hymn825()},
-      {'number': '826', 'title': 'K&S 826', 'page': const Hymn826()},
-      {'number': '827', 'title': 'K&S 827', 'page': const Hymn827()},
-      {'number': '828', 'title': 'K&S 828', 'page': const Hymn828()},
-      {'number': '829', 'title': 'K&S 829', 'page': const Hymn829()},
-      {'number': '830', 'title': 'K&S 830', 'page': const Hymn830()},
-      {'number': '831', 'title': 'K&S 831', 'page': const Hymn831()},
-      {'number': '832', 'title': 'K&S 832', 'page': const Hymn832()},
-      {'number': '833', 'title': 'K&S 833', 'page': const Hymn833()},
-      {'number': '834', 'title': 'K&S 834', 'page': const Hymn834()},
-      {'number': '835', 'title': 'K&S 835', 'page': const Hymn835()},
-      {'number': '836', 'title': 'K&S 836', 'page': const Hymn836()},
-      {'number': '837', 'title': 'K&S 837', 'page': const Hymn837()},
-      {'number': '838', 'title': 'K&S 838', 'page': const Hymn838()},
-      {'number': '839', 'title': 'K&S 839', 'page': const Hymn839()},
-      {'number': '840', 'title': 'K&S 840', 'page': const Hymn840()},
-      {'number': '841', 'title': 'K&S 841', 'page': const Hymn841()},
-      {'number': '842', 'title': 'K&S 842', 'page': const Hymn842()},
-      {'number': '843', 'title': 'K&S 843', 'page': const Hymn843()},
-      {'number': '844', 'title': 'K&S 844', 'page': const Hymn844()},
-      {'number': '845', 'title': 'K&S 845', 'page': const Hymn845()},
-      {'number': '846', 'title': 'K&S 846', 'page': const Hymn846()},
-      {'number': '847', 'title': 'K&S 847', 'page': const Hymn847()},
-      {'number': '848', 'title': 'K&S 848', 'page': const Hymn848()},
-      {'number': '849', 'title': 'K&S 849', 'page': const Hymn849()},
-      {'number': '850', 'title': 'K&S 850', 'page': const Hymn850()},
-      {'number': '851', 'title': 'K&S 851', 'page': const Hymn851()},
-      {'number': '852', 'title': 'K&S 852', 'page': const Hymn852()},
-      {'number': '853', 'title': 'K&S 853', 'page': const Hymn853()},
-      {'number': '854', 'title': 'K&S 854', 'page': const Hymn854()},
-      {'number': '855', 'title': 'K&S 855', 'page': const Hymn855()},
-      {'number': '856', 'title': 'K&S 856', 'page': const Hymn856()},
-      {'number': '857', 'title': 'K&S 857', 'page': const Hymn857()},
-      {'number': '858', 'title': 'K&S 858', 'page': const Hymn858()},
-      {'number': '859', 'title': 'K&S 859', 'page': const Hymn859()},
-      {'number': '860', 'title': 'K&S 860', 'page': const Hymn860()},
-      {'number': '861', 'title': 'K&S 861', 'page': const Hymn861()},
-      {'number': '862', 'title': 'K&S 862', 'page': const Hymn862()},
-      {'number': '863', 'title': 'K&S 863', 'page': const Hymn863()},
-      {'number': '864', 'title': 'K&S 864', 'page': const Hymn864()},
-      {'number': '865', 'title': 'K&S 865', 'page': const Hymn865()},
-    ];
-    _foundHymns = _allHymns; // Initially, show all hymns
+    _initializeHymnData();
   }
 
-  // --- SEARCH FILTER LOGIC ---
+  // Optimized Data Initialization
+  void _initializeHymnData() {
+    final Map<int, String> firstLines = {
+      1: 'JI, ọkan mi, ba orun ji',
+      2: 'Mo ji, mo ji, ogun ọrun',
+      3: 'NINU gbogbo ewu oru',
+      4: "WA s'ọdọ mi, Oluwa mi",
+      5: "WA s'adura oorọ",
+      6: "OLUWA mi, mo n jade lọ",
+      7: "JESU oorun ododo",
+      8: "Oorun ododo, jọwọ la",
+      9: "L'OJU alẹ, 'gbat'orun wọ",
+      10: "BABA, a tún pade l'okọ Jesu",
+      11: "K’a to sun Olugbala wa",
+      12: "Jesu bukun wa ka to lọ",
+      13: "A gboju soke si Ọ",
+      14: "Ifẹ Rẹ da wa si loni",
+      15: "Wọ Imọlẹ larin okun aye",
+      16: "Oluwa ọjọ to fun wa pin",
+      17: "Ero didun kan n sọ",
+      18: "Iwo imọlẹ ọkan mi",
+      19: "Wa ba mi gbe alẹ fẹrẹ lẹ tan",
+      20: "Ọsẹ ọsẹ rere",
+      21: "Ọjọ Isinmi at'ayọ",
+      22: "Jesu a w'ọdọ Rẹ",
+      23: "Kawa to pari ẹkọ wa",
+      24: "Olusagutan mi",
+      25: "Oluwa awa de",
+      26: "Gbogbo ara aye",
+      27: "Gbogbo ẹyin araye",
+      28: "Ọlọrun ojo 'simi",
+      29: "Ọlọrun wa ọrun",
+      30: "Jesu a fẹ pade",
+      31: "Bi mo ti yo lati gbọrọ",
+      32: "Eyi lọjọ t’Oluwa da",
+      33: "Olus’agutan Eni Rẹ",
+      34: "A ba fẹ ri Ọ",
+      35: "Oluwa ọjọ Isinmi",
+      36: "Nigba wo Olugbala mi",
+      37: "Ọjọ mẹfa tise kọja",
+      38: "Didun nisẹ naa ọba mi",
+      39: "Kọjọ sinmi yi to tan",
+      40: "Ayọ lọjọ ‘sinmi fun mi",
+      41: "Ẹmi Ọlọrun alaye",
+      42: "Iwọ to n mu ọkan mọlẹ",
+      43: "Iransẹ Ọlọrun awa de",
+      44: "Ọjọ Isinmi Ọlọrun",
+      45: "KRISTI Oluwa ji loni",
+      46: "Gbadura wa Ọba aye",
+      47: "ẸLẸSẸ kan mbẹ to nf'anu",
+      48: "O ti tọ Jesu f'agbara wẹnumọ",
+      49: "Olugbala gbohun mi",
+      50: "Baba Oludariji",
+      51: "JESU n fẹ gba ẹlẹsẹ",
+      52: "Baba Mimọ jọwọ gbọgbẹ ọmọ Rẹ",
+      53: "K'A wolẹ f'Ọba Ologo",
+      54: "Baba jọ ranti mi",
+      55: "Ọlọrun Ẹlẹda jọwọ sun mọ wa",
+      56: "Oluwa Ọlọrun oun aye",
+      57: "Gba wa lọjọ naa ta o se dajọ aye",
+      58: "ỌBA ti ki yẹ majẹmu",
+      59: "IRAPADA itan iyanu",
+      60: "Awa Ẹgbẹ Kérúbù",
+      61: "Baba wa ti mbẹ lọrun",
+      62: "OLUWA mi, mo n ke pe Ọ",
+      63: "Baba jọ gbọ temi",
+      64: "A de o, Baba Mimọ",
+      65: "Ẹlẹsẹ wa sorisun na",
+      66: "Igbala ni Igbala ni",
+      67: "JESU Ọba ogo dariji wa",
+      68: "N O kọrin ti Oludande mi",
+      69: "IRAPADA lọwọ iku oun ẹsẹ",
+      70: "Ẹlẹsẹ wa sọdọ Jesu",
+      71: "Gbangba loju re Ọlọrun",
+      72: "Ọba awọn ẹni mimọ",
+      73: "MIMỌ Mimọ Mimọ Olodumare",
+      74: "Baba niwaju itẹ Rẹ",
+      75: "Ẹmi ọrun gbadura wa",
+      76: "Wa Parakliti mimọ",
+      77: "T'Oluwa nilẹ atẹkun rẹ",
+      78: "T'Ọlọrun Oluwa nilẹ",
+      79: "Baba mimọ jọwọ sunmọ wa",
+      80: "Oluwa emi sa ti gbohun Rẹ",
+      81: "Ẹ yọ nin'Oluwa ẹ yọ",
+      82: "IJO Kerubu a de",
+      83: "A DUPE lowo Olorun",
+      84: "Eyin Angẹli to wa lorun",
+      85: "E GBE ohun ayo ati iyin ga",
+      86: "Oluwa ọrun oun aye",
+      87: "Ọpẹ lo yẹ f'Olugbala",
+      88: "A yin Ọba ogo oun ni Ọlọrun",
+      89: "EYIN Egbe Igbala",
+      90: "AWA dupe, awa t'ope da",
+      91: "Ẹ damure ẹyin Seraf",
+      92: "Ọkan mi yin Ọba ọrun",
+      93: "A fọpe f'Ọlọrun",
+      94: "Jesu mo wa sọdọ Rẹ",
+      95: "E JE ka jumo f'ope f'Olorun",
+      96: "GBOGBO eyin ise Oluwa",
+      97: "Ọlọrun Elẹda to d'ẹgbẹ Seraf",
+      98: "EYIN Ijo Serafu",
+      99: "Ọlọrun Elẹda to d'ẹgbẹ Seraf",
+      100: "NI TOOTO, ara ni tooto o",
+      101: "OLUWA Oke a yin O o",
+      102: "OLORUN Serafu awa n s'ope",
+      103: "Oluwa I'Olusagutan mi",
+      104: "Ogo fun Eleda Mimo l'oke",
+      105: "E jẹ ka finu didun",
+      106: "OLUWA ye wa gba wa o Baba Ire",
+      107: "FI IYIN fun oluso aguntan Israeli",
+      108: "Kérúbù ati Séráfù",
+      109: "KA fi ope fun Oluwa",
+      110: "Gbogb’ọmọ Ẹgbẹ Séráfù",
+      111: "Ẹ jẹ ka yin Ọlọrun wa",
+      112: "OLORUN Eleda wa awa n yin O",
+      113: "OKAN mi yin Oluwa l'ogo",
+      114: "Gbogbo ayida aye",
+      115: "Fun anu to pọ bi yanrin",
+      116: "Emi ba n’ẹgbẹrun ahọn",
+      117: "Ẹ wolẹ f’Ọba Ologo julọ",
+      118: "Ewe ti Ọba ọrun",
+      119: "Gbogbo aye gbe Jesu ga",
+      120: "JI okan mi dide layo",
+      121: "AWA dupe o lowo Baba wa",
+      122: "AWA omo Ijo Kerubu",
+      123: "Gbogbo ẹyin ti n gbe aye",
+      124: "Niwaju itẹ Jehofa",
+      125: "Gbogbo ẹda abẹ orun",
+      126: "Ọlọrun ailopin Iwọ",
+      127: "A f'ọpẹ f'Ọlọrun to da wa",
+      128: "Ọmọ Ẹgbẹ Séráfù dide",
+      129: "Yin Ọlọrun Abram",
+      130: "ALLELUYAH! orin t'o dun",
+      131: "Alleluya orin to dun",
+      132: "EYIN Angel orun e bu sayo",
+      133: "E BA wa gbe Jesu ga",
+      134: "E GBOHUN s'oke k'a yin",
+      135: "E KE Halleluyah s'Oba Iye",
+      136: "F’ibukun f’OIuwa",
+      137: "Lokọ Jesu gbogbo ekun yio wolẹ",
+      138: "IBA SE p'Oluwa",
+      139: "Kérúbù ẹ ho fayọ",
+      140: "Omo ijo Serafu",
+      141: "Mo f'ọpẹ f'Oluwa",
+      142: "Gbogbo Egbe Akorin",
+      143: "Gbogbo Ẹgbẹ Onigbagbọ",
+      144: "Ẹ fi Ọpẹ for Ọlọrun wa",
+      145: "Ọjọ nla lọjọ oni",
+      146: "Eleda gbogbo aye",
+      147: "Gbo orin eni rapada",
+      148: "Eni  T'o ba gbo ikede oro naa",
+      149: "Kerubu Ati Serafu",
+      150: "Awa dupe, awa tun t’ope da",
+      151: "Ji ko orin Mose",
+      152: "Wọ ọwọn Olurapada",
+      153: "Tal'eni naa ti n kan ilekun okan mi",
+      154: "A F'emi mimo lo le so ni d'alaye",
+      155: "Eyin Olukore inu oko",
+      156: "Si Olutunu ọrun",
+      157: "J'alagbara ninu",
+      158: "Fun mi ni Ẹmi Mimọ",
+      159: "Alejo kan ma n kankun",
+      160: "Ẹmi Ọlọrun mi",
+      161: "Ẹmi ọrun wa nisinsinyi",
+      162: "Emi Mimọ sọkalẹ",
+      164: "Baba wa ọrun awa de",
+      165: "Oluwa agbara fọhun",
+      166: "Agbara kan naa ti",
+      167: "Edumare Jah Jehofa",
+      168: "Ikore aye fere gbo",
+      169: "Oluwa awa ọmọ Rẹ tun de",
+      170: "Yin Oluwa Ọba wa",
+      171: "Oluwa kore wọ la n yin",
+      172: "Yin Ọlọrun yin lailai",
+      173: "Wa ẹyin ọlọpẹ wa",
+      174: "Ojo Ibukun yo si rọ",
+      175: "Jesu mo mu ore mi bo",
+      176: "A ke Halleluya soke",
+      177: "Lati esi ti awa fi n sise",
+      178: "Iwo mbo wa, Oluwa",
+      179: "Lẹba odo Jọdani ni",
+      183: "Ọjọ dajọ oun 'binu",
+      184: "Sunmọ’dọ wa Emmanueli",
+      185: "Onidajọ mbọ wa",
+      186: "Oluwa mbọ aye o mi",
+      187: "Gbọgbẹ ayọ Oluwa de",
+      188: "Yọ ẹyin Onigbagbọ",
+      190: "Ọjọ 'binu ọjọ eru",
+      191: "Wo! Oluwa lawọsanmọ",
+      192: "Jesu to ga julọ lọrun",
+      193: "Onidajọ na de o de",
+      194: "Wa iwọ Jesu t’a n reti",
+      197: "Ọjọ nla kan ma mbọ",
+      198: "A yin Ọ Baba ọrun",
+      199: "Ji ’wọ Kristian' ko ki ọrọ ayọ",
+      200: "Ẹyin Angẹl l'ọrun ogo",
+      202: "Nigba kan ni Bẹtilẹhẹmu",
+      203: "Ayọ kun ọkan wa loni",
+      204: "Ayọ baye Oluwa de",
+      206: "Gbọ ẹda ọrun n kọrin",
+      207: "Onigbagbọ Ẹ bu sayọ",
+      208: "Ọjọ ayọ nlanla naa de",
+      210: "Apata ayeraye",
+      211: "Lẹyin ọdun diẹ",
+      213: "Igba mi mbẹ ni ọwọ Rẹ",
+      214: "Ẹ funpe naa kikan",
+      218: "Ọdun titun de awa n yọ",
+      221: "A ki gbogbo yin ku ọdun",
+      222: "Ọlọrun ati reti mi",
+      223: "Ọlọrun ọdun to kọja",
+      224: "Baba ki m'ya odun yi",
+      225: "Ọdun miran ti kọja",
+      227: "Ọlọrun wa jẹ ki iyin Rẹ",
+      229: "Oluwa alafia wa",
+      231: "Awa Onigbagbọ",
+      232: "Ọlọrun Bẹtẹl’ ẹni ti",
+      233: "Ẹsẹ wọn ti dara to",
+      234: "Oluwa at'igbala wa",
+      236: "Mọkandilọgọrun dubulẹ jẹ",
+      237: "Jesu lọjọ anu yi",
+      238: "Alaimọ ni emi",
+      239: "Jesu agbara mi",
+      240: "Jisẹ rẹ nde Jesu",
+      241: "Arẹ mu ọ aye su ọ",
+      242: "Kristi sun fẹlẹsẹ",
+      243: "Oluwa ma moju kuro",
+      244: "Ọkan mi sunmọ‘tẹ anu",
+      245: "Ẹlẹsẹ mo n fẹ bukun",
+      246: "Jina sile ọrun",
+      247: "Nigba wọn kẹhin si Sion",
+      248: "Jesu mi mu mi gbohun Rẹ",
+      249: "A fayọ r’ore ọfẹ",
+      250: "Jesu jọ ranti mi",
+      251: "Bi mo ti kunlẹ Oluwa",
+      252: "Oluwa gbọ aroye mi",
+      253: "Baba ma yi oku kuro",
+      254: "PẸLU mi nibi ti mo n lọ",
+      255: "Oluwa ba gbowode ni",
+      256: "Bi mo ti ri laisawawi",
+      257: "Jesu nigba danwo",
+      258: "Mo kẹsẹ mi le Jesu",
+      259: "Otosi Ẹlẹsẹ ẹ wa",
+      260: "Ẹlẹsẹ ẹ yipada",
+      261: "Jesu emi o fi ọkan mi fun Ọ",
+      262: "Ọlọrun baba mi wo n pe",
+      263: "Pada asako sile rẹ",
+      264: "Ibu anu o le je",
+      265: "Oluwa mo gbọ pe Iwọ",
+      266: "Iwọ ẹlẹsẹ emi fi anu pe",
+      267: "Isẹ gbogbo ti awa n se",
+      269: "Kii se lainireti",
+      270: "Jesu Olufọkan mi",
+      271: "Apata ayeraye",
+      272: "Sa dakẹ ọkan mi",
+      273: "Bi agbọnrin ti n mi hẹlẹ",
+      275: "Baba wa ọrun n pe",
+      276: "Jesu yo jọba ni gbogbo",
+      277: "Krist' ki jọba Rẹ de",
+      278: "Ro ipọnju Oluwa",
+      279: "Hosana ẹ kọrin soke",
+      280: "Baba alanu to fẹ wa",
+      281: "Ẹsẹ mi pọ bi irawọ",
+      282: "Ifẹ I'Ọlọrun anu Rẹ",
+      283: "Iwọ lọwọ ẹni ti ire n san",
+      284: "Jesu Lara Rẹ lawa n wo",
+      285: "Mura ẹlẹsẹ lati gbọn",
+      286: "Ma gẹsin lọ lọlanla Rẹ",
+      287: "Gbogb' ogo iyin Ọla",
+      288: "Hosana f’ọmọ Dafidi",
+      289: "Wọ to ku ni Kalfari",
+      290: "Ta ni le so tayọ ti mbẹ",
+      291: "Si pẹpẹ Oluwa",
+      292: "Krist’ tagbelebu lorin wa",
+      293: "Furugbin ẹjẹ ẹran",
+      294: "W'olori Alufa giga",
+      295: "Ara ẹ wa ba mi sọfọ",
+      296: "Ẹ gbohun ifẹ atanu",
+      297: "Wo Ọd’agutan ti o ru",
+      298: "Wakati didun ni fun mi",
+      299: "Gbati mo ri agbelebu",
+      300: "Agbelebu ni ere mi",
+      301: "Ifẹ lo to bayi",
+      302: "Ẹyin ti n kọja",
+      303: "Olugbala mi ha gbogbe",
+      304: "Ẹ jẹ ka tọ Jesu wa lọ",
+      305: "Ogo ni fun Jesu",
+      306: "Oke kan mbẹ jina rere",
+      307: "Wọ to mbẹbẹ f'ọta Re",
+      310: "Jesu Oluwa awa de",
+      311: "Lẹba Iboji Jesu mi",
+      312: "Ọlọrun fẹ araye",
+      314: "Isimi awọn mimọ",
+      315: "Sinmi ọkan mi ni ireti",
+      317: "Lọ kede ayọ na fun gbogbo aye",
+      318: "Lowurọ ọjọ Ajinde",
+      320: "Jesu ye titi aye",
+      321: "Lọ sọ fun gbogbo aye",
+      322: "Oluwa ji lootọ",
+      323: "Kabọ ọjọ rere",
+      324: "Ji ji ọkan ayọ ji ji",
+      325: "Krist' Oluwa ji loni Alleluya",
+      327: "Halleluya Ha'lleluya",
+      328: "Jesu to ku ko gbaye la",
+      329: "Bẹlẹsẹ sowọ pọ",
+      330: "Amu ileri sẹ",
+      331: "Jesu ọrẹ ẹlẹsẹ ku",
+      332: "Mo wi fun Olukuluku",
+      333: "Ọrọ ayọ na de",
+      334: "Alleluya o ti jinde",
+      335: "A kan Krist' irekọja mọ Agbelebu",
+      336: "Mo mọ p’Oludande mi mbẹ",
+      337: "Kini Isinmi ayọ ailopin ni",
+      338: "Bugbe rẹ ti lẹwa to",
+      342: "Wo asẹgun bo ti goke",
+      343: "Alafia fọjọ naa Alleluya",
+      344: "Kristi lẹhin Isẹgun",
+      345: "Ọlọrun goke lọ",
+      347: "Ẹ gbọ iro orin ayọ ọrun",
+      348: "Iwọ ti goke lọ",
+      349: "O ti lọ awọsanma",
+      350: "Salẹm t'ọrun llu Ibukun",
+      351: "Oke kan mbẹ to dan to ga",
+      352: "lle ẹwa wọnni bo ti dara to",
+      353: "Ẹ wa ka d’orin wa pọ",
+      354: "F'awọn Ijọ ti nsimi",
+      356: "Alabukun n'nu Jesu",
+      357: "Lai lọdọ Oluwa",
+      358: "Baba to da ọrun meje",
+      359: "Ẹ juba Ọlọrun wa Jah",
+      361: "Jerusalemu tọrun",
+      362: "Ẹ gbọ b’awọn Angẹli ti",
+      363: "Ẹyin wo ni Tẹmpili Rẹ",
+      364: "F'awọn eniyan Re",
+      366: "Ile bukun kan wa",
+      367: "Wa ka da m’awọn ore wa",
+      368: "Jerusalem ibi ayọ",
+      369: "Jẹ ki n nipo lọdọ Rẹ",
+      370: "Lẹyin aye buburu yi",
+      372: "Olori Ijọ t'ọrun",
+      373: "Paradise Paradise",
+      374: "Sọ itan kan naa fun mi",
+      376: "Tani o gbe Jakob dide",
+      378: "Ẹmi ọrun sọkalẹ wa",
+      379: "Wa mi si wa Ẹmi Mimọ",
+      380: "Ẹmi mimọ sọkalẹ",
+      381: "Adaba ọrun sọkalẹ",
+      382: "Ẹmi anu oto ifẹ",
+      383: "Ẹmi Ẹlẹda nipa Rẹ",
+      384: "Emi bukun ti a n sin",
+      385: "Ẹmi mimọ ’daba ọrun",
+      386: "Gbani t’Ọlọrun sọkalẹ",
+      387: "Olurapada wa k'on to",
+      388: "Ọlọrun Metalọkan",
+      389: "Baba oke ọrun",
+      390: "E fi ogo fun baba",
+      391: "Baba Ẹlẹda wa",
+      392: "lyin ainipẹkun",
+      393: "Ọlọrun Olodumare",
+      394: "Mo fi iyin ailopin",
+      395: "Baba ọrun jinlẹ ‘fẹ Rẹ",
+      396: "Bibeli mimọ tọrun",
+      397: "BAWO ni awọn ewe wa",
+      398: "Jesu ọrọ Rẹ ye",
+      399: "Iwọ ọrọ Ọlọrun",
+      400: "Ọlọrun labo ẹni Rẹ",
+      401: "Ẹmi Mimọ sọkan wa",
+      402: "Tori mi ati Ihinrere",
+      404: "Iwe kan wa ti kika rẹ",
+      405: "Bibel’ Iwe ayérayé",
+      406: "Ẹgbẹ Kérúbù ti ye",
+      409: "Ninu gbogbo iji ti nja",
+      410: "Oju kan mbẹ ti ki togbe",
+      411: "Ọlọrun Séráfù ati ti Kérúbù",
+      412: "Lọ lorọ kutukutu",
+      415: "Wakati adura didun",
+      416: "Oluwa awado Re",
+      417: "Oluwa mo de bi itẹ Rẹ",
+      418: "Mura ẹbẹ ọkan mi",
+      419: "Gb’ọkan mi gẹgẹ bo to ri",
+      420: "Pasẹ bukun rẹ toke wa",
+      421: "Wo bi awa eniyan Rẹ",
+      422: "Tẹru tẹru t’iyanu ni",
+      423: "Igba aro ati ayọ",
+      424: "Jeki ilẹkun aitase",
+      425: "Jesu ni beni re pade",
+      426: "Iwọ Isun Imọlẹ",
+      427: "Oluwa Iwọ wadi mi",
+      428: "Sa wo itẹ anu",
+      429: "Oluwa wo ki o si gba",
+      430: "Ọlọrun a sọ ọrọ Rẹ",
+      431: "Bami sọrọ Jesu",
+      432: "Ma gbadura Emi mbẹbẹ n'nu Rẹ",
+      437: "Isun kan wa to kun f’ẹjẹ",
+      440: "Igbagbọ mi wo Ọ",
+      441: "Gbogbo Ẹyin Onigbagbọ",
+      442: "A ba le ni igbagbọ aye",
+      443: "Jesu I'olus'agutan mi",
+      444: "Aigbagbọ bila temi l'Oluwa",
+      445: "Ọlọrun yanu ọna kan",
+      446: "Alafia li aye ẹsẹ yi",
+      447: "Baba b’ifẹ rẹ ni lati",
+      449: "Fẹru re fafẹfẹ",
+      450: "Gba mo le ka oye mi Re",
+      451: "Igbagbọ mi duro lori",
+      452: "Jesu I'Olusọ agutan mi",
+      453: "Jesu Olugbala wo mi",
+      454: "Ko tọ kawọn mimọ bẹru",
+      455: "Ko tọ kawọn mimọ bẹru",
+      456: "Laifoya lapa Jesu",
+      457: "Lala mi n o ni sinmi laye",
+      459: "Lọna gbogbo t’Oluwa yan",
+      460: "Mo f’ẹmi mi sabẹ",
+      461: "Mo fi gbagbọ ba Ọlọrun mi rin",
+      462: "Mo fi gbagbọ b’Ọlọrun rin",
+      463: "Mo gbohun Jesu to wi pe",
+      464: "Nirumi at'iji aye",
+      465: "Nihin layida wa",
+      466: "Nipa Ifẹ Olugbala",
+      467: "Ohun ogo Rẹ la n royin",
+      468: "Ọlọrun kan lo tọ ka sin",
+      469: "Ọlọrun lo seleri Ekun Igbala",
+      470: "Ọm’Ọlọrun a ko ri Ọ",
+      471: "Ọna ara l’Ọlọrun wa",
+      473: "Gbẹkẹle Onigbagbọ",
+      474: "Labẹ oji ọga ogo",
+      475: "Lọwọ kiniun at'ẹkun",
+      476: "Oluwa Ọlọrun gba wa",
+      477: "Oluwa jọwọ pa wa mọ",
+      479: "Anu Rẹ Oluwa lawa n tọrọ",
+      480: "Biji lile n ja ti bẹru gbode",
+      483: "Mo n lọ talaka mi mbẹ lọdọ yin",
+      484: "Oluwa da agan lohun",
+      485: "Oluwa yoo pese",
+      486: "Ohun ta fi fun Ọ",
+      490: "Wọ orisun ohun rere",
+      491: "Ẹmi Iwosan sọkalẹ wa",
+      492: "JESU wọ nibi isadi mi",
+      493: "Isinmi wa lọrun ko si laye yi",
+      494: "Onisegun nla wa nihin",
+      495: "Ọlọrun mi 'wọ lemi o pe",
+      496: "Ẹni to laju afọju",
+      497: "Ẹgbẹ Aladura mura",
+      501: "Ọlọrun wa awa mbe Ọ",
+      506: "Kérúbù Ẹ yọ Séráfù Ẹ yọ",
+      507: "Kérúbù pẹlu Séráfù",
+      509: "Ọm’ẹgbẹ Kérúbù jade",
+      513: "N o fẹran Rẹ 'wọ odi mi",
+      514: "Jesu kiki ironu Rẹ",
+      515: "Borukọ Jesu ti dun to",
+      516: "Olugbala mi ifẹ Rẹ",
+      517: "Ifẹ ọrun alailẹgbẹ",
+      518: "Orukọ kan mbẹ ti mo fẹ",
+      519: "Jesu Oluwa a fẹ Ọ",
+      520: "Awa ko orin ifẹ Rẹ",
+      521: "Ọkan mi Oluwa ni",
+      522: "Jesu Oluwa Ọba mi",
+      524: "O fun mi ledidi",
+      525: "Gbataye yi ba kọja",
+      526: "Jesu Iwo ni a n wo",
+      527: "Ara Ẹ jẹ ka jumọ rin",
+      528: "Alabukun ni fun Ifẹ",
+      529: "Alafia ni f’ọkan na",
+      530: "Ẹnikan mbẹ to fẹran wa",
+      532: "Fẹ ẹnikeji rẹ",
+      536: "Wo bo ti dun to lati ri",
+      538: "Oluwa Iwọ ha wi pe",
+      539: "Ore Ọfẹ bo ti dun to",
+      540: "Ẹwa ‘Tana orọ kutu",
+      541: "Jesu mo gbagbelebu mi",
+      542: "N o sunmọ Ọlọrun",
+      543: "Iwọ lọna ọdọ rẹ ni",
+      544: "Jesu n pe wa lọsan loru",
+      545: "Baba ọrun emi fẹ wa",
+      546: "Gẹgẹ bi ọrọ ọrẹ Rẹ",
+      547: "Jesu ayọ ọkan gbogbo",
+      548: "Ni oru ibanujẹ ni",
+      549: "Ọdọ aguntan Ọlọrun",
+      551: "Wa ẹmi mimọ sọkalẹ",
+      552: "Baba jọwọ gbadura wa",
+      553: "Ẹgbẹ Seraf’ Ẹ wasia",
+      554: "Jesu ma to wa",
+      555: "Jesu ni Balogun ọkọ",
+      556: "Ma tọju mi Jehofa nla",
+      558: "A dupẹ lọwọ Ọlọrun",
+      560: "Nihin mo jalejo",
+      561: "Ma tọju mi baba ọrun",
+      563: "N o se foya ọjọ ibi",
+      564: "Olus'aguntan yo pese",
+      567: "Ese deru wo Jesu ni",
+      568: "Emi ba le fi wa pẹlẹ",
+      569: "Jesu mimọ ọrẹ airi",
+      570: "Jesu Ọba ayọ alare",
+      571: "Didan lọpagun wa o n tọka sọrun",
+      572: "Ẹyin ero nibo lẹ n lọ",
+      573: "Ha! Ẹgbẹ mi, ẹ wasia",
+      574: "A ko ni bugbe kan nihin",
+      575: "Duro duro fun Jesu",
+      578: "Baba mi gba mba sako lọ",
+      579: "Ninu oru ibanujẹ",
+      581: "Ẹ ma tẹsiwaju Séráfù Mimọ",
+      583: "Iransẹ Oluwa",
+      585: "Gba aye mi Oluwa",
+      586: "Gbẹkẹle Ọlọrun rẹ",
+      587: "Sisẹ tori oru mbọ sisẹ ni owurọ",
+      588: "A o sisẹ, A o sisẹ",
+      589: "Mo fara mi fun ọ",
+      590: "Gbagbelebu rẹ ni Kristi wi",
+      591: "Tan mọlẹ Rẹ si wa",
+      592: "Wa ma sisẹ",
+      593: "Jesu mase jẹ ka sinmi",
+      594: "Kọ mi Oluwa bi a ti",
+      596: "Ma sisẹ lọ mase sọlẹ",
+      598: "Ọkan arẹ ile kan mbẹ",
+      600: "Ẹyin eniyan Ọlọrun",
+      601: "Yọ awọn ti n segbe, saajo ẹni n ku",
+      602: "Eredi Irọkẹkẹ yi",
+      604: "Ẹyin t’oungbẹ n gbẹ ẹ wa mu",
+      606: "Gbe banujẹ rẹ mi",
+      607: "Loni ni Jesu n pe",
+      608: "Nigba ti danwo yi mi ka",
+      609: "Ọjọ dajọ ọjọ ẹru",
+      610: "Wa nigba ti Kristi n pe Ọ",
+      613: "Duro ọmọ ogun",
+      614: "Ohun ti n dun laginju",
+      617: "Jesu iwọ la gbohun si",
+      619: "Nihin yii n’isinmi gbe wa",
+      620: "Ẹmi Ọlọrun wa",
+      621: "Baba apat’agbara wa",
+      623: "Ọjọ nla lọjọ ti mo yan",
+      624: "Mo gbohun Rẹ ninu ala mi",
+      625: "Ore aye kilo jamọ",
+      626: "Ni inu airijẹ rẹ gbẹkẹle Jesu",
+      630: "Kérúbù Séráfù ẹ damure",
+      631: "Mo ti seleri Jesu",
+      632: "Emi o lo sọdọ Jesu",
+      633: "Tirẹ titi lai lawa se",
+      634: "Ji ọkan mi dide giri",
+      635: "Gbati Samuẹli ji",
+      638: "Ọlọrun gbọkan mi loni",
+      641: "F’ore ọfẹ Rẹ ba wa gbe",
+      643: "Ki ni o kẹyin aye",
+      646: "Wa ẹlẹsẹ sase rere",
+      647: "Olugbala a de loni",
+      648: "Sunmọhin ko gba Ara Oluwa",
+      649: "Gbogbo ẹni t’oungbẹ n gbẹ wa",
+      650: "Ki lo le wẹsẹ mi nu",
+      651: "Ọjọ ko ase na leyi",
+      652: "Ase ifẹ ọrun",
+      653: "Atupa wa n jo gere",
+      654: "Nibi ase igbeyawo",
+      655: "Baba Olodumare",
+      656: "Ifẹ pipe to tayọ ero ẹda",
+      657: "Ire ta su ni Eden",
+      658: "Jesu farahan nitotọ",
+      659: "Sinmi le Oluwa Ẹ gbọ",
+      660: "lyawo ti Isaaki gbe",
+      664: "Alabukun-fun l’ọmọ naa",
+      665: "Awọn Angẹli ni ọrun",
+      666: "Awọn asepe abura",
+      667: "Awọn kekere wo le yi",
+      668: "Bokiki ija tilẹ n kan",
+      669: "Bo ti dun to la tewe lọ",
+      670: "Bi osun gbege etido",
+      671: "Emi ko le gbagbe Ọjọ",
+      672: "Fun iyin Olodumare",
+      673: "Gba to ba de gba to ba de",
+      674: "Ile ẹkọ ọjọ isinmi",
+      676: "lya lolore mi",
+      677: "Ọrẹ kan mbẹ f'Ọmọde",
+      678: "Iya to ru mi fun osu mẹwa",
+      679: "Kiya wa Efa to dẹsẹ",
+      680: "Mase huwa ẹsẹ",
+      681: "Orukọ wo lo dun gbọ bi tiya",
+      683: "Wa ba wa jẹun Oluwa",
+      684: "Ọlọrun orin ẹni ti",
+      687: "Wo alapọn kokoro ni",
+      688: "Wo awọn apẹrẹ wọnni",
+      689: "Ipilẹ ti Jesu fi lelẹ leyi",
+      690: "Ẹ gbọrọ Oluwa lẹnu ransẹ rẹ",
+      691: "Kristi nipilẹ wa",
+      693: "A fi pilẹ yi lelẹ",
+      694: "Jẹjẹ laisi ariwo",
+      695: "Ẹyin ara n'nu Oluwa",
+      697: "Nihin lorukọ Rẹ Oluwa",
+      698: "Ogun ọrun ẹ wa ba wa yọ",
+      699: "Ilẹ kan mbẹ to dara julọ",
+      700: "Gbọ ọkan mi bi Angẹli ti n kọrin",
+      702: "Ajọdun wa la n se",
+      704: "Alafia ni f'ẹgbẹ na",
+      705: "Ara ẹ ba wa yọ",
+      707: "A ki yin Ẹ ku Ajọdun oni",
+      708: "Baba ọrun wa gbọpẹ wa",
+      711: "Ẹ ku ewu ọdun Ẹ ku iyedun",
+      712: "Ẹgbẹ Kérúbù to jade",
+      714: "Isọdọmọ akọkọ",
+      715: "Jesu Olugbala wa",
+      719: "Ki lo tun yẹ wa loni yi",
+      720: "Ọjọ ayọ leyi jẹ",
+      722: "Ọlọrun Olodumare a dupẹ",
+      724: "Awa si n jo awa si n yọ",
+      727: "Okunkun su Imọlẹ kan si n tan",
+      730: "Maikẹli Olusẹgun",
+      732: "Baba Aladura mura",
+      733: "Ẹgbẹ Kérúbù Seraf’",
+      734: "Egbe Séráfù Ẹ dide",
+      735: "Ẹ yin Ọm’Ẹgbẹ Séráfù",
+      736: "Ẹ yọ Jesu jọba",
+      739: "Ha! Kérúbù Ẹ se giri",
+      740: "Irawọ wo leyi",
+      741: "Iwọ ti okunkun",
+      742: "Kérúbù ati Séráfù",
+      743: "Kérúbù ati Séráfù",
+      744: "Lo wasu Ihin rere mi",
+      747: "Ransẹ Ọlọrun Ẹ ma kede Rẹ",
+      749: "Ransẹ Ọlọrun seun",
+      750: "O sun ni Jesu wi",
+      751: "A o pade leti odo",
+      752: "Adọrin ọdun niye ọdun wa",
+      753: "Awọn to sọwọn fun wa",
+      754: "Alabukun l’awọn oku",
+      755: "Gbohun to t’ọrun wa ti wi",
+      756: "Gbata kun fun banujẹ",
+      758: "Igba asalẹ ti dun to",
+      759: "Lala alagbase tan",
+      761: "Itana to bo‘gbẹ lasọ",
+      762: "Ibukun ni f'oku",
+      764: "Ọdun n yipo o n ji Emi",
+      765: "Bi agogo ọfọ ti n lu",
+      767: "Ẹgbẹgbẹrun",
+      768: "Ọjọ wura ọj' Ọlọrun",
+      769: "Jesu Oluwa ni se",
+      770: "Ẹyin ransẹ Kristi",
+      771: "Isin Jesu ni fun ni",
+      773: "Ọlọrun awa'fẹ",
+      775: "Baba mi gbọ temi",
+      778: "Kore ọfẹ Kristi Oluwa",
+      779: "Olugbala a tun fẹ fohun kan",
+      782: "Wa Jesu fi ara ban",
+      785: "Iyin f’ẹni Mimọ julọ",
+      786: "A dupẹ lọwọ Ọlọrun",
+      789: "Ibukun ni fun agbara",
+      790: "Gbogbo talaka ti mo mo",
+      791: "Ọlọrun latorọ dalẹ",
+      792: "Emi o ha lọ lọwọ ofo",
+      794: "Yika or'itẹ Ọlọrun",
+      796: "Ọjọ mọlẹ leyi",
+      797: "Emi at'ara ile mi",
+      804: "Dide tan Imọlẹ Imọlẹ Owurọ",
+      805: "Olupamọ gbogbo ẹda",
+      806: "Ọlọrun agbaye iyin ni forukọ Rẹ",
+      810: "Wa royin rẹ yika",
+      811: "Tal'awọn wọnyi bi 'rawọ",
+      814: "Jesu ootọ ọna",
+      815: "Ọlọrun alagbara nla",
+      816: "Jesu Iwọ Ọba mi",
+      817: "Ẹmi ti n ji oku dide",
+      818: "Alafia ni fun Ẹgbẹ Mimọ",
+      821: "Amọna ọkan at'ọga",
+      822: "Ẹgbẹ iye lẹgbẹ Seraf",
+      827: "Mose Orimọlade",
+      829: "A juba Rẹ halleluya",
+      830: "Mo fẹ ki n dabi Jesu",
+      831: "Aye si mbẹ",
+      832: "A dupẹ lọwọ Jehofa",
+      833: "Aja ni gbo ẹkun a ja",
+      834: "A n sọrọ Ilẹ bukun ni",
+      835: "Gbogbo Ẹgbẹ Séráfù",
+      837: "Jesu fẹ mi mo mo bẹ",
+      838: "Jesu onirẹlẹ",
+      839: "Oju ko ti ri eti ko ti gbọ",
+      842: "Ọjọ'oni lọ tan",
+      844: "Ọna kan lo n tọka s’ọrun",
+      845: "Ọlọrun to fẹ Abraham",
+      847: "Awọn mimọ lala pari",
+      853: "Ọlọrun aye mi",
+      861: "Oluwa, awa dupẹ l’oni",
+      862: "Ẹ JẸ k’a f’ayọ kọrin s’Ọba",
+      863: "Baba, f’anu Rẹ ṣọ wa de opin",
+      864: "Jesu, ’Wọ l’awa nyìn l’ogo",
+      865: "Mo n tẹsiwaju lọna na",
+    };
+
+    _allHymns = List.generate(865, (index) {
+      final num = index + 1;
+      return {
+        'number': num.toString(),
+        'title': 'K&S $num',
+        'keywords': firstLines[num] ?? 'K&S $num',
+      };
+    });
+    _foundHymns = _allHymns;
+  }
+
+  // --- OPTIMIZATION: High-Speed Search Logic ---
   void _runFilter(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
     if (enteredKeyword.isEmpty) {
-      results = _allHymns;
-    } else {
-      results = _allHymns
-          .where((hymn) =>
-      hymn['title'].toLowerCase().contains(enteredKeyword.toLowerCase()) ||
-          hymn['number'].toString().contains(enteredKeyword))
-          .toList();
+      setState(() => _foundHymns = _allHymns);
+      return;
     }
 
-    setState(() {
-      _foundHymns = results;
-    });
-  }
+    final query = enteredKeyword.toLowerCase();
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+    // We compute this in a separate list to avoid multiple setStates
+    final results = _allHymns.where((hymn) {
+      return hymn['number']!.contains(query) ||
+          hymn['keywords']!.toLowerCase().contains(query);
+    }).toList();
+
+    setState(() => _foundHymns = results);
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
-      drawer: const NavBar(),
-      backgroundColor: Colors.blue,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Hymn", style: TextStyle(color: Colors.blue.shade900, fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(width: getProportionateScreenWidth(10)),
-            const Text("Book", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-          ],
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.center,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue, Colors.white],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black),
-            onPressed: () => FirebaseAuth.instance.signOut(),
-          ),
-        ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            // --- CAROUSEL SLIDER SECTION ---
-            _buildImageSlider(),
-            SizedBox(height: getProportionateScreenHeight(20)),
-            // --- OPTIMIZED HYMN LIST SECTION ---
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(getProportionateSize(40)),
-                    topRight: Radius.circular(getProportionateSize(40)),
-                  ),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    // --- SEARCH BAR ---
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(24), getProportionateScreenHeight(20), getProportionateScreenWidth(24), getProportionateScreenHeight(10)),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: _runFilter,
-                        decoration: InputDecoration(
-                          labelText: 'Search Hymn by Title or Number',
-                          suffixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(getProportionateSize(20)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // --- HIGHLY-PERFORMANT LISTVIEW ---
-                    Expanded(
-                      child: GridView.builder(
-                        padding: EdgeInsets.all(getProportionateScreenWidth(16)),
-                        itemCount: _foundHymns.length,
-                        // Defines the grid layout
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // **This sets two columns**
-                          crossAxisSpacing: getProportionateScreenWidth(12), // Horizontal space
-                          mainAxisSpacing: getProportionateScreenHeight(12),  // Vertical space
-                          childAspectRatio: 2.2, // Adjust this ratio to get the card height you like (width / height)
-                        ),
-                        itemBuilder: (context, index) {
-                          final hymn = _foundHymns[index];
-                          // The same helper widget is reused here
-                          return _buildHymnListItem(
-                            hymnNumber: hymn['number'],
-                            title: hymn['title'],
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => hymn['page']));
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        drawer: const NavBar(),
+        appBar: _buildAppBar(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              _buildImageSlider(),
+              const SizedBox(height: 15),
+              _buildSearchField(),
+              _buildHymnGrid(),
+            ],
+          ),
         ),
       ),
     );
   }
-  //Widget Helper For Slider
+
+  // Componentized Search Field for performance
+  Widget _buildSearchField() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(20),
+        vertical: getProportionateScreenHeight(10),
+      ),
+      child: TextField(
+        controller: _searchController,
+        onChanged: _runFilter,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.9),
+          hintText: 'Search Number or Lyrics...',
+          prefixIcon: const Icon(Icons.search, color: Colors.blue),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHymnGrid() {
+    return Expanded(
+      child: _foundHymns.isEmpty
+          ? _buildNoResultsState()
+          : RepaintBoundary( // Optimizes scroll performance
+        child: GridView.builder(
+          padding: EdgeInsets.only(
+            left: 16, right: 16, top: 10, bottom: getProportionateScreenHeight(100),
+          ),
+          itemCount: _foundHymns.length,
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 2.2,
+          ),
+          itemBuilder: (context, index) {
+            return _buildHymnTile(_foundHymns[index]);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHymnTile(Map<String, String> hymn) {
+    return Card(
+      key: ValueKey(hymn['number']), // Helps Flutter track items efficiently
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: InkWell(
+        onTap: () => _navigateToHymn(int.parse(hymn['number']!)),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.blue,
+                child: Text(hymn['number']!,
+                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(hymn['title']!,
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                    Text(hymn['keywords']!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 10, fontStyle: FontStyle.italic)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  void _navigateToHymn(int num) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => _getHymnPage(num)),
+    );
+  }
+  Widget _getHymnPage(int num) {
+    switch (num) {
+      case 1: return const Hymn1();
+      case 2: return const Hymn2();
+      case 3: return const Hymn3();
+      case 4: return const Hymn4();
+      case 5: return const Hymn5();
+      case 6: return const Hymn6();
+      case 7: return const Hymn7();
+      case 8: return const Hymn8();
+      case 9: return const Hymn9();
+      case 10: return const Hymn10();
+      case 11: return const Hymn11();
+      case 12: return const Hymn12();
+      case 13: return const Hymn13();
+      case 14: return const Hymn14();
+      case 15: return const Hymn15();
+      case 16: return const Hymn16();
+      case 17: return const Hymn17();
+      case 18: return const Hymn18();
+      case 19: return const Hymn19();
+      case 20: return const Hymn20();
+      case 21: return const Hymn21();
+      case 22: return const Hymn22();
+      case 23: return const Hymn23();
+      case 24: return const Hymn24();
+      case 25: return const Hymn25();
+      case 26: return const Hymn26();
+      case 27: return const Hymn27();
+      case 28: return const Hymn28();
+      case 29: return const Hymn29();
+      case 30: return const Hymn30();
+      case 31: return const Hymn31();
+      case 32: return const Hymn32();
+      case 33: return const Hymn33();
+      case 34: return const Hymn34();
+      case 35: return const Hymn35();
+      case 36: return const Hymn36();
+      case 37: return const Hymn37();
+      case 38: return const Hymn38();
+      case 39: return const Hymn39();
+      case 40: return const Hymn40();
+      case 41: return const Hymn41();
+      case 42: return const Hymn42();
+      case 43: return const Hymn43();
+      case 44: return const Hymn44();
+      case 45: return const Hymn45();
+      case 46: return const Hymn46();
+      case 47: return const Hymn47();
+      case 48: return const Hymn48();
+      case 49: return const Hymn49();
+      case 50: return const Hymn50();
+      case 51: return const Hymn51();
+      case 52: return const Hymn52();
+      case 53: return const Hymn53();
+      case 54: return const Hymn54();
+      case 55: return const Hymn55();
+      case 56: return const Hymn56();
+      case 57: return const Hymn57();
+      case 58: return const Hymn58();
+      case 59: return const Hymn59();
+      case 60: return const Hymn60();
+      case 61: return const Hymn61();
+      case 62: return const Hymn62();
+      case 63: return const Hymn63();
+      case 64: return const Hymn64();
+      case 65: return const Hymn65();
+      case 66: return const Hymn66();
+      case 67: return const Hymn67();
+      case 68: return const Hymn68();
+      case 69: return const Hymn69();
+      case 70: return const Hymn70();
+      case 71: return const Hymn71();
+      case 72: return const Hymn72();
+      case 73: return const Hymn73();
+      case 74: return const Hymn74();
+      case 75: return const Hymn75();
+      case 76: return const Hymn76();
+      case 77: return const Hymn77();
+      case 78: return const Hymn78();
+      case 79: return const Hymn79();
+      case 80: return const Hymn80();
+      case 81: return const Hymn81();
+      case 82: return const Hymn82();
+      case 83: return const Hymn83();
+      case 84: return const Hymn84();
+      case 85: return const Hymn85();
+      case 86: return const Hymn86();
+      case 87: return const Hymn87();
+      case 88: return const Hymn88();
+      case 89: return const Hymn89();
+      case 90: return const Hymn90();
+      case 91: return const Hymn91();
+      case 92: return const Hymn92();
+      case 93: return const Hymn93();
+      case 94: return const Hymn94();
+      case 95: return const Hymn95();
+      case 96: return const Hymn96();
+      case 97: return const Hymn97();
+      case 98: return const Hymn98();
+      case 99: return const Hymn99();
+      case 100: return const Hymn100();
+      case 101: return const Hymn101();
+      case 102: return const Hymn102();
+      case 103: return const Hymn103();
+      case 104: return const Hymn104();
+      case 105: return const Hymn105();
+      case 106: return const Hymn106();
+      case 107: return const Hymn107();
+      case 108: return const Hymn108();
+      case 109: return const Hymn109();
+      case 110: return const Hymn110();
+      case 111: return const Hymn111();
+      case 112: return const Hymn112();
+      case 113: return const Hymn113();
+      case 114: return const Hymn114();
+      case 115: return const Hymn115();
+      case 116: return const Hymn116();
+      case 117: return const Hymn117();
+      case 118: return const Hymn118();
+      case 119: return const Hymn119();
+      case 120: return const Hymn120();
+      case 121: return const Hymn121();
+      case 122: return const Hymn122();
+      case 123: return const Hymn123();
+      case 124: return const Hymn124();
+      case 125: return const Hymn125();
+      case 126: return const Hymn126();
+      case 127: return const Hymn127();
+      case 128: return const Hymn128();
+      case 129: return const Hymn129();
+      case 130: return const Hymn130();
+      case 131: return const Hymn131();
+      case 132: return const Hymn132();
+      case 133: return const Hymn133();
+      case 134: return const Hymn134();
+      case 135: return const Hymn135();
+      case 136: return const Hymn136();
+      case 137: return const Hymn137();
+      case 138: return const Hymn138();
+      case 139: return const Hymn139();
+      case 140: return const Hymn140();
+      case 141: return const Hymn141();
+      case 142: return const Hymn142();
+      case 143: return const Hymn143();
+      case 144: return const Hymn144();
+      case 145: return const Hymn145();
+      case 146: return const Hymn146();
+      case 147: return const Hymn147();
+      case 148: return const Hymn148();
+      case 149: return const Hymn149();
+      case 150: return const Hymn150();
+      case 151: return const Hymn151();
+      case 152: return const Hymn152();
+      case 153: return const Hymn153();
+      case 154: return const Hymn154();
+      case 155: return const Hymn155();
+      case 156: return const Hymn156();
+      case 157: return const Hymn157();
+      case 158: return const Hymn158();
+      case 159: return const Hymn159();
+      case 160: return const Hymn160();
+      case 161: return const Hymn161();
+      case 162: return const Hymn162();
+      case 163: return const Hymn163();
+      case 164: return const Hymn164();
+      case 165: return const Hymn165();
+      case 166: return const Hymn166();
+      case 167: return const Hymn167();
+      case 168: return const Hymn168();
+      case 169: return const Hymn169();
+      case 170: return const Hymn170();
+      case 171: return const Hymn171();
+      case 172: return const Hymn172();
+      case 173: return const Hymn173();
+      case 174: return const Hymn174();
+      case 175: return const Hymn175();
+      case 176: return const Hymn176();
+      case 177: return const Hymn177();
+      case 178: return const Hymn178();
+      case 179: return const Hymn179();
+      case 180: return const Hymn180();
+      case 181: return const Hymn181();
+      case 182: return const Hymn182();
+      case 183: return const Hymn183();
+      case 184: return const Hymn184();
+      case 185: return const Hymn185();
+      case 186: return const Hymn186();
+      case 187: return const Hymn187();
+      case 188: return const Hymn188();
+      case 189: return const Hymn189();
+      case 190: return const Hymn190();
+      case 191: return const Hymn191();
+      case 192: return const Hymn192();
+      case 193: return const Hymn193();
+      case 194: return const Hymn194();
+      case 195: return const Hymn195();
+      case 196: return const Hymn196();
+      case 197: return const Hymn197();
+      case 198: return const Hymn198();
+      case 199: return const Hymn199();
+      case 200: return const Hymn200();
+      case 201: return const Hymn201();
+      case 202: return const Hymn202();
+      case 203: return const Hymn203();
+      case 204: return const Hymn204();
+      case 205: return const Hymn205();
+      case 206: return const Hymn206();
+      case 207: return const Hymn207();
+      case 208: return const Hymn208();
+      case 209: return const Hymn209();
+      case 210: return const Hymn210();
+      case 211: return const Hymn211();
+      case 212: return const Hymn212();
+      case 213: return const Hymn213();
+      case 214: return const Hymn214();
+      case 215: return const Hymn215();
+      case 216: return const Hymn216();
+      case 217: return const Hymn217();
+      case 218: return const Hymn218();
+      case 219: return const Hymn219();
+      case 220: return const Hymn220();
+      case 221: return const Hymn221();
+      case 222: return const Hymn222();
+      case 223: return const Hymn223();
+      case 224: return const Hymn224();
+      case 225: return const Hymn225();
+      case 226: return const Hymn226();
+      case 227: return const Hymn227();
+      case 228: return const Hymn228();
+      case 229: return const Hymn229();
+      case 230: return const Hymn230();
+      case 231: return const Hymn231();
+      case 232: return const Hymn232();
+      case 233: return const Hymn233();
+      case 234: return const Hymn234();
+      case 235: return const Hymn235();
+      case 236: return const Hymn236();
+      case 237: return const Hymn237();
+      case 238: return const Hymn238();
+      case 239: return const Hymn239();
+      case 240: return const Hymn240();
+      case 241: return const Hymn241();
+      case 242: return const Hymn242();
+      case 243: return const Hymn243();
+      case 244: return const Hymn244();
+      case 245: return const Hymn245();
+      case 246: return const Hymn246();
+      case 247: return const Hymn247();
+      case 248: return const Hymn248();
+      case 249: return const Hymn249();
+      case 250: return const Hymn250();
+      case 251: return const Hymn251();
+      case 252: return const Hymn252();
+      case 253: return const Hymn253();
+      case 254: return const Hymn254();
+      case 255: return const Hymn255();
+      case 256: return const Hymn256();
+      case 257: return const Hymn257();
+      case 258: return const Hymn258();
+      case 259: return const Hymn259();
+      case 260: return const Hymn260();
+      case 261: return const Hymn261();
+      case 262: return const Hymn262();
+      case 263: return const Hymn263();
+      case 264: return const Hymn264();
+      case 265: return const Hymn265();
+      case 266: return const Hymn266();
+      case 267: return const Hymn267();
+      case 268: return const Hymn268();
+      case 269: return const Hymn269();
+      case 270: return const Hymn270();
+      case 271: return const Hymn271();
+      case 272: return const Hymn272();
+      case 273: return const Hymn273();
+      case 274: return const Hymn274();
+      case 275: return const Hymn275();
+      case 276: return const Hymn276();
+      case 277: return const Hymn277();
+      case 278: return const Hymn278();
+      case 279: return const Hymn279();
+      case 280: return const Hymn280();
+      case 281: return const Hymn281();
+      case 282: return const Hymn282();
+      case 283: return const Hymn283();
+      case 284: return const Hymn284();
+      case 285: return const Hymn285();
+      case 286: return const Hymn286();
+      case 287: return const Hymn287();
+      case 288: return const Hymn288();
+      case 289: return const Hymn289();
+      case 290: return const Hymn290();
+      case 291: return const Hymn291();
+      case 292: return const Hymn292();
+      case 293: return const Hymn293();
+      case 294: return const Hymn294();
+      case 295: return const Hymn295();
+      case 296: return const Hymn296();
+      case 297: return const Hymn297();
+      case 298: return const Hymn298();
+      case 299: return const Hymn299();
+      case 300: return const Hymn300();
+      case 301: return const Hymn301();
+      case 302: return const Hymn302();
+      case 303: return const Hymn303();
+      case 304: return const Hymn304();
+      case 305: return const Hymn305();
+      case 306: return const Hymn306();
+      case 307: return const Hymn307();
+      case 308: return const Hymn308();
+      case 309: return const Hymn309();
+      case 310: return const Hymn310();
+      case 311: return const Hymn311();
+      case 312: return const Hymn312();
+      case 313: return const Hymn313();
+      case 314: return const Hymn314();
+      case 315: return const Hymn315();
+      case 316: return const Hymn316();
+      case 317: return const Hymn317();
+      case 318: return const Hymn318();
+      case 319: return const Hymn319();
+      case 320: return const Hymn320();
+      case 321: return const Hymn321();
+      case 322: return const Hymn322();
+      case 323: return const Hymn323();
+      case 324: return const Hymn324();
+      case 325: return const Hymn325();
+      case 326: return const Hymn326();
+      case 327: return const Hymn327();
+      case 328: return const Hymn328();
+      case 329: return const Hymn329();
+      case 330: return const Hymn330();
+      case 331: return const Hymn331();
+      case 332: return const Hymn332();
+      case 333: return const Hymn333();
+      case 334: return const Hymn334();
+      case 335: return const Hymn335();
+      case 336: return const Hymn336();
+      case 337: return const Hymn337();
+      case 338: return const Hymn338();
+      case 339: return const Hymn339();
+      case 340: return const Hymn340();
+      case 341: return const Hymn341();
+      case 342: return const Hymn342();
+      case 343: return const Hymn343();
+      case 344: return const Hymn344();
+      case 345: return const Hymn345();
+      case 346: return const Hymn346();
+      case 347: return const Hymn347();
+      case 348: return const Hymn348();
+      case 349: return const Hymn349();
+      case 350: return const Hymn350();
+      case 351: return const Hymn351();
+      case 352: return const Hymn352();
+      case 353: return const Hymn353();
+      case 354: return const Hymn354();
+      case 355: return const Hymn355();
+      case 356: return const Hymn356();
+      case 357: return const Hymn357();
+      case 358: return const Hymn358();
+      case 359: return const Hymn359();
+      case 360: return const Hymn360();
+      case 361: return const Hymn361();
+      case 362: return const Hymn362();
+      case 363: return const Hymn363();
+      case 364: return const Hymn364();
+      case 365: return const Hymn365();
+      case 366: return const Hymn366();
+      case 367: return const Hymn367();
+      case 368: return const Hymn368();
+      case 369: return const Hymn369();
+      case 370: return const Hymn370();
+      case 371: return const Hymn371();
+      case 372: return const Hymn372();
+      case 373: return const Hymn373();
+      case 374: return const Hymn374();
+      case 375: return const Hymn375();
+      case 376: return const Hymn376();
+      case 377: return const Hymn377();
+      case 378: return const Hymn378();
+      case 379: return const Hymn379();
+      case 380: return const Hymn380();
+      case 381: return const Hymn381();
+      case 382: return const Hymn382();
+      case 383: return const Hymn383();
+      case 384: return const Hymn384();
+      case 385: return const Hymn385();
+      case 386: return const Hymn386();
+      case 387: return const Hymn387();
+      case 388: return const Hymn388();
+      case 389: return const Hymn389();
+      case 390: return const Hymn390();
+      case 391: return const Hymn391();
+      case 392: return const Hymn392();
+      case 393: return const Hymn393();
+      case 394: return const Hymn394();
+      case 395: return const Hymn395();
+      case 396: return const Hymn396();
+      case 397: return const Hymn397();
+      case 398: return const Hymn398();
+      case 399: return const Hymn399();
+      case 400: return const Hymn400();
+      case 401: return const Hymn401();
+      case 402: return const Hymn402();
+      case 403: return const Hymn403();
+      case 404: return const Hymn404();
+      case 405: return const Hymn405();
+      case 406: return const Hymn406();
+      case 407: return const Hymn407();
+      case 408: return const Hymn408();
+      case 409: return const Hymn409();
+      case 410: return const Hymn410();
+      case 411: return const Hymn411();
+      case 412: return const Hymn412();
+      case 413: return const Hymn413();
+      case 414: return const Hymn414();
+      case 415: return const Hymn415();
+      case 416: return const Hymn416();
+      case 417: return const Hymn417();
+      case 418: return const Hymn418();
+      case 419: return const Hymn419();
+      case 420: return const Hymn420();
+      case 421: return const Hymn421();
+      case 422: return const Hymn422();
+      case 423: return const Hymn423();
+      case 424: return const Hymn424();
+      case 425: return const Hymn425();
+      case 426: return const Hymn426();
+      case 427: return const Hymn427();
+      case 428: return const Hymn428();
+      case 429: return const Hymn429();
+      case 430: return const Hymn430();
+      case 431: return const Hymn431();
+      case 432: return const Hymn432();
+      case 433: return const Hymn433();
+      case 434: return const Hymn434();
+      case 435: return const Hymn435();
+      case 436: return const Hymn436();
+      case 437: return const Hymn437();
+      case 438: return const Hymn438();
+      case 439: return const Hymn439();
+      case 440: return const Hymn440();
+      case 441: return const Hymn441();
+      case 442: return const Hymn442();
+      case 443: return const Hymn443();
+      case 444: return const Hymn444();
+      case 445: return const Hymn445();
+      case 446: return const Hymn446();
+      case 447: return const Hymn447();
+      case 448: return const Hymn448();
+      case 449: return const Hymn449();
+      case 450: return const Hymn450();
+      case 451: return const Hymn451();
+      case 452: return const Hymn452();
+      case 453: return const Hymn453();
+      case 454: return const Hymn454();
+      case 455: return const Hymn455();
+      case 456: return const Hymn456();
+      case 457: return const Hymn457();
+      case 458: return const Hymn458();
+      case 459: return const Hymn459();
+      case 460: return const Hymn460();
+      case 461: return const Hymn461();
+      case 462: return const Hymn462();
+      case 463: return const Hymn463();
+      case 464: return const Hymn464();
+      case 465: return const Hymn465();
+      case 466: return const Hymn466();
+      case 467: return const Hymn467();
+      case 468: return const Hymn468();
+      case 469: return const Hymn469();
+      case 470: return const Hymn470();
+      case 471: return const Hymn471();
+      case 472: return const Hymn472();
+      case 473: return const Hymn473();
+      case 474: return const Hymn474();
+      case 475: return const Hymn475();
+      case 476: return const Hymn476();
+      case 477: return const Hymn477();
+      case 478: return const Hymn478();
+      case 479: return const Hymn479();
+      case 480: return const Hymn480();
+      case 481: return const Hymn481();
+      case 482: return const Hymn482();
+      case 483: return const Hymn483();
+      case 484: return const Hymn484();
+      case 485: return const Hymn485();
+      case 486: return const Hymn486();
+      case 487: return const Hymn487();
+      case 488: return const Hymn488();
+      case 489: return const Hymn489();
+      case 490: return const Hymn490();
+      case 491: return const Hymn491();
+      case 492: return const Hymn492();
+      case 493: return const Hymn493();
+      case 494: return const Hymn494();
+      case 495: return const Hymn495();
+      case 496: return const Hymn496();
+      case 497: return const Hymn497();
+      case 498: return const Hymn498();
+      case 499: return const Hymn499();
+      case 500: return const Hymn500();
+      case 501: return const Hymn501();
+      case 502: return const Hymn502();
+      case 503: return const Hymn503();
+      case 504: return const Hymn504();
+      case 505: return const Hymn505();
+      case 506: return const Hymn506();
+      case 507: return const Hymn507();
+      case 508: return const Hymn508();
+      case 509: return const Hymn509();
+      case 510: return const Hymn510();
+      case 511: return const Hymn511();
+      case 512: return const Hymn512();
+      case 513: return const Hymn513();
+      case 514: return const Hymn514();
+      case 515: return const Hymn515();
+      case 516: return const Hymn516();
+      case 517: return const Hymn517();
+      case 518: return const Hymn518();
+      case 519: return const Hymn519();
+      case 520: return const Hymn520();
+      case 521: return const Hymn521();
+      case 522: return const Hymn522();
+      case 523: return const Hymn523();
+      case 524: return const Hymn524();
+      case 525: return const Hymn525();
+      case 526: return const Hymn526();
+      case 527: return const Hymn527();
+      case 528: return const Hymn528();
+      case 529: return const Hymn529();
+      case 530: return const Hymn530();
+      case 531: return const Hymn531();
+      case 532: return const Hymn532();
+      case 533: return const Hymn533();
+      case 534: return const Hymn534();
+      case 535: return const Hymn535();
+      case 536: return const Hymn536();
+      case 537: return const Hymn537();
+      case 538: return const Hymn538();
+      case 539: return const Hymn539();
+      case 540: return const Hymn540();
+      case 541: return const Hymn541();
+      case 542: return const Hymn542();
+      case 543: return const Hymn543();
+      case 544: return const Hymn544();
+      case 545: return const Hymn545();
+      case 546: return const Hymn546();
+      case 547: return const Hymn547();
+      case 548: return const Hymn548();
+      case 549: return const Hymn549();
+      case 550: return const Hymn550();
+      case 551: return const Hymn551();
+      case 552: return const Hymn552();
+      case 553: return const Hymn553();
+      case 554: return const Hymn554();
+      case 555: return const Hymn555();
+      case 556: return const Hymn556();
+      case 557: return const Hymn557();
+      case 558: return const Hymn558();
+      case 559: return const Hymn559();
+      case 560: return const Hymn560();
+      case 561: return const Hymn561();
+      case 562: return const Hymn562();
+      case 563: return const Hymn563();
+      case 564: return const Hymn564();
+      case 565: return const Hymn565();
+      case 566: return const Hymn566();
+      case 567: return const Hymn567();
+      case 568: return const Hymn568();
+      case 569: return const Hymn569();
+      case 570: return const Hymn570();
+      case 571: return const Hymn571();
+      case 572: return const Hymn572();
+      case 573: return const Hymn573();
+      case 574: return const Hymn574();
+      case 575: return const Hymn575();
+      case 576: return const Hymn576();
+      case 577: return const Hymn577();
+      case 578: return const Hymn578();
+      case 579: return const Hymn579();
+      case 580: return const Hymn580();
+      case 581: return const Hymn581();
+      case 582: return const Hymn582();
+      case 583: return const Hymn583();
+      case 584: return const Hymn584();
+      case 585: return const Hymn585();
+      case 586: return const Hymn586();
+      case 587: return const Hymn587();
+      case 588: return const Hymn588();
+      case 589: return const Hymn589();
+      case 590: return const Hymn590();
+      case 591: return const Hymn591();
+      case 592: return const Hymn592();
+      case 593: return const Hymn593();
+      case 594: return const Hymn594();
+      case 595: return const Hymn595();
+      case 596: return const Hymn596();
+      case 597: return const Hymn597();
+      case 598: return const Hymn598();
+      case 599: return const Hymn599();
+      case 600: return const Hymn600();
+      case 601: return const Hymn601();
+      case 602: return const Hymn602();
+      case 603: return const Hymn603();
+      case 604: return const Hymn604();
+      case 605: return const Hymn605();
+      case 606: return const Hymn606();
+      case 607: return const Hymn607();
+      case 608: return const Hymn608();
+      case 609: return const Hymn609();
+      case 610: return const Hymn610();
+      case 611: return const Hymn611();
+      case 612: return const Hymn612();
+      case 613: return const Hymn613();
+      case 614: return const Hymn614();
+      case 615: return const Hymn615();
+      case 616: return const Hymn616();
+      case 617: return const Hymn617();
+      case 618: return const Hymn618();
+      case 619: return const Hymn619();
+      case 620: return const Hymn620();
+      case 621: return const Hymn621();
+      case 622: return const Hymn622();
+      case 623: return const Hymn623();
+      case 624: return const Hymn624();
+      case 625: return const Hymn625();
+      case 626: return const Hymn626();
+      case 627: return const Hymn627();
+      case 628: return const Hymn628();
+      case 629: return const Hymn629();
+      case 630: return const Hymn630();
+      case 631: return const Hymn631();
+      case 632: return const Hymn632();
+      case 633: return const Hymn633();
+      case 634: return const Hymn634();
+      case 635: return const Hymn635();
+      case 636: return const Hymn636();
+      case 637: return const Hymn637();
+      case 638: return const Hymn638();
+      case 639: return const Hymn639();
+      case 640: return const Hymn640();
+      case 641: return const Hymn641();
+      case 642: return const Hymn642();
+      case 643: return const Hymn643();
+      case 644: return const Hymn644();
+      case 645: return const Hymn645();
+      case 646: return const Hymn646();
+      case 647: return const Hymn647();
+      case 648: return const Hymn648();
+      case 649: return const Hymn649();
+      case 650: return const Hymn650();
+      case 651: return const Hymn651();
+      case 652: return const Hymn652();
+      case 653: return const Hymn653();
+      case 654: return const Hymn654();
+      case 655: return const Hymn655();
+      case 656: return const Hymn656();
+      case 657: return const Hymn657();
+      case 658: return const Hymn658();
+      case 659: return const Hymn659();
+      case 660: return const Hymn660();
+      case 661: return const Hymn661();
+      case 662: return const Hymn662();
+      case 663: return const Hymn663();
+      case 664: return const Hymn664();
+      case 665: return const Hymn665();
+      case 666: return const Hymn666();
+      case 667: return const Hymn667();
+      case 668: return const Hymn668();
+      case 669: return const Hymn669();
+      case 670: return const Hymn670();
+      case 671: return const Hymn671();
+      case 672: return const Hymn672();
+      case 673: return const Hymn673();
+      case 674: return const Hymn674();
+      case 675: return const Hymn675();
+      case 676: return const Hymn676();
+      case 677: return const Hymn677();
+      case 678: return const Hymn678();
+      case 679: return const Hymn679();
+      case 680: return const Hymn680();
+      case 681: return const Hymn681();
+      case 682: return const Hymn682();
+      case 683: return const Hymn683();
+      case 684: return const Hymn684();
+      case 685: return const Hymn685();
+      case 686: return const Hymn686();
+      case 687: return const Hymn687();
+      case 688: return const Hymn688();
+      case 689: return const Hymn689();
+      case 690: return const Hymn690();
+      case 691: return const Hymn691();
+      case 692: return const Hymn692();
+      case 693: return const Hymn693();
+      case 694: return const Hymn694();
+      case 695: return const Hymn695();
+      case 696: return const Hymn696();
+      case 697: return const Hymn697();
+      case 698: return const Hymn698();
+      case 699: return const Hymn699();
+      case 700: return const Hymn700();
+      case 701: return const Hymn701();
+      case 702: return const Hymn702();
+      case 703: return const Hymn703();
+      case 704: return const Hymn704();
+      case 705: return const Hymn705();
+      case 706: return const Hymn706();
+      case 707: return const Hymn707();
+      case 708: return const Hymn708();
+      case 709: return const Hymn709();
+      case 710: return const Hymn710();
+      case 711: return const Hymn711();
+      case 712: return const Hymn712();
+      case 713: return const Hymn713();
+      case 714: return const Hymn714();
+      case 715: return const Hymn715();
+      case 716: return const Hymn716();
+      case 717: return const Hymn717();
+      case 718: return const Hymn718();
+      case 719: return const Hymn719();
+      case 720: return const Hymn720();
+      case 721: return const Hymn721();
+      case 722: return const Hymn722();
+      case 723: return const Hymn723();
+      case 724: return const Hymn724();
+      case 725: return const Hymn725();
+      case 726: return const Hymn726();
+      case 727: return const Hymn727();
+      case 728: return const Hymn728();
+      case 729: return const Hymn729();
+      case 730: return const Hymn730();
+      case 731: return const Hymn731();
+      case 732: return const Hymn732();
+      case 733: return const Hymn733();
+      case 734: return const Hymn734();
+      case 735: return const Hymn735();
+      case 736: return const Hymn736();
+      case 737: return const Hymn737();
+      case 738: return const Hymn738();
+      case 739: return const Hymn739();
+      case 740: return const Hymn740();
+      case 741: return const Hymn741();
+      case 742: return const Hymn742();
+      case 743: return const Hymn743();
+      case 744: return const Hymn744();
+      case 745: return const Hymn745();
+      case 746: return const Hymn746();
+      case 747: return const Hymn747();
+      case 748: return const Hymn748();
+      case 749: return const Hymn749();
+      case 750: return const Hymn750();
+      case 751: return const Hymn751();
+      case 752: return const Hymn752();
+      case 753: return const Hymn753();
+      case 754: return const Hymn754();
+      case 755: return const Hymn755();
+      case 756: return const Hymn756();
+      case 757: return const Hymn757();
+      case 758: return const Hymn758();
+      case 759: return const Hymn759();
+      case 760: return const Hymn760();
+      case 761: return const Hymn761();
+      case 762: return const Hymn762();
+      case 763: return const Hymn763();
+      case 764: return const Hymn764();
+      case 765: return const Hymn765();
+      case 766: return const Hymn766();
+      case 767: return const Hymn767();
+      case 768: return const Hymn768();
+      case 769: return const Hymn769();
+      case 770: return const Hymn770();
+      case 771: return const Hymn771();
+      case 772: return const Hymn772();
+      case 773: return const Hymn773();
+      case 774: return const Hymn774();
+      case 775: return const Hymn775();
+      case 776: return const Hymn776();
+      case 777: return const Hymn777();
+      case 778: return const Hymn778();
+      case 779: return const Hymn779();
+      case 780: return const Hymn780();
+      case 781: return const Hymn781();
+      case 782: return const Hymn782();
+      case 783: return const Hymn783();
+      case 784: return const Hymn784();
+      case 785: return const Hymn785();
+      case 786: return const Hymn786();
+      case 787: return const Hymn787();
+      case 788: return const Hymn788();
+      case 789: return const Hymn789();
+      case 790: return const Hymn790();
+      case 791: return const Hymn791();
+      case 792: return const Hymn792();
+      case 793: return const Hymn793();
+      case 794: return const Hymn794();
+      case 795: return const Hymn795();
+      case 796: return const Hymn796();
+      case 797: return const Hymn797();
+      case 798: return const Hymn798();
+      case 799: return const Hymn799();
+      case 800: return const Hymn800();
+      case 801: return const Hymn801();
+      case 802: return const Hymn802();
+      case 803: return const Hymn803();
+      case 804: return const Hymn804();
+      case 805: return const Hymn805();
+      case 806: return const Hymn806();
+      case 807: return const Hymn807();
+      case 808: return const Hymn808();
+      case 809: return const Hymn809();
+      case 810: return const Hymn810();
+      case 811: return const Hymn811();
+      case 812: return const Hymn812();
+      case 813: return const Hymn813();
+      case 814: return const Hymn814();
+      case 815: return const Hymn815();
+      case 816: return const Hymn816();
+      case 817: return const Hymn817();
+      case 818: return const Hymn818();
+      case 819: return const Hymn819();
+      case 820: return const Hymn820();
+      case 821: return const Hymn821();
+      case 822: return const Hymn822();
+      case 823: return const Hymn823();
+      case 824: return const Hymn824();
+      case 825: return const Hymn825();
+      case 826: return const Hymn826();
+      case 827: return const Hymn827();
+      case 828: return const Hymn828();
+      case 829: return const Hymn829();
+      case 830: return const Hymn830();
+      case 831: return const Hymn831();
+      case 832: return const Hymn832();
+      case 833: return const Hymn833();
+      case 834: return const Hymn834();
+      case 835: return const Hymn835();
+      case 836: return const Hymn836();
+      case 837: return const Hymn837();
+      case 838: return const Hymn838();
+      case 839: return const Hymn839();
+      case 840: return const Hymn840();
+      case 841: return const Hymn841();
+      case 842: return const Hymn842();
+      case 843: return const Hymn843();
+      case 844: return const Hymn844();
+      case 845: return const Hymn845();
+      case 846: return const Hymn846();
+      case 847: return const Hymn847();
+      case 848: return const Hymn848();
+      case 849: return const Hymn849();
+      case 850: return const Hymn850();
+      case 851: return const Hymn851();
+      case 852: return const Hymn852();
+      case 853: return const Hymn853();
+      case 854: return const Hymn854();
+      case 855: return const Hymn855();
+      case 856: return const Hymn856();
+      case 857: return const Hymn857();
+      case 858: return const Hymn858();
+      case 859: return const Hymn859();
+      case 860: return const Hymn860();
+      case 861: return const Hymn861();
+      case 862: return const Hymn862();
+      case 863: return const Hymn863();
+      case 864: return const Hymn864();
+      case 865: return const Hymn865();
+      default: return const Hymn1();
+    }
+  }
+
+  // Placeholder builders for UI separation...
+  AppBar _buildAppBar() {return AppBar(
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    // 1. Implementation of the leading drawer icon
+    leading: Builder(
+      builder: (context) {
+        return IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/navbar.svg', // Ensure this path is correct
+            width: 24,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          ),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        );
+      },
+    ),
+    title: const Text(
+      "Hymn Book",
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    ),
+    centerTitle: true,
+    actions: [
+      IconButton(
+        icon: SvgPicture.asset(
+          'assets/icons/Sign in.svg',
+          width: 24,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+        ),
+        onPressed: () => FirebaseAuth.instance.signOut(),
+      )
+    ],
+  );
+  }
+
+  Widget _buildNoResultsState() {
+    return const Center(child: Text("No Hymn Found"));
+  }
+
   Widget _buildImageSlider() {
     return CarouselSlider(
       items: imageList.map((item) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          margin: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(8)), // Responsive
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(getProportionateSize(20)), // Responsive
             child: Image.asset(
-              item['image_path'],
+              item['image_path']!,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -1907,55 +2662,13 @@ class _HymnsHomeState extends State<HymnsHome> {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 200,
+        height: getProportionateScreenHeight(200), // Responsive
         autoPlay: true,
         enlargeCenterPage: true,
         aspectRatio: 16 / 9,
         viewportFraction: 0.85,
         autoPlayCurve: Curves.fastOutSlowIn,
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
-      ),
-    );
-  }
-  // Helper widget to build each item in the list
-  Widget _buildHymnListItem({
-    required String hymnNumber,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(10),
-        vertical: getProportionateScreenHeight(6),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(getProportionateSize(15)),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(5)),
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(getProportionateSize(15)),
-          ),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.blue.shade700,
-              child: Text(
-                hymnNumber,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            title: Text(
-              title.toUpperCase(),
-              style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w600,
-                fontSize: getProportionateFontSize(16),
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ),
       ),
     );
   }

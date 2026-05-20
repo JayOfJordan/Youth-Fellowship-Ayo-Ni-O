@@ -75,33 +75,33 @@ class _Hymn758State extends State<Hymn758> {
             // --- VERSES ---
             _buildVerse(
               '''1.mp	    IGBA asalẹ ti dun to!
-		Ti ara tu ohun gbogbo;
-		'Gbat' itansan orun alẹ,
-		Ba n tan’mọlẹ s'ohun gbogbo.''',
+Ti ara tu ohun gbogbo;
+'Gbat' itansan orun alẹ,
+Ba n tan’mọlẹ s'ohun gbogbo.''',
             ),
             _buildVerse(
               '''2.		    Bẹni 'kẹhin onigbagbọ,
-		Oun a sinmi l'alafia;
-  cr	    Igbagbọ t'o gbona janjan,
-		A mọlẹ ninu ọkan rẹ.''',
+Oun a sinmi l'alafia;
+cr	    Igbagbọ t'o gbona janjan,
+A mọlẹ ninu ọkan rẹ.''',
             ),
             _buildVerse(
               '''3.mf	    Imọlẹ kan mọ loju rẹ,
-		Ẹrin si bọ ni ẹnu rẹ,
-		O n f'ede t'ahọn wa ko mọ,
-		Sọrọ ogo t'o sunmọle.''',
+Ẹrin si bọ ni ẹnu rẹ,
+O n f'ede t'ahọn wa ko mọ,
+Sọrọ ogo t'o sunmọle.''',
             ),
             _buildVerse(
               '''4.cr	    Itansan 'mọlẹ t'ọrun wa,
-		Lati gba niyanju lọna;
-		Awọn angel duro yika,
-		Lati gbe lọ s'ibugbe wọn.''',
+Lati gba niyanju lọna;
+Awọn angel duro yika,
+Lati gbe lọ s'ibugbe wọn.''',
             ),
             _buildVerse(
               '''5.mp	    Oluwa, jẹ k'a lọ bayi,
-		K'a ba Ọ yọ, k'a r'oju Rẹ,
-  cr	    Tẹ aworan Rẹ s'ọkan wa,
-		Si kọ wa b'a ti ba Ọ rin.''',
+K'a ba Ọ yọ, k'a r'oju Rẹ,
+cr	    Tẹ aworan Rẹ s'ọkan wa,
+Si kọ wa b'a ti ba Ọ rin.''',
             ),
 
             // --- AMIN ---

@@ -1,39 +1,48 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
 
-class Hymn663 extends StatefulWidget {  const Hymn663({super.key});
+class Hymn663 extends StatefulWidget {
+  const Hymn663({super.key});
 
-@override
-State<Hymn663> createState() => _Hymn663State();
+  @override
+  State<Hymn663> createState() => _Hymn663State();
 }
 
 class _Hymn663State extends State<Hymn663> {
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                // 3. AppBar Title font size set to 19, made responsive
+                fontSize: getProportionateFontSize(19),
                 fontWeight: FontWeight.normal,
               ),
             ),
           ],
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: Text(
-              "K&S 663", // Hymn Number
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 663", // Hymn Number
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. AppBar Action font size set to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -43,8 +52,8 @@ class _Hymn663State extends State<Hymn663> {
         child: Column(
           children: [
             // --- HYMN TITLE AND SUBTITLE ---
-            const Padding(
-              padding: EdgeInsets.all(15.0),
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
@@ -54,28 +63,27 @@ class _Hymn663State extends State<Hymn663> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                        fontSize: getProportionateFontSize(22),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: getProportionateScreenHeight(8)),
                     Text(
                       'ADURA TI O SAAJU OUNJẸ', // Section Title
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: getProportionateFontSize(20),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: getProportionateScreenHeight(5)),
                     Text(
-                      // Subtitle
                       '“...O si bu u, O si fi fun awọn ọmọ ẹyin Rẹ.” - Matt. 14:19',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
                   ],
@@ -86,35 +94,42 @@ class _Hymn663State extends State<Hymn663> {
             // --- FIRST PRAYER ---
             _buildVerse(
               '''I.mf	    WA ba wa jẹun, Oluwa,
-		Jẹ ka ma yin orukọ Rẹ;
-  cr	    Wa busi Ounjẹ wa, si jẹ,
-		Ka le ba Ọ jẹun l'ọrun.''',
+Jẹ ka ma yin orukọ Rẹ;
+cr	    Wa busi Ounjẹ wa, si jẹ,
+Ka le ba Ọ jẹun l'ọrun.''',
             ),
 
             // --- AMIN FOR FIRST PRAYER ---
-            const SizedBox(height: 19),
-            const Center(
-              child: Text(
-                "AMIN",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(15)),
+              child: Center(
+                child: Text(
+                  "AMIN",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: getProportionateFontSize(22),
+                  ),
                 ),
               ),
             ),
 
-            const Divider(
-              height: 40,
+            Divider(
+              height: getProportionateScreenHeight(40),
               thickness: 1,
               color: Colors.grey,
-              indent: 20,
-              endIndent: 20,
+              indent: getProportionateScreenWidth(20),
+              endIndent: getProportionateScreenWidth(20),
             ),
 
             // --- SECOND PRAYER TITLE & SUBTITLE ---
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 15.0),
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                  getProportionateScreenWidth(15),
+                  0,
+                  getProportionateScreenWidth(15),
+                  getProportionateScreenHeight(15)
+              ),
               child: Center(
                 child: Column(
                   children: [
@@ -125,18 +140,17 @@ class _Hymn663State extends State<Hymn663> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: getProportionateFontSize(20),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: getProportionateScreenHeight(5)),
                     Text(
-                      // Subtitle
                       '“Gbogbo ẹda Ọlọrun ni o dara, bi a ba fi ọpẹ gba a.”  -  I Tim. 4:4',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
                   ],
@@ -147,47 +161,52 @@ class _Hymn663State extends State<Hymn663> {
             // --- SECOND PRAYER ---
             _buildVerse(
               '''II.		    A F'ỌPẸ fun Ọ, Oluwa,
-		Fun Ounjẹ wa at' ẹbun mi;
-  di	    Fi Ounjẹ ọrun b'ọkan wa,
-  cr	    Ounjẹ iye lat'oke wa.''',
+Fun Ounjẹ wa at' ẹbun mi;
+di	    Fi Ounjẹ ọrun b'ọkan wa,
+cr	    Ounjẹ iye lat'oke wa.''',
             ),
 
             // --- AMIN FOR SECOND PRAYER ---
-            const SizedBox(height: 19),
-            const Center(
-              child: Text(
-                "AMIN",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(15)),
+              child: Center(
+                child: Text(
+                  "AMIN",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: getProportionateFontSize(22),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            SizedBox(height: getProportionateScreenHeight(50)),
           ],
         ),
       ),
     );
   }
 
-  // Helper widget to build verses
+  // 5. Helper widget to handle verse text with left alignment and responsive font size 20
   Widget _buildVerse(String text) {
-    return Column(
-      children: [
-        const SizedBox(height: 19),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-          child: Text(
-            text,
-            style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 22),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        // Ensures the text block is aligned left as requested
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            // Lyrics font size set to 20, made responsive
+            fontSize: getProportionateFontSize(20),
           ),
         ),
-      ],
+      ),
     );
   }
 }

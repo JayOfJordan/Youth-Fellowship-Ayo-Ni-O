@@ -1,4 +1,6 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
+
 class Hymn121 extends StatefulWidget {
   const Hymn121({super.key});
 
@@ -9,231 +11,198 @@ class Hymn121 extends StatefulWidget {
 class _Hymn121State extends State<Hymn121> {
   @override
   Widget build(BuildContext context) {
+    // Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
-      //backgroundColor: Colors.purple,
       appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Seraph Hymns\nOrin mimo kerubu ati serafu",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal
-                ),
-              ),
-            ],
-          ),
-          actions:[
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
             Text(
-              "K&S 121",
+              "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold
+                color: Colors.white,
+                // 4. Set font size to 19, made responsive
+                fontSize: getProportionateFontSize(19),
+                fontWeight: FontWeight.normal,
               ),
             ),
-          ]
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)), // Responsive
+            child: Text(
+              "K&S 121",
+              style: TextStyle(
+                color: Colors.red,
+                // 4. Set font size to 26, made responsive
+                fontSize: getProportionateFontSize(26),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Colors.transparent,
-              ),
+            // --- HYMN TITLE AND SUBTITLE (Cleaned up) ---
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)), // Responsive
               child: Center(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Center(
-                        child: ListTile(
-                          title: Text('121         (FE 138)',
-                            style: TextStyle(color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22),
-                          ),
-                        ),
+                    Text(
+                      '121         (FE 138)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getProportionateFontSize(22), // Responsive
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            //vs 1
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("1.		AWA dupẹ o lọwọ Baba wa (2ce)                     "
-                        "\nTi ru ọjọ oni t'o fi soju ẹmi"
-                        "\nJẹ k'a seyi s'amọdun,"
-                        "\nJọwọ jẹ ki ire wọle wa o,"
-                        "\nNinu ọdun t'a bọ si."
-                        "\nEgbe:	    Jẹ ki' ire k'o le wọ'le gbogbo wa (2ce)"
-                        "\nLoni o (2ce)"
-                        "\nAwa dupẹ lọwọ Jehovah loke ọrun (2ce)",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+
+            // --- VERSES (Using the new helper widget) ---
+            _buildVerseAndChorus(
+              '''1.		    AWA dupẹ o lọwọ Baba wa (2ce)                     
+   Ti ru ọjọ oni t'o fi soju ẹmi
+   Jẹ k'a seyi s'amọdun,
+   Jọwọ jẹ ki ire wọle wa o,
+   Ninu ọdun t'a bọ si.''',
+
+
+              '''   Egbe:	    Jẹ ki' ire k'o le wọ'le gbogbo wa \n  (2ce)
+   Loni o (2ce)
+   Awa dupẹ lọwọ Jehovah loke ọrun (2ce)''',
             ),
-            //vs2
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("2.		Ta ni fẹ isẹgun (2ce) Emi fẹ"
-                        "\nEmi fẹ isẹgun k'o na'wọ rẹ soke	    Emi fẹ isẹgun"
-                        "\nLori ajẹ oso		    Emi fẹ isẹgun"
-                        "\nLori ọta ile		    Emi fẹ isẹgun"
-                        "\nLori ọta 'bi'sẹ		    Emi fẹ isẹgun"
-                        "\nLori ọta ilu		    Emi fẹ isẹgun"
-                        "\nAti lori 'pọnju			    Emi fẹ isẹgun"
-                        "\nEgbe:	    Balogun wa ti de loni o (2ce)"
-                        "\nLati sẹgun fun gbogbo wa (2ce)"
-                        "\nAwa dupẹ lọwọ Jehovah loke ọrun (2ce)",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerseAndChorus(
+              '''2.		    Ta ni fẹ isẹgun (2ce) Emi fẹ
+   Emi fẹ isẹgun k'o na'wọ rẹ soke	    Emi fẹ \n   isẹgun
+   Lori ajẹ oso		    Emi fẹ isẹgun
+   Lori ọta ile		    Emi fẹ isẹgun
+   Lori ọta 'bi'sẹ		    Emi fẹ isẹgun
+   Lori ọta ilu		    Emi fẹ isẹgun
+   Ati lori 'pọnju			    Emi fẹ isẹgun''',
+
+
+              '''   Egbe:	    Balogun wa ti de loni o (2ce)
+   Lati sẹgun fun gbogbo wa (2ce)
+   Awa dupẹ lọwọ Jehovah loke ọrun (2ce)''',
             ),
-            //vs3
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("3.		Ta ni n fẹ abo (2ce) Emi fẹ                             "
-                        "\nẸni fẹ abo k'o na'wọ rẹ soke		    Emi fẹ abo"
-                        "\nLori ọmọ ẹgbẹ		    Emi fẹ abo"
-                        "\nLori awọn ẹbi		    Emi fẹ abo"
-                        "\nLori awọn obinrin		    Emi fẹ abo"
-                        "\nLori awọn ọmọde		    Emi fẹ abo"
-                        "\nLori awọn agba		    Emi fẹ abo"
-                        "\nLori awọn ọkunrin		    Emi fẹ abo"
-                        "\nEgbe:	    Alabo wa ti de loni o (2ce)"
-                        "\nLati dabo bo gbogbo wa (2ce)"
-                        "\nAwa dupẹ lọwọ Jehovah loke ọrun (2ce)",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerseAndChorus(
+              '''3.		    Ta ni n fẹ abo (2ce) Emi fẹ                             
+   Ẹni fẹ abo k'o na'wọ rẹ soke		    Emi fẹ abo
+   Lori ọmọ ẹgbẹ		    Emi fẹ abo
+   Lori awọn ẹbi		    Emi fẹ abo
+   Lori awọn obinrin		    Emi fẹ abo
+   Lori awọn ọmọde		    Emi fẹ abo
+   Lori awọn agba		    Emi fẹ abo
+   Lori awọn ọkunrin		    Emi fẹ abo''',
+
+
+              '''   Egbe:	    Alabo wa ti de loni o (2ce)
+   Lati dabo bo gbogbo wa (2ce)
+   Awa dupẹ lọwọ Jehovah loke ọrun (2ce)''',
             ),
-            //vs4
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("4.		Tani fẹ pese (2ce) Emi fẹ                                 "
-                        "\nẸni fẹ ipese k'o na'wọ rẹ soke	Emi fẹ ipese"
-                        "\nSe ipese owo		    Emi fẹ ipese"
-                        "\nAti pese ọmọ		    Emi fẹ ipese"
-                        "\nAti t'alafia		    Emi fẹ ipese"
-                        "\nAti pese isẹ		    Emi fẹ ipese"
-                        "\nEgbe:	    Olupese wa ti de loni o (2ce)"
-                        "\nLati pese fun gbogbo wa (2ce)"
-                        "\nAwa dupẹ lọwọ Jehovah loke ọrun (2ce)",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerseAndChorus(
+              '''4.		    Ta ni fẹ pese (2ce) Emi fẹ                                 
+   Ẹni fẹ ipese k'o na'wọ rẹ soke	Emi fẹ ipese
+   Se ipese owo		    Emi fẹ ipese
+   Ati pese ọmọ		    Emi fẹ ipese
+   Ati t'alafia		    Emi fẹ ipese
+   Ati pese isẹ		    Emi fẹ ipese''',
+
+
+              '''   Egbe:	    Olupese wa ti de loni o (2ce)
+   Lati pese fun gbogbo wa (2ce)
+   Awa dupẹ lọwọ Jehovah loke ọrun (2ce)''',
             ),
-            //vs5
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("5.		Ta ni fẹ ri Jesu (2ce) Emi fẹ,"
-                        "\nẸni fẹ ri Jesu ko na'wọ re soke	    Emi fe ri Jesu"
-                        "\nK'o le wa bukun fun wa	    Emi fe ri Jesu"
-                        "\nK'o le fun wa lagbara	    Emi fe ri Jesu"
-                        "\nK'a le se 'fẹ Rẹ d'opin	    Emi fe ri Jesu"
-                        "\nK'awa le gb'ade ogo	    Emi fe ri Jesu"
-                        "\nEgbe:	    Jesu Olugbala wa ti gunwa sihin (2ce)"
-                        "\nlati wa bukun gbogbo wa (2ce)"
-                        "\nAwa dupẹ lọwọ Jehovah loke ọrun (2ce)",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerseAndChorus(
+              '''5.		    Ta ni fẹ ri Jesu (2ce) Emi fẹ,
+   Ẹni fẹ ri Jesu ko na'wọ re soke	    Emi fe ri \n  Jesu
+   K'o le wa bukun fun wa	    Emi fe ri Jesu
+   K'o le fun wa lagbara	    Emi fe ri Jesu
+   K'a le se 'fẹ Rẹ d'opin	    Emi fe ri Jesu
+   K'awa le gb'ade ogo	    Emi fe ri Jesu''',
+
+
+              '''   Egbe:	    Jesu Olugbala wa ti gunwa sihin \n  (2ce)
+   lati wa bukun gbogbo wa (2ce)
+   Awa dupẹ lọwọ Jehovah loke ọrun (2ce)''',
             ),
-            //vs6
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("6.		Kilo yẹ wa loni o (2ce) A f'ọpẹ                       "
-                        "\nFun gbogbo awọn"
-                        "\nOre t'Oluwa se fun wa,				E f'ope f'Oluwa"
-                        "\nẸyin Agba Meje				E f'ope f'Oluwa"
-                        "\nẸyin Asiwaju				E f'ope f'Oluwa"
-                        "\nCommittee ọkunrin				E f'ope f'Oluwa"
-                        "\nCommittee obinrin				E f'ope f'Oluwa"
-                        "\nỌmọ Ogun Kristi				E f'ope f'Oluwa"
-                        "\nIrawọ Owurọ					E f'ope f'Oluwa"
-                        "\nẸgbẹ Ifẹloju				E f'ope f'Oluwa"
-                        "\nF'ogo Ọlọrun han				E f'ope f'Oluwa"
-                        "\nẸyin Ẹgbẹ Mary				E f'ope f'Oluwa"
-                        "\nẸyin Ẹgbẹ Marta				E f'ope f'Oluwa"
-                        "\nAyaba Esta				E f'ope f'Oluwa"
-                        "\nẸyin Ẹgbẹ Roda				E f'ope f'Oluwa"
-                        "\nAwọn Akọrin wa				E f'ope f'Oluwa"
-                        "\nẸyin ọmọ Ijọ				E f'ope f'Oluwa"
-                        "\nFun Ore Isẹgun				E f'ope f'Oluwa"
-                        "\nFun ibukun Gbogbo				E f'ope f'Oluwa"
-                        "\nNitori o da wa si				E f'ope f'Oluwa"
-                        "\nPe o ti gbọ ti wa				E f'ope f'Oluwa"
-                        "\nEgbe:	    Ọpẹ lo yẹ Baba wa loni (2ce)"
-                        "\nT'O wa sure fun Gbogbo wa (2ce)"
-                        "\nAwa dupẹ lọwọ Jehovah loke ọrun (2ce)",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerseAndChorus(
+              '''6.		    Kilo yẹ wa loni o (2ce) A f'ọpẹ                       
+   Fun gbogbo awọn
+   Ore t'Oluwa se fun wa,				E f'ope f'Oluwa
+   Ẹyin Agba Meje				E f'ope f'Oluwa
+   Ẹyin Asiwaju				E f'ope f'Oluwa
+   Committee ọkunrin				E f'ope f'Oluwa
+   Committee obinrin				E f'ope f'Oluwa
+   Ọmọ Ogun Kristi				E f'ope f'Oluwa
+   Irawọ Owurọ					E f'ope f'Oluwa
+   Ẹgbẹ Ifẹloju				E f'ope f'Oluwa
+   F'ogo Ọlọrun han				E f'ope f'Oluwa
+   Ẹyin Ẹgbẹ Mary				E f'ope f'Oluwa
+   Ẹyin Ẹgbẹ Marta				E f'ope f'Oluwa
+   Ayaba Esta				E f'ope f'Oluwa
+   Ẹyin Ẹgbẹ Roda				E f'ope f'Oluwa
+   Awọn Akọrin wa				E f'ope f'Oluwa
+   Ẹyin ọmọ Ijọ				E f'ope f'Oluwa
+   Fun Ore Isẹgun				E f'ope f'Oluwa
+   Fun ibukun Gbogbo				E f'ope f'Oluwa
+   Nitori o da wa si				E f'ope f'Oluwa
+   Pe o ti gbọ ti wa				E f'ope f'Oluwa''',
+
+
+              '''   Egbe:	    Ọpẹ lo yẹ Baba wa loni (2ce)
+   T'O wa sure fun Gbogbo wa (2ce)
+   Awa dupẹ lọwọ Jehovah loke ọrun (2ce)''',
             ),
-            //Amin
-            Column(
-              children: [
-                Text(
-                  "\nAMIN",
-                  style: TextStyle(color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22),
+
+            // --- AMIN ---
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(20)),
+              child: Text(
+                "AMIN",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateFontSize(22),
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 20,),
           ],
         ),
+      ),
+    );
+  }
 
+  // 5. Helper widget with specified alignment and font size
+  Widget _buildVerseAndChorus(String verse, String chorus) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0), // Responsive
+        vertical: getProportionateScreenHeight(10.0),   // Responsive
+      ),
+      child: Container(
+        // As requested, this container ensures the text block is aligned left
+        alignment: Alignment.centerLeft,
+        child: Text(
+          '$verse\n$chorus', // Combine verse and chorus
+          // As requested, no textAlign is specified here
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: getProportionateFontSize(20), // Responsive
+          ),
+        ),
       ),
     );
   }

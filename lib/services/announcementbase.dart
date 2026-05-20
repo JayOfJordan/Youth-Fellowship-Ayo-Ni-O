@@ -10,7 +10,10 @@ class DatabaseMethods {
 
   // GET ALL ANNOUNCEMENTS
   Future<Stream<QuerySnapshot>> getMAnnouncementDetails() async {
-    return FirebaseFirestore.instance.collection("Announcements").snapshots();
+    return FirebaseFirestore.instance
+        .collection("Announcements")
+        .orderBy("Timestamp", descending: true)
+        .snapshots();
   }
 
   //UPDATE AN ANNOUNCEMENT

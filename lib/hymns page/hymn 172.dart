@@ -1,4 +1,6 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
+
 class Hymn172 extends StatefulWidget {
   const Hymn172({super.key});
 
@@ -9,233 +11,163 @@ class Hymn172 extends StatefulWidget {
 class _Hymn172State extends State<Hymn172> {
   @override
   Widget build(BuildContext context) {
+    // Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
-      //backgroundColor: Colors.purple,
       appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Seraph Hymns\nOrin mimo kerubu ati serafu",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal
-                ),
-              ),
-            ],
-          ),
-          actions:[
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
             Text(
-              "K&S 172",
+              "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold
+                color: Colors.white,
+                // 4. Set font size to 19, made responsive
+                fontSize: getProportionateFontSize(18),
+                fontWeight: FontWeight.normal,
               ),
             ),
-          ]
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)), // Responsive
+            child: Center(
+              child: Text(
+                "K&S 172",
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. Set font size to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Colors.transparent,
-              ),
+            // --- HYMN TITLE AND SUBTITLE SECTION ---
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)), // Responsive
               child: Center(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(30)
-                        ),
-                        child: Center(
-                          child: ListTile(
-                            title: Text('172   C.M.S. 43  H.C. 60  7s\n'
-                                '(FE 190)',
-                              style: TextStyle(color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22),
-                            ),
-                            subtitle: Text(
-                              "“Emi o ma yọ ninu Oluwa, emi o ma yọ ninu Ọlọrun igbala mi” - Hab. 3:18",
-                              style: TextStyle(color: Colors.red,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        ),
+                    Text(
+                      '172   C.M.S. 43  H.C. 60  7s\n(FE 190)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getProportionateFontSize(22), // Responsive
+                      ),
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(8)), // Responsive
+                    Text(
+                      "“Emi o ma yọ ninu Oluwa, emi o ma yọ ninu Ọlọrun igbala mi” - Hab. 3:18",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                        fontSize: getProportionateFontSize(18), // Responsive
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            //vs 1
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("1.f	    YIN Ọlọrun, yin lailai,             "
-                        "\nFun ifẹ ojojumọ;"
-                        "\nOrisun ayọ gbogbo,"
-                        "\nK'iyin Rẹ gb'ẹnu wa kan.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+
+            // --- VERSES (Using the new helper widget) ---
+            _buildVerse(
+              '''1.f	    YIN Ọlọrun, yin lailai,             
+   Fun ifẹ ojojumọ;
+   Orisun ayọ gbogbo,
+   K'iyin Rẹ gb'ẹnu wa kan.''',
             ),
-            //vs2
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("2.mf	    Fun ire t'oko ń mu wa,        "
-                        "\nFun Ounjẹ t'a ń mu l'ọgba;"
-                        "\nFun eso igi pẹlu,"
-                        "\nAt'ororo ti a ń lo.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''2.mf	    Fun ire t'oko ń mu wa,        
+   Fun Ounjẹ t'a ń mu l'ọgba;
+   Fun eso igi pẹlu,
+   At'ororo ti a ń lo.''',
             ),
-            //vs3
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("3.		    Fun gbogb'ẹran ọsin wa,       "
-                        "\nT'oun siri ọka gbogbo;"
-                        "\nỌrun ti ń sẹ'ri silẹ,"
-                        "\nOrun ti m'oru rẹ wa.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''3.		    Fun gbogb'ẹran ọsin wa,       
+   T'oun siri ọka gbogbo;
+   Ọrun ti ń sẹ'ri silẹ,
+   Orun ti m'oru rẹ wa.''',
             ),
-            //vs4
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("4.		  Gbogbo nkan t'ẹrun ń mu wa,"
-                        "\nKakiri gbogbo ilẹ,"
-                        "\nAt'eso igba ojo,"
-                        "\nLat' inu ẹkun rẹ wa.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''4.		  Gbogbo nkan t'ẹrun ń mu wa,
+   Kakiri gbogbo ilẹ,
+   At'eso igba ojo,
+   Lat' inu ẹkun rẹ wa.''',
             ),
-            //vs5
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("5.f	    'Wo l'ẹlẹbun gbogbo wọn,     "
-                        "\nOrisun ibukun wa;"
-                        "\n'Tori naa ọkan wa y'o,"
-                        "\nF'iyin at'ọpẹ fun Ọ.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''5.f	    'Wo l'ẹlẹbun gbogbo wọn,     
+   Orisun ibukun wa;
+   'Tori naa ọkan wa y'o,
+   F'iyin at'ọpẹ fun Ọ.''',
             ),
-            //vs6
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("6.mp	    Iji lile iba ja,                        "
-                        "\nKo ba gbogbo ọka jẹ;"
-                        "\nK'eso igi wọ danu,"
-                        "\nKi akoko rẹ to pe.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''6.mp	    Iji lile iba ja,                        
+   Ko ba gbogbo ọka jẹ;
+   K'eso igi wọ danu,
+   Ki akoko rẹ to pe.''',
             ),
-            //vs7
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("7.		    Ajara 'ba ma so mọ,              "
-                        "\nKi igi gbogbo si gbẹ;"
-                        "\nK'ẹran ọsin gbogbo ku,"
-                        "\nK'ẹran igbẹ tan pẹlu.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''7.		    Ajara 'ba ma so mọ,              
+   Ki igi gbogbo si gbẹ;
+   K'ẹran ọsin gbogbo ku,
+   K'ẹran igbẹ tan pẹlu.''',
             ),
-            //vs8
-            Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text("8.mf	    Sibẹ, iwọ l'ọkan wa,           "
-                        "\nY'o f'iyin af'ọpẹ fun;"
-                        "\ncr	    Gbat' ibukun gbogbo tan,"
-                        "\nA o sa fẹ Ọ fun'ra Rẹ.",
-                      style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
+            _buildVerse(
+              '''8.mf	    Sibẹ, iwọ l'ọkan wa,           
+   Y'o f'iyin af'ọpẹ fun;
+   cr	    Gbat' ibukun gbogbo tan,
+   A o sa fẹ Ọ fun'ra Rẹ.''',
             ),
-            //Amin
-            Column(
-              children: [
-                Text(
-                  "\nAMIN",
-                  style: TextStyle(color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22),
+
+            // --- AMIN ---
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(20)),
+              child: Text(
+                "AMIN",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateFontSize(22),
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 20,),
           ],
         ),
+      ),
+    );
+  }
 
+  // Helper widget with specified alignment and font size 20
+  Widget _buildVerse(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0), // Responsive
+        vertical: getProportionateScreenHeight(10.0),   // Responsive
+      ),
+      child: Container(
+        // As requested, ensures the text block is aligned left
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          // No textAlign: TextAlign.center added as requested
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: getProportionateFontSize(20), // Responsive font size 20
+          ),
+        ),
       ),
     );
   }

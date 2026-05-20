@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:youth_fellowship/paying/paytithe.dart';
-
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 
 class Giveonline extends StatefulWidget {
   const Giveonline({super.key});
@@ -27,40 +27,42 @@ class _GiveonlineState extends State<Giveonline> {
   void initState() {
     super.initState();
 
-    // --- STEP 2: Assign your unique pages here ---
-    // This is where you map each category to its specific screen.
     givingCategories = [
       {
         "title": "Tithe",
         "image_path": 'assets/ads 2.jpg',
-        "page": const PayTithePage() // Navigate to TithePage
+        "page": const PayTithePage()
       },
       {
         "title": "Thanksgiving\nOffering",
         "image_path": 'assets/ads 4.jpg',
-        "page": const PayTithePage() // Navigate to ThanksgivingPage
+        "page": const PayTithePage()
       },
       {
         "title": "Excellent\nProject",
         "image_path": 'assets/gradient.jpg',
-        "page": const PayTithePage() // Navigate to ProjectPage
+        "page": const PayTithePage()
       },
       {
         "title": "Missions",
         "image_path": 'assets/choir 1.jpg',
-        "page": const PayTithePage() // Navigate to MissionsPage
+        "page": const PayTithePage()
       },
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig
+    SizeConfig().init(context);
+
     return Container(
       decoration: const BoxDecoration(
+        // Match gradient from forms.dart
         gradient: LinearGradient(
-          colors: [Color(0xFF0F172A), Color(0xFF1E3A8A)],
-          begin: Alignment.topCenter,
+          begin: Alignment.center,
           end: Alignment.bottomCenter,
+          colors: [Colors.blue, Colors.white],
         ),
       ),
       child: Scaffold(
@@ -70,9 +72,23 @@ class _GiveonlineState extends State<Giveonline> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Give", style: TextStyle(color: Colors.blue.shade300, fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(width: 10),
-              const Text("Online", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(
+                "Give",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: getProportionateFontSize(19),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              Text(
+                "Online",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: getProportionateFontSize(19),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           centerTitle: true,
@@ -86,23 +102,56 @@ class _GiveonlineState extends State<Giveonline> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: getProportionateScreenHeight(20)),
               _buildImageSlider(),
-              const SizedBox(height: 40),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  'Select a Category',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+              SizedBox(height: getProportionateScreenHeight(30)),
+
+              // --- GLASS CATEGORY SECTION ---
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(15.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(getProportionateSize(25)),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: getProportionateScreenHeight(20),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0),
+                        borderRadius: BorderRadius.circular(getProportionateSize(25)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: getProportionateScreenWidth(20.0),
+                            ),
+                            child: Text(
+                              'Select a Category',
+                              style: TextStyle(
+                                color: Colors.blue.shade900,
+                                fontSize: getProportionateFontSize(22),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: getProportionateScreenHeight(20)),
+                          _buildGivingCategoryGrid(),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              _buildGivingCategoryGrid(),
-              const SizedBox(height: 40),
+              SizedBox(height: getProportionateScreenHeight(40)),
             ],
           ),
         ),
@@ -114,15 +163,21 @@ class _GiveonlineState extends State<Giveonline> {
     return CarouselSlider(
       items: imageList.map((item) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          margin: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(8.0),
+          ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image.asset(item['image_path'], fit: BoxFit.cover, width: double.infinity),
+            borderRadius: BorderRadius.circular(getProportionateSize(20.0)),
+            child: Image.asset(
+              item['image_path'],
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
           ),
         );
       }).toList(),
       options: CarouselOptions(
-        height: 200,
+        height: getProportionateScreenHeight(200),
         autoPlay: true,
         enlargeCenterPage: true,
         aspectRatio: 16 / 9,
@@ -137,12 +192,14 @@ class _GiveonlineState extends State<Giveonline> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15),
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.8,
+        crossAxisSpacing: getProportionateScreenWidth(12),
+        mainAxisSpacing: getProportionateScreenHeight(12),
+        childAspectRatio: 0.85,
       ),
       itemCount: givingCategories.length,
       itemBuilder: (context, index) {
@@ -150,8 +207,6 @@ class _GiveonlineState extends State<Giveonline> {
         return _buildGivingCard(
           title: category['title'],
           imagePath: category['image_path'],
-          // The navigation logic here is already correct and will work
-          // as long as the "page" value is a valid Widget.
           onTap: () {
             Navigator.push(
               context,
@@ -163,15 +218,13 @@ class _GiveonlineState extends State<Giveonline> {
     );
   }
 
-  // No changes are needed to this widget. It is already built correctly
-  // to handle the navigation passed to it via the 'onTap' function.
   Widget _buildGivingCard({
     required String title,
     required String imagePath,
     required VoidCallback onTap,
   }) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(getProportionateSize(20)),
       child: Stack(
         children: [
           Positioned.fill(child: Image.asset(imagePath, fit: BoxFit.cover)),
@@ -179,49 +232,59 @@ class _GiveonlineState extends State<Giveonline> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.black.withOpacity(0.1), Colors.black.withOpacity(0.7)],
+                  colors: [
+                    Colors.black.withOpacity(0.1),
+                    Colors.black.withOpacity(0.7)
+                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
               ),
             ),
           ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-              child: Container(color: Colors.black.withOpacity(0.1)),
-            ),
-          ),
           Material(
             color: Colors.transparent,
             child: InkWell(
               splashColor: Colors.white.withOpacity(0.2),
-              onTap: onTap, // Use the passed-in function
+              onTap: onTap,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(getProportionateSize(12.0)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        shadows: [Shadow(blurRadius: 10.0, color: Colors.black54, offset: Offset(2.0, 2.0))],
+                        fontSize: getProportionateFontSize(18),
+                        shadows: const [
+                          Shadow(
+                            blurRadius: 8.0,
+                            color: Colors.black54,
+                            offset: Offset(1.5, 1.5),
+                          )
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: getProportionateScreenHeight(6)),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(10),
+                        vertical: getProportionateScreenHeight(4),
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Give Now',
-                        style: TextStyle(color: Color(0xFF1E3A8A), fontWeight: FontWeight.bold, fontSize: 12),
+                        style: TextStyle(
+                          color: const Color(0xFF1E3A8A),
+                          fontWeight: FontWeight.bold,
+                          fontSize: getProportionateFontSize(11),
+                        ),
                       ),
                     ),
                   ],

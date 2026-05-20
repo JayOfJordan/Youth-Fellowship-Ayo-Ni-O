@@ -1,0 +1,17 @@
+<svg viewBox="0 0 24 24" fill="none" width="32" height="32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <style>
+        :root, .palette0 {color: currentColor;
+            --color0: #292929;
+        }
+    </style>
+    <g stroke-width="2" stroke="var(--color0, #292929)" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#Notification_clip0_1_20429)">
+        <path d="M6 19v-9c0-3.3137 2.6863-6 6-6s6 2.6863 6 6v9M6 19h12M6 19H4M18 19h2" />
+        <path d="M11 22h2" />
+        <circle cx="12" cy="3" r="1" />
+    </g>
+    <defs>
+        <clipPath id="Notification_clip0_1_20429">
+            <rect fill="#fff" width="24" height="24" />
+        </clipPath>
+    </defs>
+</svg>

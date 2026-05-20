@@ -9,16 +9,15 @@ import 'package:flutter/widgets.dart';
 /// To use this class, you must first call `SizeConfig().init(context)` in the `build`
 /// method of your top-level widget (e.g., in your `main.dart`'s `MaterialApp` builder
 /// or on each page where you need it).
-
 class SizeConfig {
+  // Static variables are accessible from anywhere in the app
   static late MediaQueryData _mediaQueryData;
   static late double screenWidth;
   static late double screenHeight;
   static late Orientation orientation;
 
-  // Design canvas dimensions
   // These are the reference dimensions from your design mockups (e.g., Figma, Adobe XD).
-  // Standard iPhone 11 Pro dimensions are often used: 375x812.
+  // Standard iPhone 11 Pro dimensions are often used as a baseline: 375x812.
   static const double _designWidth = 375.0;
   static const double _designHeight = 812.0;
 
@@ -35,26 +34,28 @@ class SizeConfig {
 /// A helper function to get a dimension (width, height, font size, etc.)
 /// that is scaled proportionally to the screen's shortest side.
 ///
-/// This ensures that your UI elements maintain their aspect ratio and do not distort.
+/// This is the most robust way to scale, as it prevents distortion on devices
+/// with different aspect ratios.
 ///
 /// [inputDimension] is the size you designed for (e.g., 20px on your design canvas).
 double getProportionateSize(double inputDimension) {
-  // Get the shorter side of the screen
+  // Get the shorter side of the current device's screen
   double shortestSide = SizeConfig.screenWidth < SizeConfig.screenHeight
       ? SizeConfig.screenWidth
       : SizeConfig.screenHeight;
 
-  // Determine the corresponding design dimension (width or height)
+  // Determine the corresponding shortest side from your design canvas
   double designShortestSide =
   SizeConfig._designWidth < SizeConfig._designHeight
       ? SizeConfig._designWidth
       : SizeConfig._designHeight;
 
-  // Calculate the scaling factor and apply it
+  // Calculate the scaling factor and apply it to your input dimension
   return (inputDimension / designShortestSide) * shortestSide;
 }
 
 // You can now define your other functions in terms of this single, reliable function.
+// This makes your code DRY (Don't Repeat Yourself) and easier to maintain.
 
 /// A helper function to get a proportional height.
 double getProportionateScreenHeight(double inputHeight) {

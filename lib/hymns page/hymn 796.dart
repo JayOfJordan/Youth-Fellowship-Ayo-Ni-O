@@ -1,39 +1,48 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
 
 class Hymn796 extends StatefulWidget {
   const Hymn796({super.key});
 
   @override
-  State<Hymn796> createState() => _Hymn796State();}
+  State<Hymn796> createState() => _Hymn796State();
+}
 
 class _Hymn796State extends State<Hymn796> {
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                // 3. AppBar Title font size set to 19, made responsive
+                fontSize: getProportionateFontSize(19),
                 fontWeight: FontWeight.normal,
               ),
             ),
           ],
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: Text(
-              "K&S 796", // Hymn Number
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 796", // Hymn Number
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. AppBar Action font size set to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -42,9 +51,9 @@ class _Hymn796State extends State<Hymn796> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HYMN TITLE AND SUBTITLE (PART 1) ---
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+            // --- HYMN TITLE AND SUBTITLE ---
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
@@ -54,17 +63,18 @@ class _Hymn796State extends State<Hymn796> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                        fontSize: getProportionateFontSize(22),
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text( // Subtitle
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
+                      // Subtitle
                       '“Yoo si dabi imọlẹ ọrọ nigba ti orun ba la ati ọrọ ti ko ni ikuku.” - II Sam. 23:4',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
                   ],
@@ -72,22 +82,14 @@ class _Hymn796State extends State<Hymn796> {
               ),
             ),
 
-            // --- PART 1 ---
-            const Padding(
-              padding: EdgeInsets.only(top: 15.0),
-              child: Text(
-                'APA I',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
+            // --- PART 1 HEADER ---
+            _buildSectionHeader('APA I'),
+
             _buildVerse(
               '''1.	f	ỌJỌ 'mọlẹ l'eyi,
-		mf	Ki 'mọlẹ wa l'oni;
+mf	Ki 'mọlẹ wa l'oni;
 cr	'Wọ Orun, ran s'okunkun wa,
-		K'o si le oru lọ.''',
+K'o si le oru lọ.''',
             ),
             _buildVerse(
               '''2.	p	Ọjọ 'sinmi l'eyi,
@@ -99,106 +101,119 @@ mp	Sẹri itura Rẹ.''',
               '''3.	p	Ọjọ alafia;
 mf	F'alafia fun wa;
 cr	Da iyapa gbogbo duro,
-		Si mu ija kuro..''',
+Si mu ija kuro..''',
             ),
             _buildVerse(
               '''4.	p	Ọjọ adura ni:
 mf	K'ayé sunmọ Ọrun;
 cr	Gb'ọkan soke sọdọ Rẹ,
-		Si pade wa nihin.''',
+Si pade wa nihin.''',
             ),
             _buildVerse(
               '''5.	f	Ọba ọjọ l'eyi,
 mf	Fun wa ni isọji;
 ff	Ji oku ọkan wa s'ifẹ,
-		'Wọ asẹgun iku.''',
+'Wọ asẹgun iku.''',
             ),
 
-            // --- AMIN 1 ---
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                'AMIN',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
+            // --- AMIN SECTION 1 ---
+            _buildAmin(),
 
-            // --- PART 2 ---
-            const Padding(
-              padding: EdgeInsets.only(top: 15.0),
-              child: Text(
-                'APA II',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
+            // --- PART 2 HEADER ---
+            _buildSectionHeader('APA II'),
+
             _buildVerse(
               '''1.f	    KABỌ! Ọjọ 'sinmi,
-		T'o r'ajinde Jesu;
-		Ma bọ wa m'ọkan yi sọji,
-		Si mu inu mi dun.''',
+T'o r'ajinde Jesu;
+Ma bọ wa m'ọkan yi sọji,
+Si mu inu mi dun.''',
             ),
             _buildVerse(
               '''2.mf	    Ọba tikarẹ wa,
-		Bọ Ijọ Rẹ loni;
-  cr	    Nihinyi l'a wa t'a si ri,
-		A yin, a n gbadura.''',
+Bọ Ijọ Rẹ loni;
+cr	    Nihinyi l'a wa t'a si ri,
+A yin, a n gbadura.''',
             ),
             _buildVerse(
               '''3.mf	    Ọjọ kan f'adura,
-		N'nu ile mimọ Rẹ,
-		O san j'ẹgbẹrun ọjọ lo,
-		T'a lo f'adun ẹsẹ.''',
+N'nu ile mimọ Rẹ,
+O san j'ẹgbẹrun ọjọ lo,
+T'a lo f'adun ẹsẹ.''',
             ),
             _buildVerse(
               '''4.p	    Ọkan mi y'o f'ayọ,
-		Wa n'iru ipo yi;
-  cr	    Y'o si ma duro de ọjọ,
-		Ibukun ailopin.''',
+Wa n'iru ipo yi;
+cr	    Y'o si ma duro de ọjọ,
+Ibukun ailopin.''',
             ),
 
-            // --- AMIN 2 ---
-            const SizedBox(height: 19),
-            const Center(
-              child: Text(
-                "AMIN",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-              ),
-            ),
-            const SizedBox(height: 50),
+            // --- FINAL AMIN ---
+            _buildAmin(),
+            SizedBox(height: getProportionateScreenHeight(50)),
           ],
         ),
       ),
     );
   }
 
-  // Helper widget to build verses and avoid code duplication
-  Widget _buildVerse(String text) {
-    return Column(
-      children: [
-        const SizedBox(height: 19),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-          child: Text(
-            text,
-            style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 22),
+  // Helper for Section Headers (APA I, APA II)
+  Widget _buildSectionHeader(String title) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: getProportionateFontSize(20),
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  // Helper for AMIN
+  Widget _buildAmin() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: getProportionateScreenHeight(15.0),
+      ),
+      child: Center(
+        child: Text(
+          "AMIN",
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+            fontSize: getProportionateFontSize(22),
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  // Helper widget to handle verse text with left alignment and responsive font size 20
+  Widget _buildVerse(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        // Ensures the text block is aligned left as requested
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            // Lyrics font size set to 20, made responsive
+            fontSize: getProportionateFontSize(20),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:youth_fellowship/services/size_config.dart'; // 1. Import SizeConfig
 import 'package:flutter/material.dart';
 
 class Hymn721 extends StatefulWidget {
@@ -10,31 +11,38 @@ class Hymn721 extends StatefulWidget {
 class _Hymn721State extends State<Hymn721> {
   @override
   Widget build(BuildContext context) {
+    // 2. Initialize SizeConfig for this screen
+    SizeConfig().init(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Seraph Hymns\nOrin mimo kerubu ati serafu",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                // 3. AppBar Title font size set to 19, made responsive
+                fontSize: getProportionateFontSize(19),
                 fontWeight: FontWeight.normal,
               ),
             ),
           ],
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: Text(
-              "K&S 721", // Hymn Number
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
+            padding: EdgeInsets.only(right: getProportionateScreenWidth(8.0)),
+            child: Center(
+              child: Text(
+                "K&S 721", // Hymn Number
+                style: TextStyle(
+                  color: Colors.red,
+                  // 4. AppBar Action font size set to 26, made responsive
+                  fontSize: getProportionateFontSize(26),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -43,9 +51,9 @@ class _Hymn721State extends State<Hymn721> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HYMN TITLE AND SUBTITLE ---
-            const Padding(
-              padding: EdgeInsets.all(15.0),
+            // --- HYMN TITLE AND SUBTITLE SECTION ---
+            Padding(
+              padding: EdgeInsets.all(getProportionateSize(15.0)),
               child: Center(
                 child: Column(
                   children: [
@@ -55,27 +63,29 @@ class _Hymn721State extends State<Hymn721> {
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                        fontSize: getProportionateFontSize(22),
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text( // Subtitle
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
+                      // Subtitle
                       '“Alaye, alaye o ni yoo ma yin ọ.” - Isa. 38:19',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text( // Section Title
+                    SizedBox(height: getProportionateScreenHeight(8)),
+                    Text(
+                      // Section Title
                       'Ohun Orin: Iba se p\'Oluwa',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: getProportionateFontSize(18),
                       ),
                     ),
                   ],
@@ -83,109 +93,108 @@ class _Hymn721State extends State<Hymn721> {
               ),
             ),
 
-            // --- VERSE 1 & CHORUS ---
+            // --- VERSES (Using helper widget for left alignment and font size 20) ---
             _buildVerseAndChorus(
               '''1.f	    ỌJỌ nla l'eyi jẹ,
-		T'a n se Ajọdun wa,
-		Kérúbù, ẹ ho ye,
-		Séráfù, ẹ gberin,
-		Egbe:	    Halleluyah, Halleluyah,
-		S'Ọba wa,
-		Ẹni ti o da wa si,
-		Lati tun ri ọdun yi,
-		Ogo f'orukọ Rẹ.''',
+T'a n se Ajọdun wa,
+Kérúbù, ẹ ho ye,
+SérÁfù, ẹ gberin,
+Egbe:	    Halleluyah, Halleluyah,
+S'Ọba wa,
+Ẹni ti o da wa si,
+Lati tun ri ọdun yi,
+Ogo f'orukọ Rẹ.''',
             ),
 
-            // --- VERSE 2 & CHORUS ---
             _buildVerseAndChorus(
               '''2.f	    Orun pẹl' Osupa,
-		Ẹ fi ayọ yin han,
-		F'ẹmi wa to d'oni,
-		Larin Ẹgbẹ Kérúbù.
-		Egbe:	    Halleluyah, Halleluyah''',
+Ẹ fi ayọ yin han,
+F'ẹmi wa to d'oni,
+Larin Ẹgbẹ Kérúbù.
+Egbe:	    Halleluyah, Halleluyah''',
             ),
 
-            // --- VERSE 3 & CHORUS ---
             _buildVerseAndChorus(
               '''3.f	    Sure fun wa loni,
-		Baba Mimọ t'ọrun,
-		Ma jẹ ki a rahun,
-		Nikẹhin ayé wa,
-		Egbe:	    Halleluyah, Halleluyah''',
+Baba Mimọ t'ọrun,
+Ma jẹ ki a rahun,
+Nikẹhin ayé wa,
+Egbe:	    Halleluyah, Halleluyah''',
             ),
 
-            // --- VERSE 4 & CHORUS ---
             _buildVerseAndChorus(
               '''4.f	    Iru Ẹgbẹ Seraf'
-		Larin Ilu Afrika,
-		Igba wa sunmọle,
-		T'a o bọ l'oko ẹru,
-		Egbe:	    Halleluyah, Halleluyah''',
+Larin Ilu Afrika,
+Igba wa sunmọle,
+T'a o bọ l'oko ẹru,
+Egbe:	    Halleluyah, Halleluyah''',
             ),
 
-            // --- VERSE 5 & CHORUS ---
             _buildVerseAndChorus(
               '''5.f	    A dupẹ, Oluwa,
-		Fun Ajọdun oni,
-		T'o s'oju ẹmi wa,
-		Lori 'lẹ alaye
-		Egbe:	    Halleluyah, Halleluyah''',
+Fun Ajọdun oni,
+T'o s'oju ẹmi wa,
+Lori 'lẹ alaye
+Egbe:	    Halleluyah, Halleluyah''',
             ),
 
-            // --- VERSE 6 & CHORUS ---
             _buildVerseAndChorus(
               '''6.f	    Ajọdun nla kan mbẹ,
-		T'a o se loke Ọrun,
-		Pẹlu awọn Mimọ,
-		Fun iyin Oluwa,
-		Egbe:	    Halleluyah, Halleluyah''',
+T'a o se loke Ọrun,
+Pẹlu awọn Mimọ,
+Fun iyin Oluwa,
+Egbe:	    Halleluyah, Halleluyah''',
             ),
 
-            // --- VERSE 7 & CHORUS ---
             _buildVerseAndChorus(
               '''7.		    A dupẹ, Oluwa,
-		Pe O ti gbọ tiwa,
-		Ma jẹ k'a d'ẹsẹ mọ,
-		K'a l'ayọ nikẹhin.
-		Egbe:	    Halleluyah, Halleluyah''',
+Pe O ti gbọ tiwa,
+Ma jẹ k'a d'ẹsẹ mọ,
+K'a l'ayọ nikẹhin.
+Egbe:	    Halleluyah, Halleluyah''',
             ),
 
-            // --- AMIN ---
-            const SizedBox(height: 19),
-            const Center(
+            // --- AMIN SECTION ---
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(20.0),
+              ),
               child: Text(
                 "AMIN",
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: getProportionateFontSize(22),
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            SizedBox(height: getProportionateScreenHeight(50)),
           ],
         ),
       ),
     );
   }
 
-  // Helper widget to build a verse and its chorus
-  Widget _buildVerseAndChorus(String verse,) {
-    return Column(
-      children: [
-        const SizedBox(height: 19),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-          child: Text(
-            verse,
-            style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 22),
+  // 5. Helper widget to handle verse text with left alignment and responsive font size 20
+  Widget _buildVerseAndChorus(String verse) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(15.0),
+        vertical: getProportionateScreenHeight(10.0),
+      ),
+      child: Container(
+        // Ensures the text block is aligned left as requested
+        alignment: Alignment.centerLeft,
+        child: Text(
+          verse,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            // Lyrics font size set to 20, made responsive
+            fontSize: getProportionateFontSize(20),
           ),
         ),
-      ],
+      ),
     );
   }
 }
